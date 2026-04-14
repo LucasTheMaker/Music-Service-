@@ -2,50 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Music</title>
+  <title>Music App</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="layout">
+  <div class="layout">
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <h2>Library</h2>
-    <div id="nav">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <h2>Library</h2>
+
       <div class="nav-item active">Home</div>
       <div class="nav-item">Albums</div>
       <div class="nav-item">Artists</div>
       <div class="nav-item">Playlists</div>
     </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+      <h1 id="pageTitle">Home</h1>
+
+      <!-- ALBUM GRID (HOME PAGE) -->
+      <div id="albumGrid"></div>
+
+      <!-- TRACK VIEW (when album is opened) -->
+      <div id="trackView" style="display:none;"></div>
+
+    </div>
+
   </div>
 
-  <!-- MAIN -->
-  <div class="main">
-    <h1>Recently Added</h1>
-    <div id="content"></div>
+  <!-- PLAYER BAR -->
+  <div class="player">
+
+    <div class="track-info">
+      <div id="trackName">Nothing Playing</div>
+    </div>
+
+    <div class="controls">
+      <button id="prev">⏮</button>
+      <button id="play">▶</button>
+      <button id="next">⏭</button>
+    </div>
+
+    <input type="range" id="seek" min="0" max="100" value="0">
+
   </div>
 
-</div>
+  <!-- AUDIO ENGINE -->
+  <audio id="audio"></audio>
 
-<!-- PLAYER -->
-<div class="player">
-  <div class="track-info">
-    <div id="trackName">Nothing Playing</div>
-  </div>
-
-  <div class="controls">
-    <button id="prev">⏮</button>
-    <button id="play">▶</button>
-    <button id="next">⏭</button>
-  </div>
-
-  <input type="range" id="seek" value="0" min="0" max="100">
-
-</div>
-
-<audio id="audio"></audio>
-
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
