@@ -1,5 +1,6 @@
 const audio = document.getElementById("audio");
 const trackName = document.getElementById("trackName");
+
 const playBtn = document.getElementById("play");
 const nextBtn = document.getElementById("next");
 const prevBtn = document.getElementById("prev");
@@ -10,8 +11,9 @@ const pageTitle = document.getElementById("pageTitle");
 
 let currentAlbum = null;
 let currentSongIndex = 0;
+let isPlaying = false;
 
-// 🎧 YOUR MUSIC LIBRARY (ADD EVERYTHING HERE)
+/* 🎵 MUSIC LIBRARY (ADD YOUR MUSIC HERE) */
 const albums = [
   {
     title: "Demo Album",
@@ -32,13 +34,13 @@ const albums = [
   }
 ];
 
-
-// 🏠 LOAD HOME (ALBUM GRID)
+/* 🏠 LOAD HOME (ALBUM GRID) */
 function loadAlbums() {
+  albumGrid.innerHTML = "";
+  trackView.innerHTML = "";
+
   albumGrid.style.display = "grid";
   trackView.style.display = "none";
-
-  albumGrid.innerHTML = "";
 
   pageTitle.innerText = "Home";
 
@@ -58,15 +60,14 @@ function loadAlbums() {
   });
 }
 
-
-// 📀 OPEN ALBUM (TRACK LIST VIEW)
+/* 📀 OPEN ALBUM (TRACK LIST VIEW) */
 function openAlbum(index) {
   currentAlbum = albums[index];
 
-  pageTitle.innerText = currentAlbum.title;
-
   albumGrid.style.display = "none";
   trackView.style.display = "block";
+
+  pageTitle.innerText = currentAlbum.title;
 
   trackView.innerHTML = "";
 
@@ -84,9 +85,10 @@ function openAlbum(index) {
   });
 }
 
-
-// 🎵 PLAY SONG
+/* 🎵 PLAY SONG */
 function playSong(index) {
+  if (!currentAlbum) return;
+
   currentSongIndex = index;
 
   const song = currentAlbum.songs[index];
@@ -96,25 +98,26 @@ function playSong(index) {
 
   trackName.innerText = song.title;
 
+  isPlaying = true;
   playBtn.innerText = "⏸";
 }
 
-
-// ⏯ PLAY / PAUSE BUTTON
+/* ⏯ PLAY / PAUSE */
 playBtn.onclick = () => {
   if (!audio.src) return;
 
-  if (audio.paused) {
-    audio.play();
-    playBtn.innerText = "⏸";
-  } else {
+  if (isPlaying) {
     audio.pause();
+    isPlaying = false;
     playBtn.innerText = "▶";
+  } else {
+    audio.play();
+    isPlaying = true;
+    playBtn.innerText = "⏸";
   }
 };
 
-
-// ⏭ NEXT SONG
+/* ⏭ NEXT SONG */
 nextBtn.onclick = () => {
   if (!currentAlbum) return;
 
@@ -127,8 +130,7 @@ nextBtn.onclick = () => {
   playSong(currentSongIndex);
 };
 
-
-// ⏮ PREVIOUS SONG
+/* ⏮ PREVIOUS SONG */
 prevBtn.onclick = () => {
   if (!currentAlbum) return;
 
@@ -141,6 +143,10 @@ prevBtn.onclick = () => {
   playSong(currentSongIndex);
 };
 
+/* 🔁 AUTO NEXT SONG WHEN FINISHED */
+audio.onended = () => {
+  nextBtn.click();
+};
 
-// 🚀 INIT APP
+/* 🚀 START APP */
 loadAlbums();
