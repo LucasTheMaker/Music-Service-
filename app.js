@@ -1,11 +1,13 @@
 const audio = document.getElementById("audio");
-const trackName = document.getElementById("trackName");
 
 const playBtn = document.getElementById("play");
 const nextBtn = document.getElementById("next");
 const prevBtn = document.getElementById("prev");
 const repeatBtn = document.getElementById("repeat");
 
+const progress = document.getElementById("progress");
+
+const trackName = document.getElementById("trackName");
 const albumGrid = document.getElementById("albumGrid");
 const trackView = document.getElementById("trackView");
 const pageTitle = document.getElementById("pageTitle");
@@ -16,7 +18,7 @@ let currentSongIndex = 0;
 let isPlaying = false;
 
 let likedSongs = [];
-let repeatMode = "off"; // off | song | album
+let repeatMode = "off";
 
 /* ALBUMS */
 const albums = [
@@ -43,12 +45,9 @@ function loadAlbums() {
     const div = document.createElement("div");
     div.className = "album";
 
-    div.innerHTML = `
-      <img src="${album.cover}">
-      <div>${album.title}</div>
-    `;
-
+    div.innerHTML = `<img src="${album.cover}"><div>${album.title}</div>`;
     div.onclick = () => openAlbum(index);
+
     albumGrid.appendChild(div);
   });
 }
@@ -68,7 +67,6 @@ function openAlbum(index) {
     div.className = "track";
 
     div.innerText = song.title;
-
     div.onclick = () => playSong(i);
 
     trackView.appendChild(div);
@@ -85,7 +83,6 @@ function playSong(index) {
   audio.play();
 
   trackName.innerText = song.title;
-
   isPlaying = true;
   playBtn.innerText = "⏸";
 
@@ -119,7 +116,7 @@ prevBtn.onclick = () => {
   playSong(currentSongIndex);
 };
 
-/* REPEAT SYSTEM */
+/* REPEAT */
 repeatBtn.onclick = () => {
   if (repeatMode === "off") {
     repeatMode = "song";
@@ -135,7 +132,6 @@ repeatBtn.onclick = () => {
 
 /* AUTO NEXT + REPEAT */
 audio.onended = () => {
-
   if (repeatMode === "song") {
     audio.currentTime = 0;
     audio.play();
@@ -144,9 +140,7 @@ audio.onended = () => {
 
   if (repeatMode === "album") {
     currentSongIndex++;
-    if (currentSongIndex >= currentAlbum.songs.length) {
-      currentSongIndex = 0;
-    }
+    if (currentSongIndex >= currentAlbum.songs.length) currentSongIndex = 0;
     playSong(currentSongIndex);
     return;
   }
@@ -154,40 +148,24 @@ audio.onended = () => {
   nextBtn.click();
 };
 
-/* LIKED SONGS */
+/* 🎧 PROGRESS BAR UPDATE */
+audio.addEventListener("timeupdate", () => {
+  progress.value = (audio.currentTime / audio.duration) * 100 || 0;
+});
+
+/* 🎧 SCRUBBING (CLICK / DRAG) */
+progress.addEventListener("input", () => {
+  audio.currentTime = (progress.value / 100) * audio.duration;
+});
+
+/* ❤️ LIKE SYSTEM */
 function addToLiked(song) {
   if (!likedSongs.find(s => s.file === song.file)) {
     likedSongs.push(song);
   }
 }
 
-function showLikedSongs() {
-  albumGrid.style.display = "none";
-  trackView.style.display = "block";
-
-  pageTitle.innerText = "Liked Songs";
-
-  trackView.innerHTML = "";
-
-  likedSongs.forEach((song, i) => {
-    const div = document.createElement("div");
-    div.className = "track";
-
-    div.innerText = song.title;
-
-    div.onclick = () => {
-      audio.src = song.file;
-      audio.play();
-      trackName.innerText = song.title;
-      isPlaying = true;
-      playBtn.innerText = "⏸";
-    };
-
-    trackView.appendChild(div);
-  });
-}
-
-/* SEARCH */
+/* 🔍 SEARCH */
 searchBar.addEventListener("input", (e) => {
   const value = e.target.value.toLowerCase();
 
@@ -203,12 +181,11 @@ searchBar.addEventListener("input", (e) => {
     div.className = "album";
 
     div.innerHTML = `<img src="${album.cover}"><div>${album.title}</div>`;
-
     div.onclick = () => openAlbum(index);
 
     albumGrid.appendChild(div);
   });
 });
 
-/* START */
+/* INIT */
 loadAlbums();
