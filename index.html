@@ -11,14 +11,15 @@
 
   <div class="sidebar">
     <h2>Library</h2>
-    <input id="searchBar" placeholder="Search..." />
     <div onclick="loadAlbums()">Home</div>
+    <div onclick="loadArtists()">Artists</div>
   </div>
 
   <div class="main">
     <h1 id="pageTitle">Home</h1>
 
     <div id="albumGrid"></div>
+    <div id="artistGrid" style="display:none;"></div>
     <div id="trackView" style="display:none;"></div>
   </div>
 
