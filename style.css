@@ -1,194 +1,105 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   background: #0b0b10;
   color: white;
-  overflow: hidden;
 }
 
-/* =========================
-   MAIN LAYOUT
-========================= */
+/* LAYOUT */
 .layout {
   display: flex;
   height: 100vh;
 }
 
-/* =========================
-   SIDEBAR (Apple Music style glass)
-========================= */
+/* SIDEBAR */
 .sidebar {
-  width: 260px;
-  background: rgba(20, 20, 25, 0.6);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
+  width: 250px;
   padding: 20px;
-  border-right: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
 }
 
-.sidebar h2 {
-  font-size: 18px;
-  margin-bottom: 15px;
-  opacity: 0.9;
-}
-
-/* SEARCH */
 #searchBar {
   width: 100%;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: none;
-  outline: none;
-  background: rgba(255,255,255,0.08);
-  color: white;
+  padding: 8px;
   margin-bottom: 15px;
 }
 
-/* NAV ITEMS */
-.nav-item {
-  padding: 10px 12px;
-  margin: 6px 0;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.2s;
-  opacity: 0.7;
-}
-
-.nav-item:hover {
-  background: rgba(255,255,255,0.08);
-  opacity: 1;
-}
-
-.nav-item.active {
-  background: rgba(255,255,255,0.12);
-  opacity: 1;
-}
-
-/* =========================
-   MAIN CONTENT
-========================= */
+/* MAIN */
 .main {
   flex: 1;
-  padding: 30px;
+  padding: 20px;
   overflow-y: auto;
 }
 
-#pageTitle {
-  font-size: 28px;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-/* =========================
-   ALBUM GRID (Apple Music cards)
-========================= */
+/* ALBUMS */
 #albumGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
 }
 
 .album {
   background: rgba(255,255,255,0.06);
-  border-radius: 16px;
-  padding: 12px;
+  padding: 10px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: 0.25s ease;
-  backdrop-filter: blur(10px);
-}
-
-.album:hover {
-  transform: scale(1.05);
-  background: rgba(255,255,255,0.12);
 }
 
 .album img {
   width: 100%;
-  border-radius: 12px;
-  margin-bottom: 8px;
+  border-radius: 10px;
 }
 
-.album div {
-  font-size: 14px;
-  opacity: 0.9;
-}
-
-/* =========================
-   TRACK LIST (Apple Music simple clean list)
-========================= */
+/* TRACKS */
 .track {
-  padding: 14px 16px;
-  margin: 8px 0;
+  padding: 12px;
+  margin: 6px 0;
   background: rgba(255,255,255,0.06);
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: 0.2s;
 }
 
-.track:hover {
-  background: rgba(255,255,255,0.12);
-}
-
-/* =========================
-   PLAYER BAR (Apple Music bottom dock)
-========================= */
+/* PLAYER */
 .player {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background: rgba(20, 20, 25, 0.75);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  border-top: 1px solid rgba(255,255,255,0.06);
-  padding: 12px 20px;
+  background: rgba(20,20,25,0.9);
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-/* TRACK INFO */
-.track-info {
-  width: 200px;
-  font-size: 14px;
-  opacity: 0.85;
-}
-
-/* CONTROLS */
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-button {
+.controls button {
   background: none;
   border: none;
   color: white;
   font-size: 18px;
   cursor: pointer;
-  transition: 0.2s;
 }
 
-button:hover {
-  transform: scale(1.2);
+#volume {
+  width: 120px;
 }
 
-/* =========================
-   PROGRESS BAR (Apple Music style)
-========================= */
-#progress {
-  width: 35%;
-  accent-color: white;
-}
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
 
-/* =========================
-   SCROLLBAR (clean Apple style)
-========================= */
-.main::-webkit-scrollbar {
-  width: 8px;
-}
+  #albumGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-.main::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.15);
-  border-radius: 10px;
+  .player {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #volume {
+    width: 100%;
+  }
 }
