@@ -13,29 +13,25 @@
     <div class="sidebar">
       <h2>Library</h2>
 
-      <div class="nav-item active">Home</div>
-      <div class="nav-item">Albums</div>
-      <div class="nav-item">Artists</div>
-      <div class="nav-item">Playlists</div>
+      <input id="searchBar" placeholder="Search..." />
+
+      <div class="nav-item active" onclick="loadAlbums()">Home</div>
+      <div class="nav-item" onclick="showLikedSongs()">Liked Songs</div>
     </div>
 
-    <!-- MAIN CONTENT AREA -->
+    <!-- MAIN -->
     <div class="main">
 
-      <!-- PAGE TITLE -->
       <h1 id="pageTitle">Home</h1>
 
-      <!-- ALBUM GRID (HOME SCREEN) -->
       <div id="albumGrid"></div>
-
-      <!-- TRACK LIST (WHEN ALBUM IS OPEN) -->
       <div id="trackView" style="display:none;"></div>
 
     </div>
 
   </div>
 
-  <!-- 🎧 PLAYER BAR (BOTTOM FIXED) -->
+  <!-- PLAYER -->
   <div class="player">
 
     <div class="track-info">
@@ -48,16 +44,12 @@
       <button id="next">⏭</button>
     </div>
 
-    <!-- (optional future upgrade: seek bar) -->
     <input type="range" id="seek" min="0" max="100" value="0">
 
   </div>
 
-  <!-- 🎵 AUDIO ENGINE -->
   <audio id="audio"></audio>
 
-  <!-- JS FILE -->
   <script src="app.js"></script>
-
 </body>
 </html>
