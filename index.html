@@ -7,49 +7,46 @@
 </head>
 <body>
 
-  <div class="layout">
+<div class="layout">
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-      <h2>Library</h2>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>Library</h2>
 
-      <input id="searchBar" placeholder="Search..." />
+    <input id="searchBar" placeholder="Search..." />
 
-      <div class="nav-item active" onclick="loadAlbums()">Home</div>
-      <div class="nav-item" onclick="showLikedSongs()">Liked Songs</div>
-    </div>
-
-    <!-- MAIN -->
-    <div class="main">
-
-      <h1 id="pageTitle">Home</h1>
-
-      <div id="albumGrid"></div>
-      <div id="trackView" style="display:none;"></div>
-
-    </div>
-
+    <div class="nav-item active" onclick="loadAlbums()">Home</div>
+    <div class="nav-item" onclick="showLikedSongs()">Liked Songs</div>
   </div>
 
-  <!-- PLAYER -->
-  <div class="player">
+  <!-- MAIN -->
+  <div class="main">
+    <h1 id="pageTitle">Home</h1>
 
-    <div class="track-info">
-      <div id="trackName">Nothing Playing</div>
-    </div>
-
-    <div class="controls">
-      <button id="prev">⏮</button>
-      <button id="play">▶</button>
-      <button id="next">⏭</button>
-    </div>
-
-    <input type="range" id="seek" min="0" max="100" value="0">
-
+    <div id="albumGrid"></div>
+    <div id="trackView" style="display:none;"></div>
   </div>
 
-  <audio id="audio"></audio>
+</div>
 
-  <script src="app.js"></script>
+<!-- PLAYER -->
+<div class="player">
+
+  <div class="track-info">
+    <div id="trackName">Nothing Playing</div>
+  </div>
+
+  <div class="controls">
+    <button id="prev">⏮</button>
+    <button id="play">▶</button>
+    <button id="next">⏭</button>
+    <button id="repeat">🔁</button>
+  </div>
+
+</div>
+
+<audio id="audio"></audio>
+
+<script src="app.js"></script>
 </body>
 </html>
