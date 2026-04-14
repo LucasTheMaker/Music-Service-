@@ -1,75 +1,163 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
   background: #0b0b10;
   color: white;
+  overflow: hidden;
 }
 
+/* =========================
+   MAIN LAYOUT
+========================= */
 .layout {
   display: flex;
   height: 100vh;
 }
 
+/* =========================
+   SIDEBAR (Apple Music style glass)
+========================= */
 .sidebar {
-  width: 240px;
+  width: 260px;
+  background: rgba(20, 20, 25, 0.6);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
   padding: 20px;
-  background: rgba(20,20,25,0.85);
-  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255,255,255,0.06);
 }
 
+.sidebar h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  opacity: 0.9;
+}
+
+/* SEARCH */
 #searchBar {
   width: 100%;
-  padding: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.08);
+  color: white;
   margin-bottom: 15px;
 }
 
+/* NAV ITEMS */
+.nav-item {
+  padding: 10px 12px;
+  margin: 6px 0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  opacity: 0.7;
+}
+
+.nav-item:hover {
+  background: rgba(255,255,255,0.08);
+  opacity: 1;
+}
+
+.nav-item.active {
+  background: rgba(255,255,255,0.12);
+  opacity: 1;
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
 .main {
   flex: 1;
-  padding: 20px;
+  padding: 30px;
   overflow-y: auto;
 }
 
+#pageTitle {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* =========================
+   ALBUM GRID (Apple Music cards)
+========================= */
 #albumGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 20px;
 }
 
 .album {
   background: rgba(255,255,255,0.06);
-  padding: 10px;
-  border-radius: 12px;
+  border-radius: 16px;
+  padding: 12px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  backdrop-filter: blur(10px);
+}
+
+.album:hover {
+  transform: scale(1.05);
+  background: rgba(255,255,255,0.12);
 }
 
 .album img {
   width: 100%;
-  border-radius: 10px;
+  border-radius: 12px;
+  margin-bottom: 8px;
 }
 
-/* TRACKS */
+.album div {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* =========================
+   TRACK LIST (Apple Music simple clean list)
+========================= */
 .track {
-  padding: 12px;
+  padding: 14px 16px;
   margin: 8px 0;
   background: rgba(255,255,255,0.06);
-  border-radius: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-/* PLAYER */
+.track:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+/* =========================
+   PLAYER BAR (Apple Music bottom dock)
+========================= */
 .player {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background: rgba(20,20,25,0.95);
-  padding: 10px;
+  background: rgba(20, 20, 25, 0.75);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 12px 20px;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
 }
 
+/* TRACK INFO */
+.track-info {
+  width: 200px;
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+/* CONTROLS */
 .controls {
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  align-items: center;
+  gap: 15px;
 }
 
 button {
@@ -77,15 +165,30 @@ button {
   border: none;
   color: white;
   font-size: 18px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-/* 🎧 PROGRESS BAR */
-.progress-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
+button:hover {
+  transform: scale(1.2);
 }
 
+/* =========================
+   PROGRESS BAR (Apple Music style)
+========================= */
 #progress {
-  width: 90%;
+  width: 35%;
+  accent-color: white;
+}
+
+/* =========================
+   SCROLLBAR (clean Apple style)
+========================= */
+.main::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
 }
