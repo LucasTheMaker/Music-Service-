@@ -1,58 +1,109 @@
 const audio = document.getElementById("audio");
-const content = document.getElementById("content");
 const trackName = document.getElementById("trackName");
-
 const playBtn = document.getElementById("play");
 const nextBtn = document.getElementById("next");
 const prevBtn = document.getElementById("prev");
 
-let currentIndex = 0;
+const albumGrid = document.getElementById("albumGrid");
+const trackView = document.getElementById("trackView");
+const pageTitle = document.getElementById("pageTitle");
 
-const songs = [
+let currentAlbum = null;
+let currentSongIndex = 0;
+
+// 🎧 YOUR MUSIC LIBRARY (ADD EVERYTHING HERE)
+const albums = [
   {
-    title: "Track 1",
-    artist: "Unknown Artist",
-    file: "music/song1.mp3"
+    title: "Demo Album",
+    artist: "Various Artists",
+    cover: "images/cover1.jpg",
+    songs: [
+      { title: "Intro", file: "music/song1.mp3" },
+      { title: "Second Track", file: "music/song2.mp3" }
+    ]
   },
   {
-    title: "Track 2",
+    title: "Chill Pack",
     artist: "Unknown Artist",
-    file: "music/song2.mp3"
+    cover: "images/cover2.jpg",
+    songs: [
+      { title: "Vibe 1", file: "music/song3.mp3" }
+    ]
   }
 ];
 
-// render library
-function loadSongs() {
-  content.innerHTML = "";
 
-  songs.forEach((song, index) => {
+// 🏠 LOAD HOME (ALBUM GRID)
+function loadAlbums() {
+  albumGrid.style.display = "grid";
+  trackView.style.display = "none";
+
+  albumGrid.innerHTML = "";
+
+  pageTitle.innerText = "Home";
+
+  albums.forEach((album, index) => {
     const div = document.createElement("div");
-    div.className = "card";
+    div.className = "album";
+
     div.innerHTML = `
-      <strong>${song.title}</strong><br>
-      <small>${song.artist}</small>
+      <img src="${album.cover}" class="album-cover">
+      <div class="album-title">${album.title}</div>
+      <div class="album-artist">${album.artist}</div>
     `;
 
-    div.onclick = () => playSong(index);
+    div.onclick = () => openAlbum(index);
 
-    content.appendChild(div);
+    albumGrid.appendChild(div);
   });
 }
 
-// play system
+
+// 📀 OPEN ALBUM (TRACK LIST VIEW)
+function openAlbum(index) {
+  currentAlbum = albums[index];
+
+  pageTitle.innerText = currentAlbum.title;
+
+  albumGrid.style.display = "none";
+  trackView.style.display = "block";
+
+  trackView.innerHTML = "";
+
+  currentAlbum.songs.forEach((song, i) => {
+    const div = document.createElement("div");
+    div.className = "track";
+
+    div.innerHTML = `
+      <span>${i + 1}. ${song.title}</span>
+    `;
+
+    div.onclick = () => playSong(i);
+
+    trackView.appendChild(div);
+  });
+}
+
+
+// 🎵 PLAY SONG
 function playSong(index) {
-  currentIndex = index;
-  const song = songs[index];
+  currentSongIndex = index;
+
+  const song = currentAlbum.songs[index];
 
   audio.src = song.file;
   audio.play();
 
   trackName.innerText = song.title;
+
   playBtn.innerText = "⏸";
 }
 
-// controls
+
+// ⏯ PLAY / PAUSE BUTTON
 playBtn.onclick = () => {
+  if (!audio.src) return;
+
   if (audio.paused) {
     audio.play();
     playBtn.innerText = "⏸";
@@ -62,14 +113,34 @@ playBtn.onclick = () => {
   }
 };
 
+
+// ⏭ NEXT SONG
 nextBtn.onclick = () => {
-  currentIndex = (currentIndex + 1) % songs.length;
-  playSong(currentIndex);
+  if (!currentAlbum) return;
+
+  currentSongIndex++;
+
+  if (currentSongIndex >= currentAlbum.songs.length) {
+    currentSongIndex = 0;
+  }
+
+  playSong(currentSongIndex);
 };
 
+
+// ⏮ PREVIOUS SONG
 prevBtn.onclick = () => {
-  currentIndex = (currentIndex - 1 + songs.length) % songs.length;
-  playSong(currentIndex);
+  if (!currentAlbum) return;
+
+  currentSongIndex--;
+
+  if (currentSongIndex < 0) {
+    currentSongIndex = currentAlbum.songs.length - 1;
+  }
+
+  playSong(currentSongIndex);
 };
 
-loadSongs();
+
+// 🚀 INIT APP
+loadAlbums();
