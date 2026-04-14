@@ -18,25 +18,25 @@ let isPlaying = false;
 let likedSongs = [];
 let repeatMode = "off";
 
-/* 🎵 FULL ALBUM LIBRARY */
+/* 🎵 ALBUM DATA */
 const albums = [
   {
     title: "ye",
     artist: "Kanye West",
     cover: "images/ye.jpg",
     songs: [
-      { title: "I Thought About Killing You", file: "music/ye1.mp3" },
-      { title: "Yikes", file: "music/ye2.mp3" },
-      { title: "All Mine", file: "music/ye3.mp3" },
-      { title: "Wouldn't Leave", file: "music/ye4.mp3" },
-      { title: "No Mistakes", file: "music/ye5.mp3" },
-      { title: "Ghost Town", file: "music/ye6.mp3" },
-      { title: "Violent Crimes", file: "music/ye7.mp3" }
+      { title: "I Thought About Killing You", file: "music/1. I Thought About Killing You.mp3" },
+      { title: "Yikes", file: "music/2. Yikes.mp3" },
+      { title: "All Mine", file: "music/3. All Mine.mp3" },
+      { title: "Wouldn't Leave", file: "music/4. Wouldn't Leave.mp3" },
+      { title: "No Mistakes", file: "music/5. No Mistakes.mp3" },
+      { title: "Ghost Town", file: "music/6. Ghost Town.mp3" },
+      { title: "Violent Crimes", file: "music/7. Violent Crimes.mp3" }
     ]
   }
 ];
 
-/* 🏠 HOME */
+/* 🏠 LOAD HOME */
 function loadAlbums() {
   albumGrid.style.display = "grid";
   trackView.style.display = "none";
@@ -74,6 +74,7 @@ function openAlbum(index) {
     div.className = "track";
 
     div.innerText = song.title;
+
     div.onclick = () => playSong(i);
 
     trackView.appendChild(div);
@@ -86,7 +87,9 @@ function playSong(index) {
 
   const song = currentAlbum.songs[index];
 
-  audio.src = song.file;
+  // 🔥 fixes spaces + numbers automatically
+  audio.src = encodeURI(song.file);
+
   audio.play();
 
   trackName.innerText = song.title;
@@ -122,7 +125,7 @@ nextBtn.onclick = () => {
   playSong(currentSongIndex);
 };
 
-/* ⏮ PREVIOUS */
+/* ⏮ PREV */
 prevBtn.onclick = () => {
   if (!currentAlbum) return;
 
@@ -132,7 +135,7 @@ prevBtn.onclick = () => {
   playSong(currentSongIndex);
 };
 
-/* 🔁 REPEAT MODES */
+/* 🔁 REPEAT MODE */
 repeatBtn.onclick = () => {
   if (repeatMode === "off") {
     repeatMode = "song";
@@ -149,14 +152,12 @@ repeatBtn.onclick = () => {
 /* 🔁 AUTO NEXT + REPEAT */
 audio.onended = () => {
 
-  // repeat song
   if (repeatMode === "song") {
     audio.currentTime = 0;
     audio.play();
     return;
   }
 
-  // repeat album
   if (repeatMode === "album") {
     currentSongIndex++;
     if (currentSongIndex >= currentAlbum.songs.length) {
@@ -166,7 +167,6 @@ audio.onended = () => {
     return;
   }
 
-  // normal mode
   nextBtn.click();
 };
 
@@ -175,32 +175,6 @@ function addToLiked(song) {
   if (!likedSongs.find(s => s.file === song.file)) {
     likedSongs.push(song);
   }
-}
-
-function showLikedSongs() {
-  albumGrid.style.display = "none";
-  trackView.style.display = "block";
-
-  pageTitle.innerText = "Liked Songs";
-
-  trackView.innerHTML = "";
-
-  likedSongs.forEach((song, i) => {
-    const div = document.createElement("div");
-    div.className = "track";
-
-    div.innerText = song.title;
-
-    div.onclick = () => {
-      audio.src = song.file;
-      audio.play();
-      trackName.innerText = song.title;
-      isPlaying = true;
-      playBtn.innerText = "⏸";
-    };
-
-    trackView.appendChild(div);
-  });
 }
 
 /* 🔍 SEARCH */
@@ -229,5 +203,5 @@ searchBar.addEventListener("input", (e) => {
   });
 });
 
-/* 🚀 START */
+/* 🚀 START APP */
 loadAlbums();
