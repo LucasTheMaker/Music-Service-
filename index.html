@@ -19,22 +19,23 @@
       <div class="nav-item">Playlists</div>
     </div>
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN CONTENT AREA -->
     <div class="main">
 
+      <!-- PAGE TITLE -->
       <h1 id="pageTitle">Home</h1>
 
-      <!-- ALBUM GRID (HOME PAGE) -->
+      <!-- ALBUM GRID (HOME SCREEN) -->
       <div id="albumGrid"></div>
 
-      <!-- TRACK VIEW (when album is opened) -->
+      <!-- TRACK LIST (WHEN ALBUM IS OPEN) -->
       <div id="trackView" style="display:none;"></div>
 
     </div>
 
   </div>
 
-  <!-- PLAYER BAR -->
+  <!-- 🎧 PLAYER BAR (BOTTOM FIXED) -->
   <div class="player">
 
     <div class="track-info">
@@ -47,13 +48,16 @@
       <button id="next">⏭</button>
     </div>
 
+    <!-- (optional future upgrade: seek bar) -->
     <input type="range" id="seek" min="0" max="100" value="0">
 
   </div>
 
-  <!-- AUDIO ENGINE -->
+  <!-- 🎵 AUDIO ENGINE -->
   <audio id="audio"></audio>
 
+  <!-- JS FILE -->
   <script src="app.js"></script>
+
 </body>
 </html>
