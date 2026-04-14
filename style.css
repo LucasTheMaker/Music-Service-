@@ -16,6 +16,7 @@ body {
   width: 250px;
   padding: 20px;
   background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
 }
 
 /* MAIN */
@@ -32,18 +33,6 @@ body {
   gap: 15px;
 }
 
-.album {
-  background: rgba(255,255,255,0.06);
-  padding: 10px;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-.album img {
-  width: 100%;
-  border-radius: 10px;
-}
-
 /* TRACKS */
 .track {
   padding: 12px;
@@ -51,6 +40,26 @@ body {
   background: rgba(255,255,255,0.06);
   border-radius: 10px;
   cursor: pointer;
+}
+
+/* ARTISTS */
+#artistGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
+}
+
+.artist {
+  text-align: center;
+  cursor: pointer;
+  background: rgba(255,255,255,0.06);
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.artist img {
+  width: 100%;
+  border-radius: 12px;
 }
 
 /* PLAYER */
@@ -83,7 +92,8 @@ body {
     flex-direction: column;
   }
 
-  #albumGrid {
+  #albumGrid,
+  #artistGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 
