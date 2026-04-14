@@ -13,15 +13,17 @@ const trackView = document.getElementById("trackView");
 const pageTitle = document.getElementById("pageTitle");
 const searchBar = document.getElementById("searchBar");
 
+/* 📱 DEVICE DETECT */
+const isMobile = window.innerWidth <= 768;
+
 let currentAlbum = null;
 let currentSongIndex = 0;
 let isPlaying = false;
 
 let repeatMode = "off";
 let shuffleMode = false;
-let queue = [];
 
-/* 🎵 ALBUM */
+/* 🎵 ALBUMS */
 const albums = [
   {
     title: "ye",
@@ -52,20 +54,21 @@ function loadAlbums() {
     div.innerHTML = `
       <img src="${album.cover}">
       <div>${album.title}</div>
-      <div style="opacity:0.6;font-size:12px;">${album.artist}</div>
+      <div style="opacity:0.6;">${album.artist}</div>
     `;
     div.onclick = () => openAlbum(i);
     albumGrid.appendChild(div);
   });
 }
 
-/* 📀 OPEN */
+/* 📀 OPEN ALBUM */
 function openAlbum(i) {
   currentAlbum = albums[i];
+
   albumGrid.style.display = "none";
   trackView.style.display = "block";
-
   trackView.innerHTML = "";
+
   pageTitle.innerText = currentAlbum.title;
 
   currentAlbum.songs.forEach((song, index) => {
@@ -77,22 +80,24 @@ function openAlbum(i) {
   });
 }
 
-/* 🎧 PLAY */
+/* 🎧 PLAY SONG (FIXED) */
 function playSong(index) {
   currentSongIndex = index;
+
   const song = currentAlbum.songs[index];
 
+  audio.pause();
   audio.src = encodeURI(song.file);
-  audio.play();
+  audio.load();
+
+  audio.play().catch(err => console.log(err));
 
   trackName.innerText = song.title;
   isPlaying = true;
   playBtn.innerText = "⏸";
-
-  queue = currentAlbum.songs.slice(index + 1);
 }
 
-/* ▶ PLAY/PAUSE */
+/* ▶ PLAY / PAUSE */
 playBtn.onclick = () => {
   if (!audio.src) return;
 
@@ -125,17 +130,15 @@ prevBtn.onclick = () => {
   playSong(currentSongIndex);
 };
 
-/* 🔁 REPEAT */
-repeatBtn.onclick = () => {
-  if (repeatMode === "off") repeatMode = "song";
-  else if (repeatMode === "song") repeatMode = "album";
-  else repeatMode = "off";
-};
-
 /* 🔀 SHUFFLE */
 shuffleBtn.onclick = () => {
   shuffleMode = !shuffleMode;
   shuffleBtn.style.opacity = shuffleMode ? "1" : "0.5";
+};
+
+/* 🔁 REPEAT */
+repeatBtn.onclick = () => {
+  repeatMode = repeatMode === "off" ? "song" : repeatMode === "song" ? "album" : "off";
 };
 
 /* 🔊 VOLUME */
@@ -155,3 +158,5 @@ audio.onended = () => {
 
 /* 🚀 START */
 loadAlbums();
+
+console.log("Mobile Mode:", isMobile);
