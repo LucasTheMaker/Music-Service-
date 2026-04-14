@@ -1,1 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Music</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>Library</h2>
+    <div id="nav">
+      <div class="nav-item active">Home</div>
+      <div class="nav-item">Albums</div>
+      <div class="nav-item">Artists</div>
+      <div class="nav-item">Playlists</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <h1>Recently Added</h1>
+    <div id="content"></div>
+  </div>
+
+</div>
+
+<!-- PLAYER -->
+<div class="player">
+  <div class="track-info">
+    <div id="trackName">Nothing Playing</div>
+  </div>
+
+  <div class="controls">
+    <button id="prev">⏮</button>
+    <button id="play">▶</button>
+    <button id="next">⏭</button>
+  </div>
+
+  <input type="range" id="seek" value="0" min="0" max="100">
+
+</div>
+
+<audio id="audio"></audio>
+
+<script src="app.js"></script>
+</body>
+</html>
