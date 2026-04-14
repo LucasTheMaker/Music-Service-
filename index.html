@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Music App</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Music App Pro</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
+<div class="bg-blur" id="bgBlur"></div>
 
 <div class="layout">
 
@@ -26,16 +29,19 @@
 </div>
 
 <!-- 🎧 PLAYER -->
-<div class="player">
+<div class="player" id="player">
 
-  <div id="trackName">Nothing Playing</div>
+  <div class="now-playing">
+    <div id="trackName">Nothing Playing</div>
+    <div id="subText">Music App Pro</div>
+  </div>
 
   <div class="controls">
     <button id="prev">⏮</button>
     <button id="play">▶</button>
     <button id="next">⏭</button>
-    <button id="repeat">🔁</button>
     <button id="shuffle">🔀</button>
+    <button id="repeat">🔁</button>
   </div>
 
   <input type="range" id="volume" min="0" max="1" step="0.01">
