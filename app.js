@@ -4,6 +4,7 @@ const trackName = document.getElementById("trackName");
 const playBtn = document.getElementById("play");
 const nextBtn = document.getElementById("next");
 const prevBtn = document.getElementById("prev");
+const repeatBtn = document.getElementById("repeat");
 
 const albumGrid = document.getElementById("albumGrid");
 const trackView = document.getElementById("trackView");
@@ -15,8 +16,9 @@ let currentSongIndex = 0;
 let isPlaying = false;
 
 let likedSongs = [];
+let repeatMode = "off"; // off | song | album
 
-/* ALBUM DATA */
+/* ALBUMS */
 const albums = [
   {
     title: "Demo Album",
@@ -29,7 +31,7 @@ const albums = [
   }
 ];
 
-/* LOAD HOME */
+/* HOME */
 function loadAlbums() {
   albumGrid.style.display = "grid";
   trackView.style.display = "none";
@@ -47,7 +49,6 @@ function loadAlbums() {
     `;
 
     div.onclick = () => openAlbum(index);
-
     albumGrid.appendChild(div);
   });
 }
@@ -116,6 +117,41 @@ prevBtn.onclick = () => {
   currentSongIndex--;
   if (currentSongIndex < 0) currentSongIndex = currentAlbum.songs.length - 1;
   playSong(currentSongIndex);
+};
+
+/* REPEAT SYSTEM */
+repeatBtn.onclick = () => {
+  if (repeatMode === "off") {
+    repeatMode = "song";
+    repeatBtn.innerText = "🔂";
+  } else if (repeatMode === "song") {
+    repeatMode = "album";
+    repeatBtn.innerText = "🔁";
+  } else {
+    repeatMode = "off";
+    repeatBtn.innerText = "🔁";
+  }
+};
+
+/* AUTO NEXT + REPEAT */
+audio.onended = () => {
+
+  if (repeatMode === "song") {
+    audio.currentTime = 0;
+    audio.play();
+    return;
+  }
+
+  if (repeatMode === "album") {
+    currentSongIndex++;
+    if (currentSongIndex >= currentAlbum.songs.length) {
+      currentSongIndex = 0;
+    }
+    playSong(currentSongIndex);
+    return;
+  }
+
+  nextBtn.click();
 };
 
 /* LIKED SONGS */
