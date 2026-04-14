@@ -8,6 +8,9 @@ const shuffleBtn = document.getElementById("shuffle");
 const volumeSlider = document.getElementById("volume");
 
 const trackName = document.getElementById("trackName");
+const subText = document.getElementById("subText");
+const bgBlur = document.getElementById("bgBlur");
+
 const albumGrid = document.getElementById("albumGrid");
 const artistGrid = document.getElementById("artistGrid");
 const trackView = document.getElementById("trackView");
@@ -17,8 +20,8 @@ let currentAlbum = null;
 let currentSongIndex = 0;
 let isPlaying = false;
 
-let repeatMode = "off";
 let shuffleMode = false;
+let repeatMode = "off";
 
 /* 🎵 ALBUMS */
 const albums = [
@@ -48,11 +51,16 @@ const artists = [
   }
 ];
 
+/* 🌫 UPDATE BACKGROUND */
+function updateBackground(img) {
+  bgBlur.style.backgroundImage = `url(${img})`;
+}
+
 /* 🏠 HOME */
 function loadAlbums() {
-  albumGrid.style.display = "grid";
   artistGrid.style.display = "none";
   trackView.style.display = "none";
+  albumGrid.style.display = "grid";
 
   pageTitle.innerText = "Home";
   albumGrid.innerHTML = "";
@@ -83,6 +91,8 @@ function openAlbum(i) {
   pageTitle.innerText = currentAlbum.title;
   trackView.innerHTML = "";
 
+  updateBackground(currentAlbum.cover);
+
   currentAlbum.songs.forEach((song, index) => {
     const div = document.createElement("div");
     div.className = "track";
@@ -92,7 +102,7 @@ function openAlbum(i) {
   });
 }
 
-/* 👤 LOAD ARTISTS */
+/* 👤 ARTISTS */
 function loadArtists() {
   albumGrid.style.display = "none";
   trackView.style.display = "none";
@@ -115,7 +125,7 @@ function loadArtists() {
   });
 }
 
-/* 🎤 OPEN ARTIST PAGE */
+/* 🎤 ARTIST PAGE */
 function openArtist(i) {
   const artist = artists[i];
 
@@ -126,34 +136,21 @@ function openArtist(i) {
   pageTitle.innerText = artist.name;
   trackView.innerHTML = "";
 
+  updateBackground(artist.image);
+
   artist.songs.forEach((song, index) => {
     const div = document.createElement("div");
     div.className = "track";
     div.innerText = song.title;
 
-    div.onclick = () => {
-      playDirect(song);
-    };
-
+    div.onclick = () => playDirect(song);
     trackView.appendChild(div);
   });
 }
 
-/* 🎧 PLAY FROM ARTIST */
-function playDirect(song) {
-  audio.src = encodeURI(song.file);
-  audio.load();
-  audio.play();
-
-  trackName.innerText = song.title;
-  isPlaying = true;
-  playBtn.innerText = "⏸";
-}
-
-/* 🎧 PLAY FROM ALBUM */
+/* 🎧 PLAY */
 function playSong(index) {
   currentSongIndex = index;
-
   const song = currentAlbum.songs[index];
 
   audio.src = encodeURI(song.file);
@@ -161,8 +158,20 @@ function playSong(index) {
   audio.play();
 
   trackName.innerText = song.title;
+  subText.innerText = currentAlbum.artist;
+
   isPlaying = true;
   playBtn.innerText = "⏸";
+}
+
+/* 🎧 DIRECT PLAY */
+function playDirect(song) {
+  audio.src = encodeURI(song.file);
+  audio.load();
+  audio.play();
+
+  trackName.innerText = song.title;
+  subText.innerText = "Artist";
 }
 
 /* ▶ PLAY/PAUSE */
@@ -182,28 +191,16 @@ playBtn.onclick = () => {
 
 /* ⏭ NEXT */
 nextBtn.onclick = () => {
-  if (!currentAlbum) return;
-
   currentSongIndex++;
   if (currentSongIndex >= currentAlbum.songs.length) currentSongIndex = 0;
-
   playSong(currentSongIndex);
 };
 
 /* ⏮ PREV */
 prevBtn.onclick = () => {
-  if (!currentAlbum) return;
-
   currentSongIndex--;
   if (currentSongIndex < 0) currentSongIndex = currentAlbum.songs.length - 1;
-
   playSong(currentSongIndex);
-};
-
-/* 🔀 SHUFFLE */
-shuffleBtn.onclick = () => {
-  shuffleMode = !shuffleMode;
-  shuffleBtn.style.opacity = shuffleMode ? "1" : "0.5";
 };
 
 /* 🔊 VOLUME */
@@ -211,7 +208,7 @@ volumeSlider.oninput = () => {
   audio.volume = volumeSlider.value;
 };
 
-/* 🔁 AUTO NEXT */
+/* 🔁 END */
 audio.onended = () => {
   nextBtn.click();
 };
