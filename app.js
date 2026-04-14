@@ -4,6 +4,8 @@ const playBtn = document.getElementById("play");
 const nextBtn = document.getElementById("next");
 const prevBtn = document.getElementById("prev");
 const repeatBtn = document.getElementById("repeat");
+const shuffleBtn = document.getElementById("shuffle");
+const volumeSlider = document.getElementById("volume");
 
 const trackName = document.getElementById("trackName");
 const albumGrid = document.getElementById("albumGrid");
@@ -15,10 +17,11 @@ let currentAlbum = null;
 let currentSongIndex = 0;
 let isPlaying = false;
 
-let likedSongs = [];
 let repeatMode = "off";
+let shuffleMode = false;
+let queue = [];
 
-/* 🎵 ALBUM DATA */
+/* 🎵 ALBUM */
 const albums = [
   {
     title: "ye",
@@ -36,71 +39,60 @@ const albums = [
   }
 ];
 
-/* 🏠 LOAD HOME */
+/* 🏠 HOME */
 function loadAlbums() {
-  albumGrid.style.display = "grid";
-  trackView.style.display = "none";
-
   albumGrid.innerHTML = "";
+  trackView.style.display = "none";
+  albumGrid.style.display = "grid";
   pageTitle.innerText = "Home";
 
-  albums.forEach((album, index) => {
+  albums.forEach((album, i) => {
     const div = document.createElement("div");
     div.className = "album";
-
     div.innerHTML = `
       <img src="${album.cover}">
       <div>${album.title}</div>
       <div style="opacity:0.6;font-size:12px;">${album.artist}</div>
     `;
-
-    div.onclick = () => openAlbum(index);
+    div.onclick = () => openAlbum(i);
     albumGrid.appendChild(div);
   });
 }
 
-/* 📀 OPEN ALBUM */
-function openAlbum(index) {
-  currentAlbum = albums[index];
-
+/* 📀 OPEN */
+function openAlbum(i) {
+  currentAlbum = albums[i];
   albumGrid.style.display = "none";
   trackView.style.display = "block";
 
   trackView.innerHTML = "";
   pageTitle.innerText = currentAlbum.title;
 
-  currentAlbum.songs.forEach((song, i) => {
+  currentAlbum.songs.forEach((song, index) => {
     const div = document.createElement("div");
     div.className = "track";
-
     div.innerText = song.title;
-
-    div.onclick = () => playSong(i);
-
+    div.onclick = () => playSong(index);
     trackView.appendChild(div);
   });
 }
 
-/* 🎧 PLAY SONG */
+/* 🎧 PLAY */
 function playSong(index) {
   currentSongIndex = index;
-
   const song = currentAlbum.songs[index];
 
-  // 🔥 fixes spaces + numbers automatically
   audio.src = encodeURI(song.file);
-
   audio.play();
 
   trackName.innerText = song.title;
-
   isPlaying = true;
   playBtn.innerText = "⏸";
 
-  addToLiked(song);
+  queue = currentAlbum.songs.slice(index + 1);
 }
 
-/* ⏯ PLAY / PAUSE */
+/* ▶ PLAY/PAUSE */
 playBtn.onclick = () => {
   if (!audio.src) return;
 
@@ -117,91 +109,49 @@ playBtn.onclick = () => {
 
 /* ⏭ NEXT */
 nextBtn.onclick = () => {
-  if (!currentAlbum) return;
-
-  currentSongIndex++;
-  if (currentSongIndex >= currentAlbum.songs.length) currentSongIndex = 0;
-
+  if (shuffleMode) {
+    currentSongIndex = Math.floor(Math.random() * currentAlbum.songs.length);
+  } else {
+    currentSongIndex++;
+    if (currentSongIndex >= currentAlbum.songs.length) currentSongIndex = 0;
+  }
   playSong(currentSongIndex);
 };
 
 /* ⏮ PREV */
 prevBtn.onclick = () => {
-  if (!currentAlbum) return;
-
   currentSongIndex--;
   if (currentSongIndex < 0) currentSongIndex = currentAlbum.songs.length - 1;
-
   playSong(currentSongIndex);
 };
 
-/* 🔁 REPEAT MODE */
+/* 🔁 REPEAT */
 repeatBtn.onclick = () => {
-  if (repeatMode === "off") {
-    repeatMode = "song";
-    repeatBtn.innerText = "🔂";
-  } else if (repeatMode === "song") {
-    repeatMode = "album";
-    repeatBtn.innerText = "🔁";
-  } else {
-    repeatMode = "off";
-    repeatBtn.innerText = "🔁";
-  }
+  if (repeatMode === "off") repeatMode = "song";
+  else if (repeatMode === "song") repeatMode = "album";
+  else repeatMode = "off";
 };
 
-/* 🔁 AUTO NEXT + REPEAT */
-audio.onended = () => {
+/* 🔀 SHUFFLE */
+shuffleBtn.onclick = () => {
+  shuffleMode = !shuffleMode;
+  shuffleBtn.style.opacity = shuffleMode ? "1" : "0.5";
+};
 
+/* 🔊 VOLUME */
+volumeSlider.oninput = () => {
+  audio.volume = volumeSlider.value;
+};
+
+/* 🔁 AUTO NEXT */
+audio.onended = () => {
   if (repeatMode === "song") {
     audio.currentTime = 0;
     audio.play();
     return;
   }
-
-  if (repeatMode === "album") {
-    currentSongIndex++;
-    if (currentSongIndex >= currentAlbum.songs.length) {
-      currentSongIndex = 0;
-    }
-    playSong(currentSongIndex);
-    return;
-  }
-
   nextBtn.click();
 };
 
-/* ❤️ LIKED SONGS */
-function addToLiked(song) {
-  if (!likedSongs.find(s => s.file === song.file)) {
-    likedSongs.push(song);
-  }
-}
-
-/* 🔍 SEARCH */
-searchBar.addEventListener("input", (e) => {
-  const value = e.target.value.toLowerCase();
-
-  const filtered = albums.filter(a =>
-    a.title.toLowerCase().includes(value) ||
-    a.artist.toLowerCase().includes(value)
-  );
-
-  albumGrid.innerHTML = "";
-
-  filtered.forEach((album, index) => {
-    const div = document.createElement("div");
-    div.className = "album";
-
-    div.innerHTML = `
-      <img src="${album.cover}">
-      <div>${album.title}</div>
-      <div style="opacity:0.6;font-size:12px;">${album.artist}</div>
-    `;
-
-    div.onclick = () => openAlbum(index);
-    albumGrid.appendChild(div);
-  });
-});
-
-/* 🚀 START APP */
+/* 🚀 START */
 loadAlbums();
