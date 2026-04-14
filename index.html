@@ -11,11 +11,9 @@
 
   <div class="sidebar">
     <h2>Library</h2>
-
     <input id="searchBar" placeholder="Search..." />
 
     <div class="nav-item active" onclick="loadAlbums()">Home</div>
-    <div class="nav-item" onclick="showLikedSongs()">Liked Songs</div>
   </div>
 
   <div class="main">
@@ -27,7 +25,7 @@
 
 </div>
 
-<!-- PLAYER -->
+<!-- 🎧 PLAYER -->
 <div class="player">
 
   <div class="track-info">
@@ -39,12 +37,10 @@
     <button id="play">▶</button>
     <button id="next">⏭</button>
     <button id="repeat">🔁</button>
+    <button id="shuffle">🔀</button>
   </div>
 
-  <!-- 🎧 REAL PROGRESS BAR -->
-  <div class="progress-container">
-    <input type="range" id="progress" value="0" min="0" max="100">
-  </div>
+  <input type="range" id="volume" min="0" max="1" step="0.01">
 
 </div>
 
