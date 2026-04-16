@@ -40,18 +40,18 @@ const albums = [
   }
 ];
 
-/* 🔥 SAME IMAGE USED HERE (fix you asked for) */
+/* 🔥 SAME IMAGE FOR ARTIST PAGE */
 const artists = [
   {
     name: "Kanye West",
-    image: "images/ye.jpg", // SAME IMAGE AS ALBUM COVER
+    image: "images/ye.jpg",
     bio: "American rapper, producer, and designer known for shaping modern hip-hop.",
     albums: [albums[0]]
   }
 ];
 
 /* =========================
-   AUDIO PLAYER (FIXED)
+   AUDIO PLAYER (SAFE)
 ========================= */
 function playSong(song, album = null, index = 0) {
   if (!song || !song.file) return;
@@ -78,14 +78,14 @@ function playSong(song, album = null, index = 0) {
 }
 
 /* =========================
-   HOME PAGE
+   HOME PAGE (FIXED CLICK)
 ========================= */
 function showHome() {
   main.innerHTML = `
     <h1>Home</h1>
 
     <h2>Artists</h2>
-    <div id="artistRow"></div>
+    <div id="artistRow" class="scroll"></div>
   `;
 
   const row = document.getElementById("artistRow");
@@ -95,31 +95,44 @@ function showHome() {
     card.className = "artist-card";
 
     card.innerHTML = `
-      <img src="${artist.image}">
+      <img src="${artist.image}" draggable="false">
       <div class="artist-name">${artist.name}</div>
     `;
 
-    card.onclick = () => showArtist(i); // 🔥 CLICK FIX
+    // 🔥 STRONG CLICK HANDLER (NO INLINE ONCLICK)
+    card.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      console.log("Artist clicked:", artist.name);
+
+      showArtist(i);
+    });
+
     row.appendChild(card);
   });
 }
 
 /* =========================
-   🔥 ARTIST PAGE (CLICKABLE FIXED)
+   🔥 ARTIST PAGE (FIXED CLICK)
 ========================= */
 function showArtist(i) {
   const artist = artists[i];
 
   main.innerHTML = `
     <div style="padding:10px;">
-      <img src="${artist.image}" style="width:220px;border-radius:20px;">
+      <img src="${artist.image}" style="width:220px;border-radius:20px;" draggable="false">
       <h1>${artist.name}</h1>
       <p style="opacity:0.8;">${artist.bio}</p>
 
       <h3>Albums</h3>
-      <div id="albumRow"></div>
+      <div id="albumRow" class="scroll"></div>
+
+      <button id="backBtn">← Back</button>
     </div>
   `;
+
+  document.getElementById("backBtn").onclick = showHome;
 
   const row = document.getElementById("albumRow");
 
@@ -128,11 +141,15 @@ function showArtist(i) {
     card.className = "album-card";
 
     card.innerHTML = `
-      <img src="${album.cover}">
+      <img src="${album.cover}" draggable="false">
       <div>${album.title}</div>
     `;
 
-    card.onclick = () => showAlbum(album); // 🔥 FIXED NAV
+    card.addEventListener("click", (e) => {
+      e.stopPropagation();
+      showAlbum(album);
+    });
+
     row.appendChild(card);
   });
 }
@@ -143,7 +160,7 @@ function showArtist(i) {
 function showAlbum(album) {
   main.innerHTML = `
     <div style="padding:10px;">
-      <img src="${album.cover}" style="width:240px;border-radius:18px;">
+      <img src="${album.cover}" style="width:240px;border-radius:18px;" draggable="false">
       <h1>${album.title}</h1>
       <h3>${album.artist}</h3>
 
@@ -152,8 +169,12 @@ function showAlbum(album) {
 
       <h3>Tracklist</h3>
       <div id="trackList"></div>
+
+      <button id="backArtist">← Back to Artist</button>
     </div>
   `;
+
+  document.getElementById("backArtist").onclick = () => showArtist(0);
 
   const list = document.getElementById("trackList");
 
@@ -162,7 +183,11 @@ function showAlbum(album) {
     div.className = "track";
     div.innerText = `${i + 1}. ${song.title}`;
 
-    div.onclick = () => playSong(song, album, i);
+    div.addEventListener("click", (e) => {
+      e.stopPropagation();
+      playSong(song, album, i);
+    });
+
     list.appendChild(div);
   });
 }
@@ -219,19 +244,19 @@ searchInput.oninput = () => {
         div.className = "track";
         div.innerText = song.title;
 
-        div.onclick = () => playSong(song, album, i);
+        div.addEventListener("click", () => {
+          playSong(song, album, i);
+        });
+
         main.appendChild(div);
       }
     });
   });
 };
 
-/* =========================
-   THEME
-========================= */
 themeToggle.onclick = () => {
   document.body.classList.toggle("light");
 };
 
-/* START APP */
+/* START */
 showHome();
