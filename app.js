@@ -24,8 +24,6 @@ const albums = [
     title: "ye",
     artist: "Kanye West",
     cover: "images/ye.jpg",
-
-    // ✅ YOUR UPDATED DESCRIPTION
     description:
       "Ye is Kanye West’s eighth studio album, released on June 1, 2018. It is a highly personal, introspective seven-track project recorded in Wyoming, focused on mental health, bipolar disorder, family, and recent controversies, featuring stripped-back production.",
 
@@ -41,40 +39,32 @@ const albums = [
   }
 ];
 
-/* 👤 ARTIST */
 const artists = [
   {
     name: "Kanye West",
     image: "images/kanye.png",
     bio:
-      "Kanye Omari West (now known as Ye) is a highly influential American rapper, producer, and fashion designer born in 1977. Rising to fame in the early 2000s, he revolutionized hip-hop by breaking away from gangster rap conventions, integrating soul samples, and exploring introspective themes. Known for his eclectic sound, critical acclaim, and controversial public persona, he has sold over 135 million records and won 24 Grammy Awards.\n\nKey Aspects of His Artistry:\n• Musical Evolution: From soul-sampling production (The College Dropout) to maximalist hip-hop (My Beautiful Dark Twisted Fantasy) and industrial sounds (Yeezus).\n• Production Pioneer: Early Roc-A-Fella producer including Jay-Z’s The Blueprint.\n• Fashion and Design: Founder of YEEZY brand.\n• Controversy: One of music’s most polarizing public figures.\n• Critical Acclaim: One of the most influential artists of the 21st century.",
+      "Kanye Omari West (now known as Ye) is a highly influential American rapper, producer, and fashion designer born in 1977. Rising to fame in the early 2000s, he revolutionized hip-hop by breaking away from gangster rap conventions, integrating soul samples, and exploring introspective themes.\n\nKey Aspects:\n• Musical Evolution across multiple eras\n• Roc-A-Fella production roots\n• YEEZY fashion empire\n• Cultural controversy\n• One of the most influential artists of the 21st century.",
     albums: [albums[0]]
   }
 ];
 
 /* =========================
-   PLAY SONG
+   PLAY FUNCTION
 ========================= */
 function playSong(song, album, index) {
   audio.src = encodeURI(song.file);
   audio.load();
-  audio.play().catch(console.log);
+  audio.play();
 
   trackName.innerText = song.title;
   subText.innerText = album.artist;
 
   currentAlbum = album;
   currentIndex = index;
-
   isPlaying = true;
-  playBtn.innerText = "⏸";
-}
 
-/* =========================
-   PLAY ALBUM
-========================= */
-function playAlbum(album) {
-  playSong(album.songs[0], album, 0);
+  playBtn.innerText = "⏸";
 }
 
 /* =========================
@@ -97,10 +87,7 @@ audio.addEventListener("ended", () => {
    HOME
 ========================= */
 function showHome() {
-  main.innerHTML = `
-    <h1>Artists</h1>
-    <div id="artistRow"></div>
-  `;
+  main.innerHTML = `<h1>Artists</h1><div id="artistRow"></div>`;
 
   const row = document.getElementById("artistRow");
 
@@ -119,7 +106,7 @@ function showHome() {
 }
 
 /* =========================
-   ARTIST PAGE + BIO TOGGLE
+   ARTIST PAGE
 ========================= */
 function showArtist(i) {
   const artist = artists[i];
@@ -153,16 +140,16 @@ function showArtist(i) {
   const bioText = document.getElementById("bioText");
   const toggle = document.getElementById("toggleBio");
 
-  function renderBio() {
+  function render() {
     bioText.innerText = expanded ? fullBio : shortBio;
     toggle.innerText = expanded ? "Show less" : "More";
   }
 
-  renderBio();
+  render();
 
   toggle.onclick = () => {
     expanded = !expanded;
-    renderBio();
+    render();
   };
 
   const row = document.getElementById("albumRow");
@@ -199,7 +186,7 @@ function showAlbum(album) {
     <div id="trackList"></div>
   `;
 
-  document.getElementById("playAlbum").onclick = () => playAlbum(album);
+  document.getElementById("playAlbum").onclick = () => playSong(album.songs[0], album, 0);
   document.getElementById("backHome").onclick = showHome;
 
   const list = document.getElementById("trackList");
@@ -208,52 +195,40 @@ function showAlbum(album) {
     const div = document.createElement("div");
     div.className = "track";
     div.innerText = `${i + 1}. ${song.title}`;
-
     div.onclick = () => playSong(song, album, i);
     list.appendChild(div);
   });
 }
 
-/* =========================
-   CONTROLS
-========================= */
+/* CONTROLS */
 playBtn.onclick = () => {
   if (!audio.src) return;
-
   if (isPlaying) {
     audio.pause();
     playBtn.innerText = "▶";
-    isPlaying = false;
   } else {
     audio.play();
     playBtn.innerText = "⏸";
-    isPlaying = true;
   }
+  isPlaying = !isPlaying;
 };
 
 nextBtn.onclick = () => {
   if (!currentAlbum) return;
-
   currentIndex = (currentIndex + 1) % currentAlbum.songs.length;
   playSong(currentAlbum.songs[currentIndex], currentAlbum, currentIndex);
 };
 
 prevBtn.onclick = () => {
   if (!currentAlbum) return;
-
   currentIndex =
     (currentIndex - 1 + currentAlbum.songs.length) %
     currentAlbum.songs.length;
-
   playSong(currentAlbum.songs[currentIndex], currentAlbum, currentIndex);
 };
 
 volume.oninput = () => {
   audio.volume = volume.value;
-};
-
-themeToggle.onclick = () => {
-  document.body.classList.toggle("light");
 };
 
 searchInput.oninput = () => {
