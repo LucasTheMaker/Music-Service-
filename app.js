@@ -17,18 +17,6 @@ let currentIndex = 0;
 let isPlaying = false;
 
 /* =========================
-   PROGRESS SYSTEM (NEW)
-========================= */
-const progressBar = document.createElement("input");
-progressBar.type = "range";
-progressBar.min = 0;
-progressBar.max = 100;
-progressBar.value = 0;
-progressBar.style.width = "100%";
-
-let isSeeking = false;
-
-/* =========================
    DATA
 ========================= */
 const albums = [
@@ -36,10 +24,7 @@ const albums = [
     title: "ye",
     artist: "Kanye West",
     cover: "images/ye.jpg",
-    year: "2018",
-    label: "GOOD Music / Def Jam Recordings",
-    description:
-      "A deeply personal seven-track album where Kanye explores identity, mental health, fame, relationships, and self-destruction. It feels minimal on the surface but is emotionally dense, shifting between chaos and clarity in real time.",
+    description: "A deeply personal 7-track album.",
     songs: [
       { title: "I Thought About Killing You", file: "music/1. I Thought About Killing You.mp3" },
       { title: "Yikes", file: "music/2. Yikes.mp3" },
@@ -52,12 +37,12 @@ const albums = [
   }
 ];
 
+/* 👤 ARTIST IMAGE = kanye.png */
 const artists = [
   {
     name: "Kanye West",
-    image: "images/ye.jpg",
-    bio:
-      "Kanye West is an American rapper, producer, designer, and cultural figure known for redefining modern hip-hop through experimental production, emotional storytelling, and constant reinvention across eras.",
+    image: "images/kanye.png",
+    bio: `Kanye West is an influential rapper, producer, and designer known for reshaping hip-hop.`,
     albums: [albums[0]]
   }
 ];
@@ -65,15 +50,13 @@ const artists = [
 /* =========================
    PLAY SONG
 ========================= */
-function playSong(song, album = null, index = 0) {
-  const safePath = encodeURI(song.file);
-
-  audio.src = safePath;
+function playSong(song, album, index) {
+  audio.src = encodeURI(song.file);
   audio.load();
-  audio.play().catch(console.log);
+  audio.play();
 
   trackName.innerText = song.title;
-  subText.innerText = album ? album.artist : "";
+  subText.innerText = album.artist;
 
   currentAlbum = album;
   currentIndex = index;
@@ -86,8 +69,6 @@ function playSong(song, album = null, index = 0) {
    PLAY ALBUM
 ========================= */
 function playAlbum(album) {
-  currentAlbum = album;
-  currentIndex = 0;
   playSong(album.songs[0], album, 0);
 }
 
@@ -108,62 +89,32 @@ audio.addEventListener("ended", () => {
 });
 
 /* =========================
-   TIME + PROGRESS (NEW)
-========================= */
-audio.addEventListener("timeupdate", () => {
-  if (!audio.duration || isSeeking) return;
-
-  const percent = (audio.currentTime / audio.duration) * 100;
-  progressBar.value = percent || 0;
-});
-
-progressBar.addEventListener("input", () => {
-  isSeeking = true;
-});
-
-progressBar.addEventListener("change", () => {
-  if (audio.duration) {
-    audio.currentTime = (progressBar.value / 100) * audio.duration;
-  }
-  isSeeking = false;
-});
-
-/* =========================
-   NOW PLAYING BAR (APPLE STYLE)
-========================= */
-function attachPlayerBar() {
-  const player = document.querySelector(".player");
-  player.appendChild(progressBar);
-}
-
-/* =========================
    HOME
 ========================= */
 function showHome() {
   main.innerHTML = `
-    <h1>Home</h1>
-    <h2>Artists</h2>
-    <div id="artistRow" class="scroll"></div>
+    <h1>Artists</h1>
+    <div id="artistRow"></div>
   `;
 
   const row = document.getElementById("artistRow");
 
   artists.forEach((artist, i) => {
-    const card = document.createElement("div");
-    card.className = "artist-card";
+    const div = document.createElement("div");
+    div.className = "artist-card";
 
-    card.innerHTML = `
+    div.innerHTML = `
       <img src="${artist.image}">
-      <div class="artist-name">${artist.name}</div>
+      <h3>${artist.name}</h3>
     `;
 
-    card.onclick = () => showArtist(i);
-    row.appendChild(card);
+    div.onclick = () => showArtist(i);
+    row.appendChild(div);
   });
 }
 
 /* =========================
-   🔥 ARTIST PAGE (APPLE STYLE)
+   ARTIST PAGE (APPLE STYLE)
 ========================= */
 function showArtist(i) {
   const artist = artists[i];
@@ -171,33 +122,32 @@ function showArtist(i) {
   main.innerHTML = `
     <div class="artist-hero">
       <img src="${artist.image}">
-      <div class="overlay">
+      <div class="artist-overlay">
         <h1>${artist.name}</h1>
         <p>${artist.bio}</p>
-
-        <button id="backBtn">← Back</button>
+        <button id="back">← Back</button>
       </div>
     </div>
 
     <h2>Albums</h2>
-    <div id="albumRow" class="scroll"></div>
+    <div id="albumRow"></div>
   `;
 
-  document.getElementById("backBtn").onclick = showHome;
+  document.getElementById("back").onclick = showHome;
 
   const row = document.getElementById("albumRow");
 
   artist.albums.forEach(album => {
-    const card = document.createElement("div");
-    card.className = "album-card";
+    const div = document.createElement("div");
+    div.className = "album-card";
 
-    card.innerHTML = `
+    div.innerHTML = `
       <img src="${album.cover}">
-      <div>${album.title}</div>
+      <p>${album.title}</p>
     `;
 
-    card.onclick = () => showAlbum(album);
-    row.appendChild(card);
+    div.onclick = () => showAlbum(album);
+    row.appendChild(div);
   });
 }
 
@@ -206,23 +156,19 @@ function showArtist(i) {
 ========================= */
 function showAlbum(album) {
   main.innerHTML = `
-    <div>
-      <img src="${album.cover}" style="width:260px;border-radius:18px;">
-      <h1>${album.title}</h1>
-      <h3>${album.artist}</h3>
+    <img src="${album.cover}" style="width:250px;border-radius:20px;">
+    <h1>${album.title}</h1>
+    <p>${album.description}</p>
 
-      <p>${album.description}</p>
+    <button id="playAlbum">▶ Play Album</button>
+    <button id="backArtist">← Back</button>
 
-      <button id="playAlbum">▶ Play Album</button>
-      <button id="backArtist">← Back</button>
-
-      <h3>Tracklist</h3>
-      <div id="trackList"></div>
-    </div>
+    <h3>Tracks</h3>
+    <div id="trackList"></div>
   `;
 
   document.getElementById("playAlbum").onclick = () => playAlbum(album);
-  document.getElementById("backArtist").onclick = () => showHome();
+  document.getElementById("backArtist").onclick = showHome;
 
   const list = document.getElementById("trackList");
 
@@ -236,33 +182,29 @@ function showAlbum(album) {
   });
 }
 
-/* =========================
-   CONTROLS
-========================= */
+/* CONTROLS */
 playBtn.onclick = () => {
   if (!audio.src) return;
 
   if (isPlaying) {
     audio.pause();
-    playBtn.innerText = "▶";
     isPlaying = false;
+    playBtn.innerText = "▶";
   } else {
     audio.play();
-    playBtn.innerText = "⏸";
     isPlaying = true;
+    playBtn.innerText = "⏸";
   }
 };
 
 nextBtn.onclick = () => {
   if (!currentAlbum) return;
-
   currentIndex = (currentIndex + 1) % currentAlbum.songs.length;
   playSong(currentAlbum.songs[currentIndex], currentAlbum, currentIndex);
 };
 
 prevBtn.onclick = () => {
   if (!currentAlbum) return;
-
   currentIndex =
     (currentIndex - 1 + currentAlbum.songs.length) %
     currentAlbum.songs.length;
@@ -280,7 +222,7 @@ themeToggle.onclick = () => {
 
 searchInput.oninput = () => {
   const q = searchInput.value.toLowerCase();
-  main.innerHTML = "<h2>Search Results</h2>";
+  main.innerHTML = "<h2>Search</h2>";
 
   albums.forEach(album => {
     album.songs.forEach((song, i) => {
@@ -295,6 +237,4 @@ searchInput.oninput = () => {
   });
 };
 
-/* START */
 showHome();
-attachPlayerBar();
