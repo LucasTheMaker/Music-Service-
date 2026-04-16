@@ -1,18 +1,10 @@
-# 🎵 Music Service App
+# 🎵 Music Service (Apple Music Style Clone)
 
-A simple Spotify / Apple Music style web music player built using HTML, CSS, and JavaScript.
+A simple music streaming web app built with HTML, CSS, and JavaScript.
 
----
-
-## 🚀 Features
-
-- 🎤 Artist section (Apple Music style hero cards)
-- 💿 Album grid (Spotify-style tiles)
-- ▶️ Music player (play / pause / next / previous)
-- 🔍 Search songs
-- 🌙 Light / Dark mode toggle
-- 📱 Mobile responsive layout
+## 🚀 Live Site
+https://lucasthemaker.github.io/Music-Service-/
 
 ---
 
-## 🗂️ Project Structure
+## 📁 Project Structure
