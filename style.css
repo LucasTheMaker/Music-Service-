@@ -15,6 +15,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* TOP BAR */
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -28,24 +29,18 @@ body {
   border: none;
 }
 
+/* MAIN */
 .main {
   padding: 20px;
-  padding-bottom: 120px;
 }
 
-/* ARTISTS (BIG CARDS) */
-.artist-grid {
-  display: flex;
-  overflow-x: auto;
-  gap: 16px;
-}
-
+/* ARTIST CARD */
 .artist-card {
-  min-width: 260px;
-  height: 320px;
+  position: relative;
+  min-width: 220px;
+  height: 260px;
   border-radius: 20px;
   overflow: hidden;
-  position: relative;
   cursor: pointer;
 }
 
@@ -57,58 +52,29 @@ body {
 
 .artist-name {
   position: absolute;
-  bottom: 15px;
-  left: 15px;
-  font-size: 22px;
+  bottom: 10px;
+  left: 10px;
+  font-size: 18px;
   font-weight: bold;
 }
 
-/* ALBUMS (SPOTIFY GRID) */
-.album-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
+/* ALBUM CARD (smaller like Spotify) */
 .album-card {
-  background: rgba(255,255,255,0.06);
-  border-radius: 12px;
-  padding: 8px;
+  width: 140px;
   cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.album-card:hover {
-  transform: scale(1.03);
 }
 
 .album-card img {
   width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-.album-title {
-  font-size: 12px;
-  margin-top: 6px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-@media (max-width: 768px) {
-  .album-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* TRACK LIST */
-.track {
-  padding: 14px;
-  margin: 6px 0;
-  background: rgba(255,255,255,0.1);
   border-radius: 12px;
+}
+
+/* TRACKLIST */
+.track {
+  padding: 10px;
+  margin: 6px 0;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -117,21 +83,16 @@ body {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background: rgba(20,20,20,0.95);
-  padding: 12px;
+  background: rgba(20,20,20,0.9);
+  padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-button {
-  background: none;
-  border: none;
-  color: var(--text);
-  font-size: 18px;
-  cursor: pointer;
-}
-
-#volume {
-  width: 100px;
+/* SCROLL ROW */
+.scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
 }
