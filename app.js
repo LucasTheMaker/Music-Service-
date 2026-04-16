@@ -17,7 +17,7 @@ let currentIndex = 0;
 let isPlaying = false;
 
 /* =========================
-   ALBUM DATA (YOUR FILES)
+   DATA
 ========================= */
 const albums = [
   {
@@ -27,12 +27,12 @@ const albums = [
     year: "2018",
     label: "GOOD Music / Def Jam Recordings",
     description:
-      "A raw 7-track album exploring mental health, fame, relationships, and self-awareness.",
+      "A raw 7-track album exploring mental health, fame, relationships, and identity.",
     songs: [
       { title: "I Thought About Killing You", file: "music/1. I Thought About Killing You.mp3" },
       { title: "Yikes", file: "music/2. Yikes.mp3" },
       { title: "All Mine", file: "music/3. All Mine.mp3" },
-      { title: "Wouldn't Leave", file: "music/4. Wouldn’t Leave.mp3" },
+      { title: "Wouldn't Leave", file: "music/4. Wouldn't Leave.mp3" },
       { title: "No Mistakes", file: "music/5. No Mistakes.mp3" },
       { title: "Ghost Town", file: "music/6. Ghost Town.mp3" },
       { title: "Violent Crimes", file: "music/7. Violent Crimes.mp3" }
@@ -40,21 +40,22 @@ const albums = [
   }
 ];
 
+/* 🔥 SAME IMAGE USED HERE (fix you asked for) */
 const artists = [
   {
     name: "Kanye West",
-    image: "images/kanye.png",
-    songs: albums[0].songs
+    image: "images/ye.jpg", // SAME IMAGE AS ALBUM COVER
+    bio: "American rapper, producer, and designer known for shaping modern hip-hop.",
+    albums: [albums[0]]
   }
 ];
 
 /* =========================
-   🔥 FIXED AUDIO PLAYER
+   AUDIO PLAYER (FIXED)
 ========================= */
 function playSong(song, album = null, index = 0) {
   if (!song || !song.file) return;
 
-  // 🔥 FIX: handles spaces, apostrophes, special characters
   const safePath = encodeURI(song.file);
 
   console.log("Playing:", safePath);
@@ -62,141 +63,107 @@ function playSong(song, album = null, index = 0) {
   audio.src = safePath;
   audio.load();
 
-  const playPromise = audio.play();
-
-  if (playPromise !== undefined) {
-    playPromise.catch(err => {
-      console.log("Audio blocked or failed:", err);
-    });
-  }
+  audio.play().catch(err => {
+    console.log("Audio error:", err);
+  });
 
   trackName.innerText = song.title;
   subText.innerText = album ? album.artist : "Kanye West";
 
-  isPlaying = true;
-  playBtn.innerText = "⏸";
-
   currentAlbum = album;
   currentIndex = index;
+
+  isPlaying = true;
+  playBtn.innerText = "⏸";
 }
 
 /* =========================
-   HOME SCREEN
+   HOME PAGE
 ========================= */
-function loadHome() {
+function showHome() {
   main.innerHTML = `
     <h1>Home</h1>
 
     <h2>Artists</h2>
-    <div class="artist-grid" id="artistRow"></div>
-
-    <h2>Albums</h2>
-    <div class="album-grid" id="albumRow"></div>
-
-    <div id="detailView"></div>
+    <div id="artistRow"></div>
   `;
 
-  loadArtists();
-  loadAlbums();
-}
-
-/* =========================
-   ARTISTS
-========================= */
-function loadArtists() {
   const row = document.getElementById("artistRow");
-  row.innerHTML = "";
 
   artists.forEach((artist, i) => {
-    const div = document.createElement("div");
-    div.className = "artist-card";
+    const card = document.createElement("div");
+    card.className = "artist-card";
 
-    div.innerHTML = `
+    card.innerHTML = `
       <img src="${artist.image}">
       <div class="artist-name">${artist.name}</div>
     `;
 
-    div.onclick = () => openArtist(i);
-    row.appendChild(div);
+    card.onclick = () => showArtist(i); // 🔥 CLICK FIX
+    row.appendChild(card);
   });
 }
 
 /* =========================
-   ALBUMS
+   🔥 ARTIST PAGE (CLICKABLE FIXED)
 ========================= */
-function loadAlbums() {
-  const row = document.getElementById("albumRow");
-  row.innerHTML = "";
+function showArtist(i) {
+  const artist = artists[i];
 
-  albums.forEach((album, i) => {
-    const div = document.createElement("div");
-    div.className = "album-card";
+  main.innerHTML = `
+    <div style="padding:10px;">
+      <img src="${artist.image}" style="width:220px;border-radius:20px;">
+      <h1>${artist.name}</h1>
+      <p style="opacity:0.8;">${artist.bio}</p>
 
-    div.innerHTML = `
-      <img src="${album.cover}">
-      <div class="album-title">${album.title}</div>
-    `;
-
-    div.onclick = () => openAlbum(i);
-    row.appendChild(div);
-  });
-}
-
-/* =========================
-   ALBUM PAGE (APPLE STYLE)
-========================= */
-function openAlbum(i) {
-  const album = albums[i];
-
-  const view = document.getElementById("detailView");
-
-  view.innerHTML = `
-    <div>
-      <img src="${album.cover}" style="width:240px;border-radius:16px;">
-      <h1>${album.title}</h1>
-      <h3>${album.artist}</h3>
-
-      <p style="opacity:0.7;max-width:500px;">
-        ${album.description}
-      </p>
-
-      <p style="opacity:0.5;">
-        ${album.year} • ${album.label}
-      </p>
-
-      <h3>Tracklist</h3>
+      <h3>Albums</h3>
+      <div id="albumRow"></div>
     </div>
   `;
 
-  album.songs.forEach((song, index) => {
-    const div = document.createElement("div");
-    div.className = "track";
-    div.innerText = `${index + 1}. ${song.title}`;
+  const row = document.getElementById("albumRow");
 
-    div.onclick = () => playSong(song, album, index);
-    view.appendChild(div);
+  artist.albums.forEach((album) => {
+    const card = document.createElement("div");
+    card.className = "album-card";
+
+    card.innerHTML = `
+      <img src="${album.cover}">
+      <div>${album.title}</div>
+    `;
+
+    card.onclick = () => showAlbum(album); // 🔥 FIXED NAV
+    row.appendChild(card);
   });
 }
 
 /* =========================
-   ARTIST PAGE
+   ALBUM PAGE
 ========================= */
-function openArtist(i) {
-  const artist = artists[i];
+function showAlbum(album) {
+  main.innerHTML = `
+    <div style="padding:10px;">
+      <img src="${album.cover}" style="width:240px;border-radius:18px;">
+      <h1>${album.title}</h1>
+      <h3>${album.artist}</h3>
 
-  const view = document.getElementById("detailView");
-  view.innerHTML = `
-    <h1>${artist.name}</h1>
-    <h3>Songs</h3>
+      <p style="opacity:0.8;">${album.description}</p>
+      <p style="opacity:0.5;">${album.year} • ${album.label}</p>
+
+      <h3>Tracklist</h3>
+      <div id="trackList"></div>
+    </div>
   `;
 
-  artist.songs.forEach((song, index) => {
+  const list = document.getElementById("trackList");
+
+  album.songs.forEach((song, i) => {
     const div = document.createElement("div");
     div.className = "track";
-    div.innerText = song.title;
+    div.innerText = `${i + 1}. ${song.title}`;
 
-    div.onclick = () => playSong(song, null, index);
-    view.appendChild(div);
+    div.onclick = () => playSong(song, album, i);
+    list.appendChild(div);
   });
 }
 
@@ -219,12 +186,14 @@ playBtn.onclick = () => {
 
 nextBtn.onclick = () => {
   if (!currentAlbum) return;
+
   currentIndex = (currentIndex + 1) % currentAlbum.songs.length;
   playSong(currentAlbum.songs[currentIndex], currentAlbum, currentIndex);
 };
 
 prevBtn.onclick = () => {
   if (!currentAlbum) return;
+
   currentIndex =
     (currentIndex - 1 + currentAlbum.songs.length) %
     currentAlbum.songs.length;
@@ -236,27 +205,33 @@ volume.oninput = () => {
   audio.volume = volume.value;
 };
 
+/* =========================
+   SEARCH
+========================= */
 searchInput.oninput = () => {
   const q = searchInput.value.toLowerCase();
-  const view = document.getElementById("detailView");
-  view.innerHTML = "<h3>Search Results</h3>";
+  main.innerHTML = "<h2>Search Results</h2>";
 
   albums.forEach(album => {
-    album.songs.forEach((song, index) => {
+    album.songs.forEach((song, i) => {
       if (song.title.toLowerCase().includes(q)) {
         const div = document.createElement("div");
         div.className = "track";
         div.innerText = song.title;
 
-        div.onclick = () => playSong(song, album, index);
-        view.appendChild(div);
+        div.onclick = () => playSong(song, album, i);
+        main.appendChild(div);
       }
     });
   });
 };
 
+/* =========================
+   THEME
+========================= */
 themeToggle.onclick = () => {
   document.body.classList.toggle("light");
 };
 
-loadHome();
+/* START APP */
+showHome();
