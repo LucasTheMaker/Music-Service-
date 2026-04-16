@@ -1,16 +1,18 @@
-# Music App
+# 🎵 Music Service App
 
-A simple Spotify-style music player built with HTML, CSS, and JavaScript.
-
----
-
-## Features
-- Artist cards
-- Album browsing
-- Music player (play, pause, next, previous)
-- Search system
-- Light/Dark mode toggle
+A simple Spotify / Apple Music style web music player built using HTML, CSS, and JavaScript.
 
 ---
 
-## Folder Structure
+## 🚀 Features
+
+- 🎤 Artist section (Apple Music style hero cards)
+- 💿 Album grid (Spotify-style tiles)
+- ▶️ Music player (play / pause / next / previous)
+- 🔍 Search songs
+- 🌙 Light / Dark mode toggle
+- 📱 Mobile responsive layout
+
+---
+
+## 🗂️ Project Structure
