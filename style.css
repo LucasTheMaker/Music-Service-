@@ -3,142 +3,94 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   background: black;
   color: white;
-  overflow-x: hidden;
-}
-
-/* 🌫 BACKGROUND BLUR */
-.bg-blur {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  filter: blur(40px);
-  opacity: 0.25;
-  z-index: -1;
-  transition: 0.5s ease;
-}
-
-/* LAYOUT */
-.layout {
-  display: flex;
-  height: 100vh;
-}
-
-/* SIDEBAR */
-.sidebar {
-  width: 260px;
-  padding: 20px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(20px);
 }
 
 /* MAIN */
 .main {
-  flex: 1;
   padding: 20px;
-  overflow-y: auto;
 }
 
-/* GRID */
-#albumGrid,
-#artistGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+/* TITLES */
+.home-title {
+  font-size: 42px;
+  font-weight: bold;
+}
+
+.section-title {
+  font-size: 22px;
+  margin: 20px 0 10px;
+}
+
+/* SCROLL ROW */
+.horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
   gap: 15px;
+  padding-bottom: 10px;
 }
 
-/* CARD ANIMATION */
-.album, .artist {
-  background: rgba(255,255,255,0.06);
-  border-radius: 16px;
-  padding: 10px;
+.horizontal-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* BIG ARTIST CARD */
+.big-card {
+  min-width: 260px;
+  height: 260px;
+  border-radius: 20px;
+  overflow: hidden;
   cursor: pointer;
-  transition: 0.3s;
 }
 
-.album:hover, .artist:hover {
-  transform: scale(1.05);
+.big-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.album img, .artist img {
+/* ALBUM CARDS */
+.album-card {
+  min-width: 140px;
+  cursor: pointer;
+}
+
+.album-card img {
   width: 100%;
   border-radius: 12px;
 }
 
-/* TRACKS */
+.album-card div {
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+/* TRACK LIST */
 .track {
   padding: 14px;
   margin: 6px 0;
   background: rgba(255,255,255,0.06);
   border-radius: 12px;
-  cursor: pointer;
-  transition: 0.2s;
 }
 
-.track:hover {
-  background: rgba(255,255,255,0.12);
-}
-
-/* PLAYER (MINI APPLE MUSIC STYLE) */
+/* PLAYER */
 .player {
   position: fixed;
   bottom: 0;
   width: 100%;
-  padding: 12px;
-  background: rgba(20,20,20,0.8);
-  backdrop-filter: blur(20px);
+  background: rgba(20,20,20,0.9);
+  padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.now-playing {
-  display: flex;
-  flex-direction: column;
-}
-
-#trackName {
-  font-weight: bold;
-}
-
-#subText {
-  font-size: 12px;
-  opacity: 0.6;
-}
-
-/* CONTROLS */
 .controls button {
   background: none;
   border: none;
   color: white;
   font-size: 18px;
-  cursor: pointer;
-  transition: 0.2s;
 }
 
-.controls button:hover {
-  transform: scale(1.2);
-}
-
-/* VOLUME */
 #volume {
-  width: 120px;
-}
-
-/* 📱 MOBILE */
-@media (max-width: 768px) {
-  .layout {
-    flex-direction: column;
-  }
-
-  .player {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  #volume {
-    width: 100%;
-  }
+  width: 100px;
 }
