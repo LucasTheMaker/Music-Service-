@@ -24,8 +24,10 @@ const albums = [
     title: "ye",
     artist: "Kanye West",
     cover: "images/ye.jpg",
+
+    // ✅ YOUR UPDATED DESCRIPTION
     description:
-      "Ye (stylized as ye) is Kanye West’s eighth studio album, released on June 1, 2018. It is a highly personal, introspective seven-track project recorded in Wyoming, focused on mental health, bipolar disorder, family, and recent controversies, featuring stripped-back production.",
+      "Ye is Kanye West’s eighth studio album, released on June 1, 2018. It is a highly personal, introspective seven-track project recorded in Wyoming, focused on mental health, bipolar disorder, family, and recent controversies, featuring stripped-back production.",
 
     songs: [
       { title: "I Thought About Killing You", file: "music/1. I Thought About Killing You.mp3" },
@@ -39,6 +41,7 @@ const albums = [
   }
 ];
 
+/* 👤 ARTIST */
 const artists = [
   {
     name: "Kanye West",
@@ -116,7 +119,7 @@ function showHome() {
 }
 
 /* =========================
-   ARTIST PAGE + FIXED BIO TOGGLE
+   ARTIST PAGE + BIO TOGGLE
 ========================= */
 function showArtist(i) {
   const artist = artists[i];
