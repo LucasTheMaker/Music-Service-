@@ -24,7 +24,8 @@ const albums = [
     title: "ye",
     artist: "Kanye West",
     cover: "images/ye.jpg",
-    description: "A deeply personal 7-track album.",
+    description:
+      "A deeply personal 7-track album where Kanye explores identity, mental health, fame, relationships, and self-destruction.",
     songs: [
       { title: "I Thought About Killing You", file: "music/1. I Thought About Killing You.mp3" },
       { title: "Yikes", file: "music/2. Yikes.mp3" },
@@ -42,7 +43,8 @@ const artists = [
   {
     name: "Kanye West",
     image: "images/kanye.png",
-    bio: `Kanye West is an influential rapper, producer, and designer known for reshaping hip-hop.`,
+    bio:
+      "Kanye Omari West (now known as Ye) is a highly influential American rapper, producer, and fashion designer born in 1977. Rising to fame in the early 2000s, he revolutionized hip-hop by breaking away from gangster rap conventions, integrating soul samples, and exploring introspective themes. Known for his eclectic sound, critical acclaim, and controversial public persona, he has sold over 135 million records and won 24 Grammy Awards.\n\nKey Aspects of His Artistry:\n• Musical Evolution: From soul-sampling to experimental hip-hop and industrial sounds.\n• Production Pioneer: Early Roc-A-Fella producer including Jay-Z’s The Blueprint.\n• Fashion: Founder of YEEZY brand.\n• Controversy: One of music’s most polarizing public figures.\n• Critical Acclaim: Widely regarded as one of the most influential artists of the 21st century.",
     albums: [albums[0]]
   }
 ];
@@ -53,7 +55,7 @@ const artists = [
 function playSong(song, album, index) {
   audio.src = encodeURI(song.file);
   audio.load();
-  audio.play();
+  audio.play().catch(console.log);
 
   trackName.innerText = song.title;
   subText.innerText = album.artist;
@@ -73,7 +75,7 @@ function playAlbum(album) {
 }
 
 /* =========================
-   AUTO NEXT
+   AUTO NEXT SONG
 ========================= */
 audio.addEventListener("ended", () => {
   if (!currentAlbum) return;
@@ -89,7 +91,7 @@ audio.addEventListener("ended", () => {
 });
 
 /* =========================
-   HOME
+   HOME PAGE
 ========================= */
 function showHome() {
   main.innerHTML = `
@@ -114,18 +116,28 @@ function showHome() {
 }
 
 /* =========================
-   ARTIST PAGE (APPLE STYLE)
+   🔥 ARTIST PAGE + BIO MORE SYSTEM
 ========================= */
 function showArtist(i) {
   const artist = artists[i];
+
+  let expanded = false;
+
+  const shortBio = artist.bio.slice(0, 220) + "...";
 
   main.innerHTML = `
     <div class="artist-hero">
       <img src="${artist.image}">
       <div class="artist-overlay">
+
         <h1>${artist.name}</h1>
-        <p>${artist.bio}</p>
-        <button id="back">← Back</button>
+
+        <p id="bioText" class="bio-text">
+          ${shortBio}
+          <span id="moreBtn" style="color:#1DB954;cursor:pointer;"> More</span>
+        </p>
+
+        <button id="backBtn">← Back</button>
       </div>
     </div>
 
@@ -133,8 +145,32 @@ function showArtist(i) {
     <div id="albumRow"></div>
   `;
 
-  document.getElementById("back").onclick = showHome;
+  document.getElementById("backBtn").onclick = showHome;
 
+  /* BIO TOGGLE (SAFE FIX) */
+  const bioText = document.getElementById("bioText");
+  const moreBtn = document.getElementById("moreBtn");
+
+  moreBtn.onclick = () => {
+    expanded = !expanded;
+
+    if (expanded) {
+      bioText.innerHTML = `
+        ${artist.bio}
+        <span id="moreBtn" style="color:#1DB954;cursor:pointer;"> Show less</span>
+      `;
+    } else {
+      bioText.innerHTML = `
+        ${shortBio}
+        <span id="moreBtn" style="color:#1DB954;cursor:pointer;"> More</span>
+      `;
+    }
+
+    // rebind click after rewrite
+    document.getElementById("moreBtn").onclick = moreBtn.onclick;
+  };
+
+  /* ALBUMS */
   const row = document.getElementById("albumRow");
 
   artist.albums.forEach(album => {
@@ -156,19 +192,19 @@ function showArtist(i) {
 ========================= */
 function showAlbum(album) {
   main.innerHTML = `
-    <img src="${album.cover}" style="width:250px;border-radius:20px;">
+    <img src="${album.cover}" style="width:260px;border-radius:20px;">
     <h1>${album.title}</h1>
     <p>${album.description}</p>
 
     <button id="playAlbum">▶ Play Album</button>
-    <button id="backArtist">← Back</button>
+    <button id="backHome">← Back</button>
 
-    <h3>Tracks</h3>
+    <h3>Tracklist</h3>
     <div id="trackList"></div>
   `;
 
   document.getElementById("playAlbum").onclick = () => playAlbum(album);
-  document.getElementById("backArtist").onclick = showHome;
+  document.getElementById("backHome").onclick = showHome;
 
   const list = document.getElementById("trackList");
 
@@ -182,29 +218,33 @@ function showAlbum(album) {
   });
 }
 
-/* CONTROLS */
+/* =========================
+   CONTROLS
+========================= */
 playBtn.onclick = () => {
   if (!audio.src) return;
 
   if (isPlaying) {
     audio.pause();
-    isPlaying = false;
     playBtn.innerText = "▶";
+    isPlaying = false;
   } else {
     audio.play();
-    isPlaying = true;
     playBtn.innerText = "⏸";
+    isPlaying = true;
   }
 };
 
 nextBtn.onclick = () => {
   if (!currentAlbum) return;
+
   currentIndex = (currentIndex + 1) % currentAlbum.songs.length;
   playSong(currentAlbum.songs[currentIndex], currentAlbum, currentIndex);
 };
 
 prevBtn.onclick = () => {
   if (!currentAlbum) return;
+
   currentIndex =
     (currentIndex - 1 + currentAlbum.songs.length) %
     currentAlbum.songs.length;
