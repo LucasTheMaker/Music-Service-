@@ -1,37 +1,40 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Music App</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Music Service</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div class="topbar">
-  <input id="search" placeholder="Search music...">
-  <button id="themeToggle">🌙</button>
-</div>
-
-<div id="main" class="main"></div>
-
-<div class="player">
-  <div>
-    <div id="trackName">Nothing Playing</div>
-    <div id="subText">Ready</div>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <input id="search" placeholder="Search songs...">
+    <button id="themeToggle">Theme</button>
   </div>
 
-  <div>
-    <button id="prev">⏮</button>
-    <button id="play">▶</button>
-    <button id="next">⏭</button>
+  <!-- MAIN APP -->
+  <div class="main" id="main"></div>
+
+  <!-- PLAYER -->
+  <div class="player">
+    <div>
+      <div id="trackName">Not playing</div>
+      <div id="subText"></div>
+    </div>
+
+    <div>
+      <button id="prev">⏮</button>
+      <button id="play">▶</button>
+      <button id="next">⏭</button>
+    </div>
+
+    <input id="volume" type="range" min="0" max="1" step="0.01">
   </div>
 
-  <input id="volume" type="range" min="0" max="1" step="0.01">
-</div>
+  <!-- AUDIO -->
+  <audio id="audio"></audio>
 
-<audio id="audio"></audio>
-
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
