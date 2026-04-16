@@ -21,7 +21,7 @@ const albums = [
   {
     title: "ye",
     artist: "Kanye West",
-    cover: "images/ye.jpg",
+    cover: "https://upload.wikimedia.org/wikipedia/en/thumb/7/74/Ye_album_cover.jpg/250px-Ye_album_cover.jpg",
     songs: [
       { title: "I Thought About Killing You", file: "music/song1.mp3" },
       { title: "Yikes", file: "music/song2.mp3" }
@@ -70,7 +70,7 @@ function loadHome() {
   loadAlbums();
 }
 
-/* ARTISTS (BIG CARDS) */
+/* ARTISTS */
 function loadArtists() {
   const row = document.getElementById("artistRow");
   row.innerHTML = "";
@@ -89,7 +89,7 @@ function loadArtists() {
   });
 }
 
-/* ALBUMS (SMALL CARDS) */
+/* ALBUMS */
 function loadAlbums() {
   const row = document.getElementById("albumRow");
   row.innerHTML = "";
