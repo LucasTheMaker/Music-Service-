@@ -40,32 +40,24 @@ const albums = [
   }
 ];
 
-/* 🔥 SAME IMAGE FOR ARTIST PAGE */
 const artists = [
   {
     name: "Kanye West",
     image: "images/ye.jpg",
-    bio: "American rapper, producer, and designer known for shaping modern hip-hop.",
+    bio: "American rapper, producer, and designer.",
     albums: [albums[0]]
   }
 ];
 
 /* =========================
-   AUDIO PLAYER (SAFE)
+   PLAY SONG
 ========================= */
 function playSong(song, album = null, index = 0) {
-  if (!song || !song.file) return;
-
   const safePath = encodeURI(song.file);
-
-  console.log("Playing:", safePath);
 
   audio.src = safePath;
   audio.load();
-
-  audio.play().catch(err => {
-    console.log("Audio error:", err);
-  });
+  audio.play().catch(err => console.log(err));
 
   trackName.innerText = song.title;
   subText.innerText = album ? album.artist : "Kanye West";
@@ -78,7 +70,32 @@ function playSong(song, album = null, index = 0) {
 }
 
 /* =========================
-   HOME PAGE (FIXED CLICK)
+   PLAY FULL ALBUM
+========================= */
+function playAlbum(album) {
+  currentAlbum = album;
+  currentIndex = 0;
+  playSong(album.songs[0], album, 0);
+}
+
+/* =========================
+   AUTO NEXT SONG
+========================= */
+audio.addEventListener("ended", () => {
+  if (!currentAlbum) return;
+
+  currentIndex++;
+
+  if (currentIndex < currentAlbum.songs.length) {
+    playSong(currentAlbum.songs[currentIndex], currentAlbum, currentIndex);
+  } else {
+    isPlaying = false;
+    playBtn.innerText = "▶";
+  }
+});
+
+/* =========================
+   HOME
 ========================= */
 function showHome() {
   main.innerHTML = `
@@ -95,44 +112,31 @@ function showHome() {
     card.className = "artist-card";
 
     card.innerHTML = `
-      <img src="${artist.image}" draggable="false">
+      <img src="${artist.image}">
       <div class="artist-name">${artist.name}</div>
     `;
 
-    // 🔥 STRONG CLICK HANDLER (NO INLINE ONCLICK)
-    card.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      console.log("Artist clicked:", artist.name);
-
-      showArtist(i);
-    });
-
+    card.onclick = () => showArtist(i);
     row.appendChild(card);
   });
 }
 
 /* =========================
-   🔥 ARTIST PAGE (FIXED CLICK)
+   ARTIST PAGE
 ========================= */
 function showArtist(i) {
   const artist = artists[i];
 
   main.innerHTML = `
     <div style="padding:10px;">
-      <img src="${artist.image}" style="width:220px;border-radius:20px;" draggable="false">
+      <img src="${artist.image}" style="width:220px;border-radius:20px;">
       <h1>${artist.name}</h1>
-      <p style="opacity:0.8;">${artist.bio}</p>
+      <p>${artist.bio}</p>
 
       <h3>Albums</h3>
       <div id="albumRow" class="scroll"></div>
-
-      <button id="backBtn">← Back</button>
     </div>
   `;
-
-  document.getElementById("backBtn").onclick = showHome;
 
   const row = document.getElementById("albumRow");
 
@@ -141,52 +145,47 @@ function showArtist(i) {
     card.className = "album-card";
 
     card.innerHTML = `
-      <img src="${album.cover}" draggable="false">
+      <img src="${album.cover}">
       <div>${album.title}</div>
     `;
 
-    card.addEventListener("click", (e) => {
-      e.stopPropagation();
-      showAlbum(album);
-    });
-
+    card.onclick = () => showAlbum(album);
     row.appendChild(card);
   });
 }
 
 /* =========================
-   ALBUM PAGE
+   ALBUM PAGE (FIXED + PLAY BUTTON)
 ========================= */
 function showAlbum(album) {
   main.innerHTML = `
     <div style="padding:10px;">
-      <img src="${album.cover}" style="width:240px;border-radius:18px;" draggable="false">
+      <img src="${album.cover}" style="width:240px;border-radius:18px;">
       <h1>${album.title}</h1>
       <h3>${album.artist}</h3>
 
-      <p style="opacity:0.8;">${album.description}</p>
-      <p style="opacity:0.5;">${album.year} • ${album.label}</p>
+      <p>${album.description}</p>
+
+      <button id="playAlbumBtn">▶ Play Album</button>
 
       <h3>Tracklist</h3>
       <div id="trackList"></div>
-
-      <button id="backArtist">← Back to Artist</button>
     </div>
   `;
 
-  document.getElementById("backArtist").onclick = () => showArtist(0);
+  document.getElementById("playAlbumBtn").onclick = () => playAlbum(album);
 
   const list = document.getElementById("trackList");
 
   album.songs.forEach((song, i) => {
     const div = document.createElement("div");
     div.className = "track";
-    div.innerText = `${i + 1}. ${song.title}`;
 
-    div.addEventListener("click", (e) => {
-      e.stopPropagation();
-      playSong(song, album, i);
-    });
+    div.innerHTML = `
+      <span>${i + 1}. ${song.title}</span>
+    `;
+
+    div.onclick = () => playSong(song, album, i);
 
     list.appendChild(div);
   });
@@ -244,10 +243,7 @@ searchInput.oninput = () => {
         div.className = "track";
         div.innerText = song.title;
 
-        div.addEventListener("click", () => {
-          playSong(song, album, i);
-        });
-
+        div.onclick = () => playSong(song, album, i);
         main.appendChild(div);
       }
     });
@@ -258,5 +254,4 @@ themeToggle.onclick = () => {
   document.body.classList.toggle("light");
 };
 
-/* START */
 showHome();
