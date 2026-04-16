@@ -7,14 +7,16 @@ const volume = document.getElementById("volume");
 
 const trackName = document.getElementById("trackName");
 const subText = document.getElementById("subText");
+const main = document.getElementById("main");
 
-const trackView = document.getElementById("trackView");
+const searchInput = document.getElementById("search");
+const themeToggle = document.getElementById("themeToggle");
 
 let currentAlbum = null;
 let currentIndex = 0;
 let isPlaying = false;
 
-/* 🎵 ALBUMS */
+/* DATA */
 const albums = [
   {
     title: "ye",
@@ -29,7 +31,6 @@ const albums = [
   }
 ];
 
-/* 👤 ARTISTS */
 const artists = [
   {
     name: "Kanye West",
@@ -38,28 +39,49 @@ const artists = [
   }
 ];
 
-/* 🏠 HOME UI */
-function loadHomeUI() {
-  trackView.style.display = "none";
+/* HOME */
+function loadHome() {
+  main.innerHTML = `
+    <h1 class="home-title">Home</h1>
 
-  const artistRow = document.getElementById("artistRow");
-  const albumRow = document.getElementById("albumRow");
+    <h2>Artist</h2>
+    <div class="scroll" id="artistRow"></div>
 
-  artistRow.innerHTML = "";
-  albumRow.innerHTML = "";
+    <h2>Albums</h2>
+    <div class="scroll" id="albumRow"></div>
 
-  /* 🎤 KANYE CARD */
-  const kanye = artists[0];
+    <div id="trackView"></div>
+  `;
 
-  const card = document.createElement("div");
-  card.className = "big-card";
+  loadArtistRow();
+  loadAlbumRow();
+}
 
-  card.innerHTML = `<img src="${kanye.image}">`;
-  card.onclick = () => openArtist(0);
+/* ARTIST ROW */
+function loadArtistRow() {
+  const row = document.getElementById("artistRow");
+  row.innerHTML = "";
 
-  artistRow.appendChild(card);
+  const artist = artists[0];
 
-  /* 📀 ALBUM ROW */
+  const div = document.createElement("div");
+  div.className = "artist-card";
+
+  div.innerHTML = `
+    <img src="${artist.image}">
+    <div class="artist-name">${artist.name}</div>
+  `;
+
+  div.onclick = () => openArtist(0);
+
+  row.appendChild(div);
+}
+
+/* ALBUM ROW */
+function loadAlbumRow() {
+  const row = document.getElementById("albumRow");
+  row.innerHTML = "";
+
   albums.forEach((album, i) => {
     const div = document.createElement("div");
     div.className = "album-card";
@@ -70,14 +92,14 @@ function loadHomeUI() {
     `;
 
     div.onclick = () => openAlbum(i);
-    albumRow.appendChild(div);
+    row.appendChild(div);
   });
 }
 
-/* 📀 OPEN ALBUM */
+/* OPEN ALBUM */
 function openAlbum(i) {
   currentAlbum = albums[i];
-  trackView.style.display = "block";
+  const trackView = document.getElementById("trackView");
   trackView.innerHTML = "";
 
   currentAlbum.songs.forEach((song, index) => {
@@ -90,11 +112,11 @@ function openAlbum(i) {
   });
 }
 
-/* 👤 OPEN ARTIST */
+/* OPEN ARTIST */
 function openArtist(i) {
   const artist = artists[i];
-  trackView.style.display = "block";
-  trackView.innerHTML = "";
+  const trackView = document.getElementById("trackView");
+  trackView.innerHTML = `<h2>${artist.name}</h2>`;
 
   artist.songs.forEach((song) => {
     const div = document.createElement("div");
@@ -106,7 +128,7 @@ function openArtist(i) {
   });
 }
 
-/* ▶ PLAY */
+/* PLAY */
 function play(i) {
   currentIndex = i;
   const song = currentAlbum.songs[i];
@@ -121,7 +143,7 @@ function play(i) {
   playBtn.innerText = "⏸";
 }
 
-/* ▶ DIRECT PLAY */
+/* DIRECT PLAY */
 function playDirect(song) {
   audio.src = encodeURI(song.file);
   audio.play();
@@ -130,7 +152,7 @@ function playDirect(song) {
   subText.innerText = "Kanye West";
 }
 
-/* ▶ PLAY/PAUSE */
+/* CONTROLS */
 playBtn.onclick = () => {
   if (!audio.src) return;
 
@@ -145,35 +167,46 @@ playBtn.onclick = () => {
   }
 };
 
-/* ⏭ NEXT */
 nextBtn.onclick = () => {
   if (!currentAlbum) return;
-
-  currentIndex++;
-  if (currentIndex >= currentAlbum.songs.length) currentIndex = 0;
-
+  currentIndex = (currentIndex + 1) % currentAlbum.songs.length;
   play(currentIndex);
 };
 
-/* ⏮ PREV */
 prevBtn.onclick = () => {
   if (!currentAlbum) return;
-
-  currentIndex--;
-  if (currentIndex < 0) currentIndex = currentAlbum.songs.length - 1;
-
+  currentIndex = (currentIndex - 1 + currentAlbum.songs.length) % currentAlbum.songs.length;
   play(currentIndex);
 };
 
-/* 🔊 VOLUME */
 volume.oninput = () => {
   audio.volume = volume.value;
 };
 
-/* 🔁 AUTO NEXT */
-audio.onended = () => {
-  nextBtn.click();
+/* SEARCH */
+searchInput.oninput = () => {
+  const q = searchInput.value.toLowerCase();
+  const trackView = document.getElementById("trackView");
+  trackView.innerHTML = "";
+
+  albums.forEach(album => {
+    album.songs.forEach(song => {
+      if (song.title.toLowerCase().includes(q)) {
+        const div = document.createElement("div");
+        div.className = "track";
+        div.innerText = song.title;
+
+        div.onclick = () => playDirect(song);
+        trackView.appendChild(div);
+      }
+    });
+  });
 };
 
-/* 🚀 START */
-loadHomeUI();
+/* THEME */
+themeToggle.onclick = () => {
+  document.body.classList.toggle("light");
+};
+
+/* START */
+loadHome();
