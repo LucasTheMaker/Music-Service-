@@ -17,13 +17,17 @@ let currentIndex = 0;
 let isPlaying = false;
 
 /* =========================
-   CLEAN DATA (FIXED STRUCTURE)
+   ALBUM DATA
 ========================= */
 const albums = [
   {
     title: "ye",
     artist: "Kanye West",
     cover: "images/ye.jpg",
+    year: "2018",
+    label: "GOOD Music / Def Jam Recordings",
+    description:
+      "A raw and emotional 7-track album exploring mental health, fame, relationships, and self-awareness.",
     songs: [
       { title: "I Thought About Killing You", file: "music/1.mp3" },
       { title: "Yikes", file: "music/2.mp3" },
@@ -45,13 +49,11 @@ const artists = [
 ];
 
 /* =========================
-   PLAYER
+   PLAY SONG
 ========================= */
 function playSong(song, album = null, index = 0) {
-  if (!song || !song.file) return;
-
   audio.src = song.file;
-  audio.play().catch(err => console.log("Audio error:", err));
+  audio.play();
 
   trackName.innerText = song.title;
   subText.innerText = album ? album.artist : "Kanye West";
@@ -84,7 +86,7 @@ function loadHome() {
 }
 
 /* =========================
-   ARTISTS (FIX CLICK ISSUE)
+   ARTISTS
 ========================= */
 function loadArtists() {
   const row = document.getElementById("artistRow");
@@ -99,18 +101,13 @@ function loadArtists() {
       <div class="artist-name">${artist.name}</div>
     `;
 
-    div.style.pointerEvents = "auto"; // 🔥 FIX CLICK BLOCK BUG
-
-    div.addEventListener("click", () => {
-      openArtist(i);
-    });
-
+    div.onclick = () => openArtist(i);
     row.appendChild(div);
   });
 }
 
 /* =========================
-   ALBUMS
+   ALBUM GRID
 ========================= */
 function loadAlbums() {
   const row = document.getElementById("albumRow");
@@ -125,67 +122,66 @@ function loadAlbums() {
       <div class="album-title">${album.title}</div>
     `;
 
-    div.addEventListener("click", () => openAlbum(i));
-
+    div.onclick = () => openAlbumPage(i);
     row.appendChild(div);
   });
 }
 
 /* =========================
-   OPEN ALBUM (FIXED TRACK ISSUE)
+   🔥 NEW APPLE-STYLE ALBUM PAGE
 ========================= */
-function openAlbum(i) {
+function openAlbumPage(i) {
   const album = albums[i];
 
   const view = document.getElementById("detailView");
-  view.innerHTML = "";
 
-  const header = document.createElement("div");
-  header.innerHTML = `
-    <h2>${album.title}</h2>
-    <p>${album.artist}</p>
-    <img src="${album.cover}" style="width:200px;border-radius:12px;">
+  view.innerHTML = `
+    <div style="margin-bottom:20px;">
+      <img src="${album.cover}" style="width:250px;border-radius:18px;">
+      <h1>${album.title}</h1>
+      <h3>${album.artist}</h3>
+
+      <p style="opacity:0.8;max-width:500px;">
+        ${album.description}
+      </p>
+
+      <p style="opacity:0.6;">
+        Released: ${album.year} • Label: ${album.label}
+      </p>
+    </div>
+
     <h3>Tracklist</h3>
   `;
-  view.appendChild(header);
 
   album.songs.forEach((song, index) => {
     const div = document.createElement("div");
     div.className = "track";
-    div.textContent = `${index + 1}. ${song.title}`;
+    div.innerText = `${index + 1}. ${song.title}`;
 
-    div.addEventListener("click", () => {
-      playSong(song, album, index);
-    });
+    div.onclick = () => playSong(song, album, index);
 
     view.appendChild(div);
   });
 }
 
 /* =========================
-   OPEN ARTIST (FIXED CLICK)
+   ARTIST PAGE
 ========================= */
 function openArtist(i) {
   const artist = artists[i];
 
   const view = document.getElementById("detailView");
-  view.innerHTML = "";
-
-  const header = document.createElement("div");
-  header.innerHTML = `
-    <h2>${artist.name}</h2>
+  view.innerHTML = `
+    <h1>${artist.name}</h1>
     <h3>Songs</h3>
   `;
-  view.appendChild(header);
 
   artist.songs.forEach((song, index) => {
     const div = document.createElement("div");
     div.className = "track";
-    div.textContent = song.title;
+    div.innerText = song.title;
 
-    div.addEventListener("click", () => {
-      playSong(song, null, index);
-    });
+    div.onclick = () => playSong(song, null, index);
 
     view.appendChild(div);
   });
@@ -237,11 +233,9 @@ searchInput.oninput = () => {
       if (song.title.toLowerCase().includes(q)) {
         const div = document.createElement("div");
         div.className = "track";
-        div.textContent = song.title;
+        div.innerText = song.title;
 
-        div.addEventListener("click", () => {
-          playSong(song, album, index);
-        });
+        div.onclick = () => playSong(song, album, index);
 
         view.appendChild(div);
       }
