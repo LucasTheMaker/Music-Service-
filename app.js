@@ -21,7 +21,7 @@ const albums = [
   {
     title: "ye",
     artist: "Kanye West",
-    cover: "https://upload.wikimedia.org/wikipedia/en/thumb/7/74/Ye_album_cover.jpg/250px-Ye_album_cover.jpg",
+    cover: "images/ye.jpg",   // ✅ LOCAL IMAGE FIXED
     songs: [
       { title: "I Thought About Killing You", file: "music/song1.mp3" },
       { title: "Yikes", file: "music/song2.mp3" }
