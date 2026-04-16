@@ -17,7 +17,7 @@ let currentIndex = 0;
 let isPlaying = false;
 
 /* =========================
-   YE ALBUM (FULL TRACKLIST)
+   CLEAN DATA (FIXED STRUCTURE)
 ========================= */
 const albums = [
   {
@@ -44,10 +44,14 @@ const artists = [
   }
 ];
 
-/* PLAY */
+/* =========================
+   PLAYER
+========================= */
 function playSong(song, album = null, index = 0) {
+  if (!song || !song.file) return;
+
   audio.src = song.file;
-  audio.play();
+  audio.play().catch(err => console.log("Audio error:", err));
 
   trackName.innerText = song.title;
   subText.innerText = album ? album.artist : "Kanye West";
@@ -59,7 +63,9 @@ function playSong(song, album = null, index = 0) {
   currentIndex = index;
 }
 
-/* HOME */
+/* =========================
+   HOME
+========================= */
 function loadHome() {
   main.innerHTML = `
     <h1>Home</h1>
@@ -77,7 +83,9 @@ function loadHome() {
   loadAlbums();
 }
 
-/* ARTISTS */
+/* =========================
+   ARTISTS (FIX CLICK ISSUE)
+========================= */
 function loadArtists() {
   const row = document.getElementById("artistRow");
   row.innerHTML = "";
@@ -91,12 +99,19 @@ function loadArtists() {
       <div class="artist-name">${artist.name}</div>
     `;
 
-    div.onclick = () => openArtist(i);
+    div.style.pointerEvents = "auto"; // 🔥 FIX CLICK BLOCK BUG
+
+    div.addEventListener("click", () => {
+      openArtist(i);
+    });
+
     row.appendChild(div);
   });
 }
 
-/* ALBUMS */
+/* =========================
+   ALBUMS
+========================= */
 function loadAlbums() {
   const row = document.getElementById("albumRow");
   row.innerHTML = "";
@@ -110,54 +125,75 @@ function loadAlbums() {
       <div class="album-title">${album.title}</div>
     `;
 
-    div.onclick = () => openAlbum(i);
+    div.addEventListener("click", () => openAlbum(i));
+
     row.appendChild(div);
   });
 }
 
-/* ALBUM PAGE */
+/* =========================
+   OPEN ALBUM (FIXED TRACK ISSUE)
+========================= */
 function openAlbum(i) {
   const album = albums[i];
 
   const view = document.getElementById("detailView");
-  view.innerHTML = `
+  view.innerHTML = "";
+
+  const header = document.createElement("div");
+  header.innerHTML = `
     <h2>${album.title}</h2>
     <p>${album.artist}</p>
     <img src="${album.cover}" style="width:200px;border-radius:12px;">
     <h3>Tracklist</h3>
   `;
+  view.appendChild(header);
 
   album.songs.forEach((song, index) => {
     const div = document.createElement("div");
     div.className = "track";
-    div.innerText = `${index + 1}. ${song.title}`;
+    div.textContent = `${index + 1}. ${song.title}`;
 
-    div.onclick = () => playSong(song, album, index);
+    div.addEventListener("click", () => {
+      playSong(song, album, index);
+    });
+
     view.appendChild(div);
   });
 }
 
-/* ARTIST PAGE */
+/* =========================
+   OPEN ARTIST (FIXED CLICK)
+========================= */
 function openArtist(i) {
   const artist = artists[i];
 
   const view = document.getElementById("detailView");
-  view.innerHTML = `
+  view.innerHTML = "";
+
+  const header = document.createElement("div");
+  header.innerHTML = `
     <h2>${artist.name}</h2>
     <h3>Songs</h3>
   `;
+  view.appendChild(header);
 
   artist.songs.forEach((song, index) => {
     const div = document.createElement("div");
     div.className = "track";
-    div.innerText = song.title;
+    div.textContent = song.title;
 
-    div.onclick = () => playSong(song, null, index);
+    div.addEventListener("click", () => {
+      playSong(song, null, index);
+    });
+
     view.appendChild(div);
   });
 }
 
-/* CONTROLS */
+/* =========================
+   CONTROLS
+========================= */
 playBtn.onclick = () => {
   if (!audio.src) return;
 
@@ -201,9 +237,12 @@ searchInput.oninput = () => {
       if (song.title.toLowerCase().includes(q)) {
         const div = document.createElement("div");
         div.className = "track";
-        div.innerText = song.title;
+        div.textContent = song.title;
 
-        div.onclick = () => playSong(song, album, index);
+        div.addEventListener("click", () => {
+          playSong(song, album, index);
+        });
+
         view.appendChild(div);
       }
     });
