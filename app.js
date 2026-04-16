@@ -21,10 +21,10 @@ const albums = [
   {
     title: "ye",
     artist: "Kanye West",
-    cover: "images/kanye.png",
+    cover: "images/ye.jpg",
     songs: [
-      { title: "Song 1", file: "music/song1.mp3" },
-      { title: "Song 2", file: "music/song2.mp3" }
+      { title: "I Thought About Killing You", file: "music/song1.mp3" },
+      { title: "Yikes", file: "music/song2.mp3" }
     ]
   }
 ];
@@ -37,7 +37,7 @@ const artists = [
   }
 ];
 
-/* PLAY FUNCTION */
+/* PLAY */
 function playSong(song, album = null, index = 0) {
   audio.src = song.file;
   audio.play();
@@ -58,10 +58,10 @@ function loadHome() {
     <h1>Home</h1>
 
     <h2>Artists</h2>
-    <div class="scroll" id="artistRow"></div>
+    <div class="artist-grid" id="artistRow"></div>
 
     <h2>Albums</h2>
-    <div class="scroll" id="albumRow"></div>
+    <div class="album-grid" id="albumRow"></div>
 
     <div id="trackView"></div>
   `;
@@ -70,7 +70,7 @@ function loadHome() {
   loadAlbums();
 }
 
-/* ARTISTS (FIXED) */
+/* ARTISTS (BIG CARDS) */
 function loadArtists() {
   const row = document.getElementById("artistRow");
   row.innerHTML = "";
@@ -79,23 +79,17 @@ function loadArtists() {
     const div = document.createElement("div");
     div.className = "artist-card";
 
-    const img = document.createElement("img");
-    img.src = "images/kanye.png";
-    img.alt = artist.name;
-
-    const name = document.createElement("div");
-    name.className = "artist-name";
-    name.innerText = artist.name;
-
-    div.appendChild(img);
-    div.appendChild(name);
+    div.innerHTML = `
+      <img src="${artist.image}">
+      <div class="artist-name">${artist.name}</div>
+    `;
 
     div.onclick = () => openArtist(i);
     row.appendChild(div);
   });
 }
 
-/* ALBUMS */
+/* ALBUMS (SMALL CARDS) */
 function loadAlbums() {
   const row = document.getElementById("albumRow");
   row.innerHTML = "";
@@ -105,8 +99,8 @@ function loadAlbums() {
     div.className = "album-card";
 
     div.innerHTML = `
-      <img src="${album.cover}" alt="${album.title}">
-      <div>${album.title}</div>
+      <img src="${album.cover}">
+      <div class="album-title">${album.title}</div>
     `;
 
     div.onclick = () => openAlbum(i);
@@ -119,7 +113,7 @@ function openAlbum(i) {
   currentAlbum = albums[i];
 
   const trackView = document.getElementById("trackView");
-  trackView.innerHTML = "";
+  trackView.innerHTML = `<h2>${currentAlbum.title}</h2>`;
 
   currentAlbum.songs.forEach((song, index) => {
     const div = document.createElement("div");
@@ -136,7 +130,7 @@ function openArtist(i) {
   const artist = artists[i];
 
   const trackView = document.getElementById("trackView");
-  trackView.innerHTML = "";
+  trackView.innerHTML = `<h2>${artist.name}</h2>`;
 
   artist.songs.forEach((song, index) => {
     const div = document.createElement("div");
