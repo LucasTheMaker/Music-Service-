@@ -44,17 +44,24 @@ const artists = [
     name: "Kanye West",
     image: "images/kanye.png",
     bio:
-      "Kanye Omari West (now known as Ye) is a highly influential American rapper, producer, and fashion designer born in 1977. Rising to fame in the early 2000s, he revolutionized hip-hop by breaking away from gangster rap conventions, integrating soul samples, and exploring introspective themes.\n\nKey Aspects:\n• Musical Evolution across multiple eras\n• Roc-A-Fella production roots\n• YEEZY fashion empire\n• Cultural controversy\n• One of the most influential artists of the 21st century.",
+      "Kanye Omari West (Ye) is a highly influential rapper, producer, and designer...\n\nKey aspects:\n• Music evolution\n• Production legacy\n• Fashion influence\n• Cultural impact",
     albums: [albums[0]]
   }
 ];
 
 /* =========================
-   PLAY FUNCTION
+   SAFE INIT (FIXES YOUR ISSUE)
+========================= */
+window.addEventListener("DOMContentLoaded", () => {
+  console.log("APP LOADED");
+  showHome();
+});
+
+/* =========================
+   PLAY
 ========================= */
 function playSong(song, album, index) {
   audio.src = encodeURI(song.file);
-  audio.load();
   audio.play();
 
   trackName.innerText = song.title;
@@ -113,7 +120,6 @@ function showArtist(i) {
 
   const fullBio = artist.bio;
   const shortBio = fullBio.slice(0, 180) + "...";
-
   let expanded = false;
 
   main.innerHTML = `
@@ -123,7 +129,7 @@ function showArtist(i) {
 
         <h1>${artist.name}</h1>
 
-        <p id="bioText" class="bio-text"></p>
+        <p id="bioText"></p>
         <span id="toggleBio" style="color:#1DB954;cursor:pointer;">More</span>
 
         <br><br>
@@ -173,7 +179,7 @@ function showArtist(i) {
 ========================= */
 function showAlbum(album) {
   main.innerHTML = `
-    <img src="${album.cover}" style="width:260px;border-radius:20px;">
+    <img src="${album.cover}" style="width:250px;border-radius:20px;">
     <h1>${album.title}</h1>
     <h3>${album.artist}</h3>
 
@@ -186,7 +192,9 @@ function showAlbum(album) {
     <div id="trackList"></div>
   `;
 
-  document.getElementById("playAlbum").onclick = () => playSong(album.songs[0], album, 0);
+  document.getElementById("playAlbum").onclick = () =>
+    playSong(album.songs[0], album, 0);
+
   document.getElementById("backHome").onclick = showHome;
 
   const list = document.getElementById("trackList");
@@ -200,9 +208,12 @@ function showAlbum(album) {
   });
 }
 
-/* CONTROLS */
+/* =========================
+   CONTROLS
+========================= */
 playBtn.onclick = () => {
   if (!audio.src) return;
+
   if (isPlaying) {
     audio.pause();
     playBtn.innerText = "▶";
@@ -210,6 +221,7 @@ playBtn.onclick = () => {
     audio.play();
     playBtn.innerText = "⏸";
   }
+
   isPlaying = !isPlaying;
 };
 
@@ -224,6 +236,7 @@ prevBtn.onclick = () => {
   currentIndex =
     (currentIndex - 1 + currentAlbum.songs.length) %
     currentAlbum.songs.length;
+
   playSong(currentAlbum.songs[currentIndex], currentAlbum, currentIndex);
 };
 
@@ -247,5 +260,3 @@ searchInput.oninput = () => {
     });
   });
 };
-
-showHome();
