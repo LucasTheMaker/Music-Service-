@@ -25,7 +25,7 @@ const albums = [
     artist: "Kanye West",
     cover: "images/ye.jpg",
     year: "2018",
-    label: "GOOD Music / Def Jam Recordings",
+    label: "GOOD Music / Def Jam",
     description:
       "A raw 7-track album exploring mental health, fame, relationships, and identity.",
     songs: [
@@ -57,10 +57,10 @@ function playSong(song, album = null, index = 0) {
 
   audio.src = safePath;
   audio.load();
-  audio.play().catch(err => console.log(err));
+  audio.play().catch(console.log);
 
   trackName.innerText = song.title;
-  subText.innerText = album ? album.artist : "Kanye West";
+  subText.innerText = album ? album.artist : "";
 
   currentAlbum = album;
   currentIndex = index;
@@ -100,7 +100,6 @@ audio.addEventListener("ended", () => {
 function showHome() {
   main.innerHTML = `
     <h1>Home</h1>
-
     <h2>Artists</h2>
     <div id="artistRow" class="scroll"></div>
   `;
@@ -128,19 +127,17 @@ function showArtist(i) {
   const artist = artists[i];
 
   main.innerHTML = `
-    <div style="padding:10px;">
-      <img src="${artist.image}" style="width:220px;border-radius:20px;">
-      <h1>${artist.name}</h1>
-      <p>${artist.bio}</p>
+    <h1>${artist.name}</h1>
+    <img src="${artist.image}" style="width:200px;border-radius:20px;">
+    <p>${artist.bio}</p>
 
-      <h3>Albums</h3>
-      <div id="albumRow" class="scroll"></div>
-    </div>
+    <h3>Albums</h3>
+    <div id="albumRow" class="scroll"></div>
   `;
 
   const row = document.getElementById("albumRow");
 
-  artist.albums.forEach((album) => {
+  artist.albums.forEach(album => {
     const card = document.createElement("div");
     card.className = "album-card";
 
@@ -155,22 +152,20 @@ function showArtist(i) {
 }
 
 /* =========================
-   ALBUM PAGE (FIXED + PLAY BUTTON)
+   ALBUM PAGE
 ========================= */
 function showAlbum(album) {
   main.innerHTML = `
-    <div style="padding:10px;">
-      <img src="${album.cover}" style="width:240px;border-radius:18px;">
-      <h1>${album.title}</h1>
-      <h3>${album.artist}</h3>
+    <img src="${album.cover}" style="width:240px;border-radius:16px;">
+    <h1>${album.title}</h1>
+    <h3>${album.artist}</h3>
 
-      <p>${album.description}</p>
+    <p>${album.description}</p>
 
-      <button id="playAlbumBtn">▶ Play Album</button>
+    <button id="playAlbumBtn">▶ Play Album</button>
 
-      <h3>Tracklist</h3>
-      <div id="trackList"></div>
-    </div>
+    <h3>Tracklist</h3>
+    <div id="trackList"></div>
   `;
 
   document.getElementById("playAlbumBtn").onclick = () => playAlbum(album);
@@ -180,13 +175,9 @@ function showAlbum(album) {
   album.songs.forEach((song, i) => {
     const div = document.createElement("div");
     div.className = "track";
-
-    div.innerHTML = `
-      <span>${i + 1}. ${song.title}</span>
-    `;
+    div.innerText = `${i + 1}. ${song.title}`;
 
     div.onclick = () => playSong(song, album, i);
-
     list.appendChild(div);
   });
 }
@@ -229,9 +220,6 @@ volume.oninput = () => {
   audio.volume = volume.value;
 };
 
-/* =========================
-   SEARCH
-========================= */
 searchInput.oninput = () => {
   const q = searchInput.value.toLowerCase();
   main.innerHTML = "<h2>Search Results</h2>";
