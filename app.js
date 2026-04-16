@@ -17,18 +17,22 @@ let currentIndex = 0;
 let isPlaying = false;
 
 /* =========================
-   YE ALBUM (MATCHES YOUR FILE NAMES)
+   ALBUM DATA (YOUR FILES)
 ========================= */
 const albums = [
   {
     title: "ye",
     artist: "Kanye West",
     cover: "images/ye.jpg",
+    year: "2018",
+    label: "GOOD Music / Def Jam Recordings",
+    description:
+      "A raw 7-track album exploring mental health, fame, relationships, and self-awareness.",
     songs: [
       { title: "I Thought About Killing You", file: "music/1. I Thought About Killing You.mp3" },
       { title: "Yikes", file: "music/2. Yikes.mp3" },
       { title: "All Mine", file: "music/3. All Mine.mp3" },
-      { title: "Wouldn't Leave", file: "music/4. Wouldn't Leave.mp3" },
+      { title: "Wouldn't Leave", file: "music/4. Wouldn’t Leave.mp3" },
       { title: "No Mistakes", file: "music/5. No Mistakes.mp3" },
       { title: "Ghost Town", file: "music/6. Ghost Town.mp3" },
       { title: "Violent Crimes", file: "music/7. Violent Crimes.mp3" }
@@ -45,13 +49,26 @@ const artists = [
 ];
 
 /* =========================
-   PLAY FUNCTION
+   🔥 FIXED AUDIO PLAYER
 ========================= */
 function playSong(song, album = null, index = 0) {
   if (!song || !song.file) return;
 
-  audio.src = song.file;
-  audio.play().catch(err => console.log("Audio error:", err));
+  // 🔥 FIX: handles spaces, apostrophes, special characters
+  const safePath = encodeURI(song.file);
+
+  console.log("Playing:", safePath);
+
+  audio.src = safePath;
+  audio.load();
+
+  const playPromise = audio.play();
+
+  if (playPromise !== undefined) {
+    playPromise.catch(err => {
+      console.log("Audio blocked or failed:", err);
+    });
+  }
 
   trackName.innerText = song.title;
   subText.innerText = album ? album.artist : "Kanye West";
@@ -64,7 +81,7 @@ function playSong(song, album = null, index = 0) {
 }
 
 /* =========================
-   HOME
+   HOME SCREEN
 ========================= */
 function loadHome() {
   main.innerHTML = `
@@ -126,17 +143,29 @@ function loadAlbums() {
 }
 
 /* =========================
-   ALBUM PAGE
+   ALBUM PAGE (APPLE STYLE)
 ========================= */
 function openAlbum(i) {
   const album = albums[i];
 
   const view = document.getElementById("detailView");
+
   view.innerHTML = `
-    <h2>${album.title}</h2>
-    <p>${album.artist}</p>
-    <img src="${album.cover}" style="width:200px;border-radius:12px;">
-    <h3>Tracklist</h3>
+    <div>
+      <img src="${album.cover}" style="width:240px;border-radius:16px;">
+      <h1>${album.title}</h1>
+      <h3>${album.artist}</h3>
+
+      <p style="opacity:0.7;max-width:500px;">
+        ${album.description}
+      </p>
+
+      <p style="opacity:0.5;">
+        ${album.year} • ${album.label}
+      </p>
+
+      <h3>Tracklist</h3>
+    </div>
   `;
 
   album.songs.forEach((song, index) => {
@@ -157,7 +186,7 @@ function openArtist(i) {
 
   const view = document.getElementById("detailView");
   view.innerHTML = `
-    <h2>${artist.name}</h2>
+    <h1>${artist.name}</h1>
     <h3>Songs</h3>
   `;
 
