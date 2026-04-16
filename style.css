@@ -1,21 +1,10 @@
-:root {
-  --bg: black;
-  --text: white;
-}
-
-body.light {
-  --bg: white;
-  --text: black;
-}
-
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
+  background: #000;
+  color: white;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* TOP BAR */
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -25,7 +14,7 @@ body {
 #search {
   width: 70%;
   padding: 10px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: none;
 }
 
@@ -34,45 +23,48 @@ body {
   padding: 20px;
 }
 
-/* ARTIST CARD */
-.artist-card {
+/* ARTIST HERO (APPLE STYLE) */
+.artist-hero {
   position: relative;
-  min-width: 220px;
-  height: 260px;
+  width: 100%;
   border-radius: 20px;
   overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.artist-hero img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  filter: brightness(60%);
+}
+
+.artist-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+/* CARDS */
+.artist-card, .album-card {
   cursor: pointer;
+  margin: 10px;
 }
 
 .artist-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.artist-name {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* ALBUM CARD (smaller like Spotify) */
-.album-card {
-  width: 140px;
-  cursor: pointer;
+  width: 200px;
+  border-radius: 20px;
 }
 
 .album-card img {
-  width: 100%;
+  width: 140px;
   border-radius: 12px;
 }
 
-/* TRACKLIST */
+/* TRACKS */
 .track {
   padding: 10px;
-  margin: 6px 0;
+  margin: 5px 0;
   background: rgba(255,255,255,0.08);
   border-radius: 10px;
   cursor: pointer;
@@ -83,16 +75,18 @@ body {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background: rgba(20,20,20,0.9);
-  padding: 10px;
+  background: #111;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 10px;
 }
 
-/* SCROLL ROW */
-.scroll {
+.now {
+  width: 30%;
+}
+
+.controls {
   display: flex;
-  gap: 12px;
-  overflow-x: auto;
+  gap: 10px;
 }
