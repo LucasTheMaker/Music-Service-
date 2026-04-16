@@ -1,13 +1,16 @@
-const albums = [
-  {
-    title: "ye",
-    artist: "Kanye West",
-    cover: "images/ye.jpg",
-    songs: [
-      { title: "I Thought About Killing You", file: "music/song1.mp3" },
-      { title: "Yikes", file: "music/song2.mp3" }
-    ]
-  },
+# Music App
 
-  // 👇 ADD MORE ALBUMS HERE (same format)
-];
+A simple Spotify-style music player built with HTML, CSS, and JavaScript.
+
+---
+
+## Features
+- Artist cards
+- Album browsing
+- Music player (play, pause, next, previous)
+- Search system
+- Light/Dark mode toggle
+
+---
+
+## Folder Structure
