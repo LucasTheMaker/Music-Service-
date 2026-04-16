@@ -16,15 +16,22 @@ let currentAlbum = null;
 let currentIndex = 0;
 let isPlaying = false;
 
-/* DATA */
+/* =========================
+   YE ALBUM (FULL TRACKLIST)
+========================= */
 const albums = [
   {
     title: "ye",
     artist: "Kanye West",
-    cover: "images/ye.jpg",   // ✅ LOCAL IMAGE FIXED
+    cover: "images/ye.jpg",
     songs: [
-      { title: "I Thought About Killing You", file: "music/song1.mp3" },
-      { title: "Yikes", file: "music/song2.mp3" }
+      { title: "I Thought About Killing You", file: "music/1.mp3" },
+      { title: "Yikes", file: "music/2.mp3" },
+      { title: "All Mine", file: "music/3.mp3" },
+      { title: "Wouldn't Leave", file: "music/4.mp3" },
+      { title: "No Mistakes", file: "music/5.mp3" },
+      { title: "Ghost Town", file: "music/6.mp3" },
+      { title: "Violent Crimes", file: "music/7.mp3" }
     ]
   }
 ];
@@ -63,7 +70,7 @@ function loadHome() {
     <h2>Albums</h2>
     <div class="album-grid" id="albumRow"></div>
 
-    <div id="trackView"></div>
+    <div id="detailView"></div>
   `;
 
   loadArtists();
@@ -108,29 +115,37 @@ function loadAlbums() {
   });
 }
 
-/* OPEN ALBUM */
+/* ALBUM PAGE */
 function openAlbum(i) {
-  currentAlbum = albums[i];
+  const album = albums[i];
 
-  const trackView = document.getElementById("trackView");
-  trackView.innerHTML = `<h2>${currentAlbum.title}</h2>`;
+  const view = document.getElementById("detailView");
+  view.innerHTML = `
+    <h2>${album.title}</h2>
+    <p>${album.artist}</p>
+    <img src="${album.cover}" style="width:200px;border-radius:12px;">
+    <h3>Tracklist</h3>
+  `;
 
-  currentAlbum.songs.forEach((song, index) => {
+  album.songs.forEach((song, index) => {
     const div = document.createElement("div");
     div.className = "track";
-    div.innerText = song.title;
+    div.innerText = `${index + 1}. ${song.title}`;
 
-    div.onclick = () => playSong(song, currentAlbum, index);
-    trackView.appendChild(div);
+    div.onclick = () => playSong(song, album, index);
+    view.appendChild(div);
   });
 }
 
-/* OPEN ARTIST */
+/* ARTIST PAGE */
 function openArtist(i) {
   const artist = artists[i];
 
-  const trackView = document.getElementById("trackView");
-  trackView.innerHTML = `<h2>${artist.name}</h2>`;
+  const view = document.getElementById("detailView");
+  view.innerHTML = `
+    <h2>${artist.name}</h2>
+    <h3>Songs</h3>
+  `;
 
   artist.songs.forEach((song, index) => {
     const div = document.createElement("div");
@@ -138,7 +153,7 @@ function openArtist(i) {
     div.innerText = song.title;
 
     div.onclick = () => playSong(song, null, index);
-    trackView.appendChild(div);
+    view.appendChild(div);
   });
 }
 
@@ -178,8 +193,8 @@ volume.oninput = () => {
 
 searchInput.oninput = () => {
   const q = searchInput.value.toLowerCase();
-  const trackView = document.getElementById("trackView");
-  trackView.innerHTML = "";
+  const view = document.getElementById("detailView");
+  view.innerHTML = "<h3>Search Results</h3>";
 
   albums.forEach(album => {
     album.songs.forEach((song, index) => {
@@ -189,7 +204,7 @@ searchInput.oninput = () => {
         div.innerText = song.title;
 
         div.onclick = () => playSong(song, album, index);
-        trackView.appendChild(div);
+        view.appendChild(div);
       }
     });
   });
