@@ -37,7 +37,7 @@ const artists = [
   }
 ];
 
-/* PLAY */
+/* PLAY FUNCTION */
 function playSong(song, album = null, index = 0) {
   audio.src = song.file;
   audio.play();
@@ -70,7 +70,7 @@ function loadHome() {
   loadAlbums();
 }
 
-/* ARTISTS */
+/* ARTISTS (FIXED) */
 function loadArtists() {
   const row = document.getElementById("artistRow");
   row.innerHTML = "";
@@ -79,10 +79,16 @@ function loadArtists() {
     const div = document.createElement("div");
     div.className = "artist-card";
 
-    div.innerHTML = `
-      <img src="${artist.image}" alt="${artist.name}">
-      <div class="artist-name">${artist.name}</div>
-    `;
+    const img = document.createElement("img");
+    img.src = "images/kanye.png";
+    img.alt = artist.name;
+
+    const name = document.createElement("div");
+    name.className = "artist-name";
+    name.innerText = artist.name;
+
+    div.appendChild(img);
+    div.appendChild(name);
 
     div.onclick = () => openArtist(i);
     row.appendChild(div);
