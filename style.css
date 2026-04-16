@@ -1,45 +1,20 @@
-.artist-grid {
-  display: flex;
-  overflow-x: auto;
-  gap: 16px;
-}
-
-.artist-card {
-  min-width: 260px;
-  height: 320px;
-  border-radius: 20px;
-  overflow: hidden;
-  position: relative;
-  cursor: pointer;
-}
-
-.artist-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.artist-name {
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
-  font-size: 22px;
-  font-weight: bold;
-}
-
-/* ALBUM GRID (SMALLER, APPLE MUSIC STYLE) */
 .album-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
 }
 
+/* SMALL SPOTIFY STYLE CARD */
 .album-card {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.06);
   border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
   padding: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.album-card:hover {
+  transform: scale(1.03);
 }
 
 .album-card img {
@@ -47,10 +22,15 @@
   aspect-ratio: 1;
   object-fit: cover;
   border-radius: 10px;
+  display: block;
 }
 
 .album-title {
+  font-size: 12px;
   margin-top: 6px;
-  font-size: 14px;
-  text-align: center;
+  text-align: left;
+  opacity: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
