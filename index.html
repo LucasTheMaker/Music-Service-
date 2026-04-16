@@ -13,17 +13,17 @@
     <button id="themeToggle">Theme</button>
   </div>
 
-  <!-- MAIN APP -->
-  <div class="main" id="main"></div>
+  <!-- MAIN -->
+  <div id="main" class="main"></div>
 
   <!-- PLAYER -->
   <div class="player">
-    <div>
+    <div class="now">
       <div id="trackName">Not playing</div>
       <div id="subText"></div>
     </div>
 
-    <div>
+    <div class="controls">
       <button id="prev">⏮</button>
       <button id="play">▶</button>
       <button id="next">⏭</button>
@@ -32,7 +32,6 @@
     <input id="volume" type="range" min="0" max="1" step="0.01">
   </div>
 
-  <!-- AUDIO -->
   <audio id="audio"></audio>
 
   <script src="app.js"></script>
