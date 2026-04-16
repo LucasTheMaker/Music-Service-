@@ -10,7 +10,6 @@ const subText = document.getElementById("subText");
 const main = document.getElementById("main");
 
 const searchInput = document.getElementById("search");
-const themeToggle = document.getElementById("themeToggle");
 
 let currentAlbum = null;
 let currentIndex = 0;
@@ -25,7 +24,7 @@ const albums = [
     artist: "Kanye West",
     cover: "images/ye.jpg",
     description:
-      "Ye is Kanye West’s eighth studio album, released on June 1, 2018. It is a highly personal, introspective seven-track project recorded in Wyoming, focused on mental health, bipolar disorder, family, and recent controversies, featuring stripped-back production.",
+      "Ye is Kanye West’s eighth studio album, released on June 1, 2018. It is a highly personal, introspective seven-track project recorded in Wyoming, focused on mental health, bipolar disorder, family, and recent controversies.",
 
     songs: [
       { title: "I Thought About Killing You", file: "music/1. I Thought About Killing You.mp3" },
@@ -44,50 +43,16 @@ const artists = [
     name: "Kanye West",
     image: "images/kanye.png",
     bio:
-      "Kanye Omari West (Ye) is a highly influential rapper, producer, and designer...\n\nKey aspects:\n• Music evolution\n• Production legacy\n• Fashion influence\n• Cultural impact",
+      "Kanye Omari West (Ye) is a highly influential rapper, producer, and designer.\n\nKnown for:\n• Musical innovation\n• Production legacy\n• Fashion influence\n• Cultural impact",
     albums: [albums[0]]
   }
 ];
 
 /* =========================
-   SAFE INIT (FIXES YOUR ISSUE)
+   INIT (IMPORTANT FIX)
 ========================= */
 window.addEventListener("DOMContentLoaded", () => {
-  console.log("APP LOADED");
   showHome();
-});
-
-/* =========================
-   PLAY
-========================= */
-function playSong(song, album, index) {
-  audio.src = encodeURI(song.file);
-  audio.play();
-
-  trackName.innerText = song.title;
-  subText.innerText = album.artist;
-
-  currentAlbum = album;
-  currentIndex = index;
-  isPlaying = true;
-
-  playBtn.innerText = "⏸";
-}
-
-/* =========================
-   AUTO NEXT
-========================= */
-audio.addEventListener("ended", () => {
-  if (!currentAlbum) return;
-
-  currentIndex++;
-
-  if (currentIndex < currentAlbum.songs.length) {
-    playSong(currentAlbum.songs[currentIndex], currentAlbum, currentIndex);
-  } else {
-    isPlaying = false;
-    playBtn.innerText = "▶";
-  }
 });
 
 /* =========================
@@ -108,6 +73,7 @@ function showHome() {
     `;
 
     div.onclick = () => showArtist(i);
+
     row.appendChild(div);
   });
 }
@@ -146,16 +112,16 @@ function showArtist(i) {
   const bioText = document.getElementById("bioText");
   const toggle = document.getElementById("toggleBio");
 
-  function render() {
+  function renderBio() {
     bioText.innerText = expanded ? fullBio : shortBio;
     toggle.innerText = expanded ? "Show less" : "More";
   }
 
-  render();
+  renderBio();
 
   toggle.onclick = () => {
     expanded = !expanded;
-    render();
+    renderBio();
   };
 
   const row = document.getElementById("albumRow");
@@ -170,6 +136,7 @@ function showArtist(i) {
     `;
 
     div.onclick = () => showAlbum(album);
+
     row.appendChild(div);
   });
 }
@@ -192,10 +159,11 @@ function showAlbum(album) {
     <div id="trackList"></div>
   `;
 
-  document.getElementById("playAlbum").onclick = () =>
-    playSong(album.songs[0], album, 0);
-
   document.getElementById("backHome").onclick = showHome;
+
+  document.getElementById("playAlbum").onclick = () => {
+    playSong(album.songs[0], album, 0);
+  };
 
   const list = document.getElementById("trackList");
 
@@ -203,14 +171,45 @@ function showAlbum(album) {
     const div = document.createElement("div");
     div.className = "track";
     div.innerText = `${i + 1}. ${song.title}`;
+
     div.onclick = () => playSong(song, album, i);
+
     list.appendChild(div);
   });
 }
 
 /* =========================
-   CONTROLS
+   PLAYER
 ========================= */
+function playSong(song, album, index) {
+  audio.src = encodeURI(song.file);
+  audio.play();
+
+  trackName.innerText = song.title;
+  subText.innerText = album.artist;
+
+  currentAlbum = album;
+  currentIndex = index;
+
+  isPlaying = true;
+  playBtn.innerText = "⏸";
+}
+
+/* AUTO NEXT */
+audio.addEventListener("ended", () => {
+  if (!currentAlbum) return;
+
+  currentIndex++;
+
+  if (currentIndex < currentAlbum.songs.length) {
+    playSong(currentAlbum.songs[currentIndex], currentAlbum, currentIndex);
+  } else {
+    isPlaying = false;
+    playBtn.innerText = "▶";
+  }
+});
+
+/* CONTROLS */
 playBtn.onclick = () => {
   if (!audio.src) return;
 
@@ -227,12 +226,14 @@ playBtn.onclick = () => {
 
 nextBtn.onclick = () => {
   if (!currentAlbum) return;
+
   currentIndex = (currentIndex + 1) % currentAlbum.songs.length;
   playSong(currentAlbum.songs[currentIndex], currentAlbum, currentIndex);
 };
 
 prevBtn.onclick = () => {
   if (!currentAlbum) return;
+
   currentIndex =
     (currentIndex - 1 + currentAlbum.songs.length) %
     currentAlbum.songs.length;
@@ -244,6 +245,7 @@ volume.oninput = () => {
   audio.volume = volume.value;
 };
 
+/* SEARCH */
 searchInput.oninput = () => {
   const q = searchInput.value.toLowerCase();
   main.innerHTML = "<h2>Search</h2>";
