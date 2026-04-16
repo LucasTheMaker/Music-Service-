@@ -2,49 +2,51 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Music App</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="layout">
+<!-- TOP BAR -->
+<div class="topbar">
+  <input id="search" placeholder="Search music...">
+  <button id="themeToggle">🌙</button>
+</div>
 
-  <div class="main">
+<!-- MAIN -->
+<div class="main">
 
-    <h1 class="home-title">Home</h1>
+  <h1 class="home-title">Home</h1>
 
-    <!-- ARTIST (TOP PICKS REPLACEMENT) -->
-    <h2 class="section-title">Artist</h2>
-    <div class="horizontal-scroll" id="artistRow"></div>
+  <!-- ARTIST -->
+  <h2>Artist</h2>
+  <div id="artistRow" class="scroll"></div>
 
-    <!-- ALBUMS (RECENTLY PLAYED REPLACEMENT) -->
-    <h2 class="section-title">Albums</h2>
-    <div class="horizontal-scroll" id="albumRow"></div>
+  <!-- ALBUMS -->
+  <h2>Albums</h2>
+  <div id="albumRow" class="scroll"></div>
 
-    <!-- TRACK VIEW -->
-    <div id="trackView" style="display:none;"></div>
-
-  </div>
+  <!-- TRACK VIEW -->
+  <div id="trackView"></div>
 
 </div>
 
 <!-- PLAYER -->
 <div class="player">
-
   <div>
     <div id="trackName">Nothing Playing</div>
     <div id="subText">Ready</div>
   </div>
 
-  <div class="controls">
+  <div>
     <button id="prev">⏮</button>
     <button id="play">▶</button>
     <button id="next">⏭</button>
   </div>
 
   <input id="volume" type="range" min="0" max="1" step="0.01">
-
 </div>
 
 <audio id="audio"></audio>
