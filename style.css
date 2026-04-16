@@ -1,51 +1,15 @@
-:root {
-  --bg: black;
-  --text: white;
-}
-
-body.light {
-  --bg: white;
-  --text: black;
-}
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-}
-
-#search {
-  width: 70%;
-  padding: 10px;
-  border-radius: 12px;
-  border: none;
-}
-
-.main {
-  padding: 20px;
-  padding-bottom: 120px;
-}
-
-.scroll {
+.artist-grid {
   display: flex;
   overflow-x: auto;
-  gap: 12px;
+  gap: 16px;
 }
 
-/* 🔥 ARTIST CARD FIX */
 .artist-card {
-  position: relative;
   min-width: 260px;
-  height: 300px;
+  height: 320px;
   border-radius: 20px;
   overflow: hidden;
+  position: relative;
   cursor: pointer;
 }
 
@@ -53,15 +17,6 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
-}
-
-/* gradient overlay */
-.artist-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
 }
 
 .artist-name {
@@ -70,51 +25,32 @@ body {
   left: 15px;
   font-size: 22px;
   font-weight: bold;
-  z-index: 2;
 }
 
-/* ALBUM */
+/* ALBUM GRID (SMALLER, APPLE MUSIC STYLE) */
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
 .album-card {
-  min-width: 140px;
-  text-align: center;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  overflow: hidden;
   cursor: pointer;
+  padding: 8px;
 }
 
 .album-card img {
   width: 100%;
-  border-radius: 12px;
-  display: block;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
-/* TRACK */
-.track {
-  padding: 14px;
-  margin: 6px 0;
-  background: rgba(255,255,255,0.1);
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-/* PLAYER */
-.player {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: rgba(20,20,20,0.95);
-  padding: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-button {
-  background: none;
-  border: none;
-  color: var(--text);
-  font-size: 18px;
-  cursor: pointer;
-}
-
-#volume {
-  width: 100px;
+.album-title {
+  margin-top: 6px;
+  font-size: 14px;
+  text-align: center;
 }
