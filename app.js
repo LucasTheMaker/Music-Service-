@@ -17,6 +17,18 @@ let currentIndex = 0;
 let isPlaying = false;
 
 /* =========================
+   PROGRESS SYSTEM (NEW)
+========================= */
+const progressBar = document.createElement("input");
+progressBar.type = "range";
+progressBar.min = 0;
+progressBar.max = 100;
+progressBar.value = 0;
+progressBar.style.width = "100%";
+
+let isSeeking = false;
+
+/* =========================
    DATA
 ========================= */
 const albums = [
@@ -25,9 +37,9 @@ const albums = [
     artist: "Kanye West",
     cover: "images/ye.jpg",
     year: "2018",
-    label: "GOOD Music / Def Jam",
+    label: "GOOD Music / Def Jam Recordings",
     description:
-      "A raw 7-track album exploring mental health, fame, relationships, and identity.",
+      "A deeply personal seven-track album where Kanye explores identity, mental health, fame, relationships, and self-destruction. It feels minimal on the surface but is emotionally dense, shifting between chaos and clarity in real time.",
     songs: [
       { title: "I Thought About Killing You", file: "music/1. I Thought About Killing You.mp3" },
       { title: "Yikes", file: "music/2. Yikes.mp3" },
@@ -44,7 +56,8 @@ const artists = [
   {
     name: "Kanye West",
     image: "images/ye.jpg",
-    bio: "American rapper, producer, and designer.",
+    bio:
+      "Kanye West is an American rapper, producer, designer, and cultural figure known for redefining modern hip-hop through experimental production, emotional storytelling, and constant reinvention across eras.",
     albums: [albums[0]]
   }
 ];
@@ -70,7 +83,7 @@ function playSong(song, album = null, index = 0) {
 }
 
 /* =========================
-   PLAY FULL ALBUM
+   PLAY ALBUM
 ========================= */
 function playAlbum(album) {
   currentAlbum = album;
@@ -79,7 +92,7 @@ function playAlbum(album) {
 }
 
 /* =========================
-   AUTO NEXT SONG
+   AUTO NEXT
 ========================= */
 audio.addEventListener("ended", () => {
   if (!currentAlbum) return;
@@ -93,6 +106,35 @@ audio.addEventListener("ended", () => {
     playBtn.innerText = "▶";
   }
 });
+
+/* =========================
+   TIME + PROGRESS (NEW)
+========================= */
+audio.addEventListener("timeupdate", () => {
+  if (!audio.duration || isSeeking) return;
+
+  const percent = (audio.currentTime / audio.duration) * 100;
+  progressBar.value = percent || 0;
+});
+
+progressBar.addEventListener("input", () => {
+  isSeeking = true;
+});
+
+progressBar.addEventListener("change", () => {
+  if (audio.duration) {
+    audio.currentTime = (progressBar.value / 100) * audio.duration;
+  }
+  isSeeking = false;
+});
+
+/* =========================
+   NOW PLAYING BAR (APPLE STYLE)
+========================= */
+function attachPlayerBar() {
+  const player = document.querySelector(".player");
+  player.appendChild(progressBar);
+}
 
 /* =========================
    HOME
@@ -121,19 +163,27 @@ function showHome() {
 }
 
 /* =========================
-   ARTIST PAGE
+   🔥 ARTIST PAGE (APPLE STYLE)
 ========================= */
 function showArtist(i) {
   const artist = artists[i];
 
   main.innerHTML = `
-    <h1>${artist.name}</h1>
-    <img src="${artist.image}" style="width:200px;border-radius:20px;">
-    <p>${artist.bio}</p>
+    <div class="artist-hero">
+      <img src="${artist.image}">
+      <div class="overlay">
+        <h1>${artist.name}</h1>
+        <p>${artist.bio}</p>
 
-    <h3>Albums</h3>
+        <button id="backBtn">← Back</button>
+      </div>
+    </div>
+
+    <h2>Albums</h2>
     <div id="albumRow" class="scroll"></div>
   `;
+
+  document.getElementById("backBtn").onclick = showHome;
 
   const row = document.getElementById("albumRow");
 
@@ -156,19 +206,23 @@ function showArtist(i) {
 ========================= */
 function showAlbum(album) {
   main.innerHTML = `
-    <img src="${album.cover}" style="width:240px;border-radius:16px;">
-    <h1>${album.title}</h1>
-    <h3>${album.artist}</h3>
+    <div>
+      <img src="${album.cover}" style="width:260px;border-radius:18px;">
+      <h1>${album.title}</h1>
+      <h3>${album.artist}</h3>
 
-    <p>${album.description}</p>
+      <p>${album.description}</p>
 
-    <button id="playAlbumBtn">▶ Play Album</button>
+      <button id="playAlbum">▶ Play Album</button>
+      <button id="backArtist">← Back</button>
 
-    <h3>Tracklist</h3>
-    <div id="trackList"></div>
+      <h3>Tracklist</h3>
+      <div id="trackList"></div>
+    </div>
   `;
 
-  document.getElementById("playAlbumBtn").onclick = () => playAlbum(album);
+  document.getElementById("playAlbum").onclick = () => playAlbum(album);
+  document.getElementById("backArtist").onclick = () => showHome();
 
   const list = document.getElementById("trackList");
 
@@ -220,6 +274,10 @@ volume.oninput = () => {
   audio.volume = volume.value;
 };
 
+themeToggle.onclick = () => {
+  document.body.classList.toggle("light");
+};
+
 searchInput.oninput = () => {
   const q = searchInput.value.toLowerCase();
   main.innerHTML = "<h2>Search Results</h2>";
@@ -230,7 +288,6 @@ searchInput.oninput = () => {
         const div = document.createElement("div");
         div.className = "track";
         div.innerText = song.title;
-
         div.onclick = () => playSong(song, album, i);
         main.appendChild(div);
       }
@@ -238,8 +295,6 @@ searchInput.oninput = () => {
   });
 };
 
-themeToggle.onclick = () => {
-  document.body.classList.toggle("light");
-};
-
+/* START */
 showHome();
+attachPlayerBar();
