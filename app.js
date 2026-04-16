@@ -23,8 +23,8 @@ const albums = [
     artist: "Kanye West",
     cover: "images/kanye.png",
     songs: [
-      { title: "I Thought About Killing You", file: "music/song1.mp3" },
-      { title: "Yikes", file: "music/song2.mp3" }
+      { title: "Song 1", file: "music/song1.mp3" },
+      { title: "Song 2", file: "music/song2.mp3" }
     ]
   }
 ];
@@ -37,7 +37,7 @@ const artists = [
   }
 ];
 
-/* PLAY SYSTEM */
+/* PLAY */
 function playSong(song, album = null, index = 0) {
   audio.src = song.file;
   audio.play();
@@ -55,7 +55,7 @@ function playSong(song, album = null, index = 0) {
 /* HOME */
 function loadHome() {
   main.innerHTML = `
-    <h1 class="home-title">Home</h1>
+    <h1>Home</h1>
 
     <h2>Artists</h2>
     <div class="scroll" id="artistRow"></div>
@@ -80,7 +80,7 @@ function loadArtists() {
     div.className = "artist-card";
 
     div.innerHTML = `
-      <img src="${artist.image}">
+      <img src="${artist.image}" alt="${artist.name}">
       <div class="artist-name">${artist.name}</div>
     `;
 
@@ -99,7 +99,7 @@ function loadAlbums() {
     div.className = "album-card";
 
     div.innerHTML = `
-      <img src="${album.cover}">
+      <img src="${album.cover}" alt="${album.title}">
       <div>${album.title}</div>
     `;
 
@@ -111,6 +111,7 @@ function loadAlbums() {
 /* OPEN ALBUM */
 function openAlbum(i) {
   currentAlbum = albums[i];
+
   const trackView = document.getElementById("trackView");
   trackView.innerHTML = "";
 
@@ -127,6 +128,7 @@ function openAlbum(i) {
 /* OPEN ARTIST */
 function openArtist(i) {
   const artist = artists[i];
+
   const trackView = document.getElementById("trackView");
   trackView.innerHTML = "";
 
@@ -170,12 +172,10 @@ prevBtn.onclick = () => {
   playSong(currentAlbum.songs[currentIndex], currentAlbum, currentIndex);
 };
 
-/* VOLUME */
 volume.oninput = () => {
   audio.volume = volume.value;
 };
 
-/* SEARCH */
 searchInput.oninput = () => {
   const q = searchInput.value.toLowerCase();
   const trackView = document.getElementById("trackView");
@@ -195,7 +195,6 @@ searchInput.oninput = () => {
   });
 };
 
-/* THEME */
 themeToggle.onclick = () => {
   document.body.classList.toggle("light");
 };
