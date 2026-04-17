@@ -15,7 +15,7 @@ let currentIndex = 0;
 let isPlaying = false;
 
 /* =========================
-   ALBUMS
+   ALBUM DATABASE
 ========================= */
 const albums = [
 
@@ -24,7 +24,7 @@ const albums = [
   title: "ye",
   artist: "Kanye West",
   cover: "images/ye.jpg",
-  description: "2018 album.",
+  description: "A short introspective 2018 album exploring mental health and personal struggles.",
   songs: [
     { title: "I Thought About Killing You", file: "music/ye/I Thought About Killing You.mp3" },
     { title: "Yikes", file: "music/ye/Yikes.mp3" },
@@ -41,11 +41,13 @@ const albums = [
   title: "The College Dropout",
   artist: "Kanye West",
   cover: "images/dropout.jpg",
-  description: "Debut album.",
+  description: "Kanye West’s debut album that changed hip-hop production.",
   songs: [
     { title: "We Dont Care", file: "music/dropout/We Dont Care.mp3" },
     { title: "Spaceship", file: "music/dropout/Spaceship.mp3" },
-    { title: "Jesus Walks", file: "music/dropout/Jesus Walks.mp3" }
+    { title: "Jesus Walks", file: "music/dropout/Jesus Walks.mp3" },
+    { title: "Through The Wire", file: "music/dropout/Through The Wire.mp3" },
+    { title: "Family Business", file: "music/dropout/Family Business.mp3" }
   ]
 },
 
@@ -54,7 +56,7 @@ const albums = [
   title: "Late Registration",
   artist: "Kanye West",
   cover: "images/late-registration.jpg",
-  description: "2005 album.",
+  description: "Orchestral hip-hop masterpiece released in 2005.",
   songs: [
     { title: "Heard Em Say", file: "music/latereg/Heard Em Say.mp3" },
     { title: "Touch The Sky", file: "music/latereg/Touch The Sky.mp3" },
@@ -63,6 +65,25 @@ const albums = [
     { title: "Hey Mama", file: "music/latereg/Hey Mama.mp3" },
     { title: "Gone", file: "music/latereg/Gone.mp3" },
     { title: "Late", file: "music/latereg/Late.mp3" }
+  ]
+},
+
+/* THRILLER */
+{
+  title: "Thriller",
+  artist: "Michael Jackson",
+  cover: "images/thriller.jpg",
+  description: "Best-selling album of all time, blending pop, funk, and rock.",
+  songs: [
+    { title: "Wanna Be Startin Somethin", file: "music/thriller/Wanna Be Startin Somethin.mp3" },
+    { title: "Baby Be Mine", file: "music/thriller/Baby Be Mine.mp3" },
+    { title: "The Girl Is Mine", file: "music/thriller/The Girl Is Mine.mp3" },
+    { title: "Thriller", file: "music/thriller/Thriller.mp3" },
+    { title: "Beat It", file: "music/thriller/Beat It.mp3" },
+    { title: "Billie Jean", file: "music/thriller/Billie Jean.mp3" },
+    { title: "Human Nature", file: "music/thriller/Human Nature.mp3" },
+    { title: "P Y T Pretty Young Thing", file: "music/thriller/P Y T Pretty Young Thing.mp3" },
+    { title: "The Lady In My Life", file: "music/thriller/The Lady In My Life.mp3" }
   ]
 }
 
@@ -75,8 +96,14 @@ const artists = [
 {
   name: "Kanye West",
   image: "images/kanye.png",
-  bio: "Legendary artist.",
+  bio: "Influential rapper, producer, and designer.",
   albums: [albums[0], albums[1], albums[2]]
+},
+{
+  name: "Michael Jackson",
+  image: "images/mj.jpg",
+  bio: "King of Pop.",
+  albums: [albums[3]]
 }
 ];
 
@@ -135,7 +162,7 @@ function showArtist(i) {
 ========================= */
 function showAlbum(album) {
   main.innerHTML = `
-    <img src="${album.cover}" width="220" style="border-radius:15px;">
+    <img src="${album.cover}" width="220">
     <h1>${album.title}</h1>
     <h3>${album.artist}</h3>
     <p>${album.description}</p>
@@ -158,7 +185,7 @@ function showAlbum(album) {
 }
 
 /* =========================
-   PLAYER
+   PLAYER SYSTEM
 ========================= */
 function playSong(song, album, index) {
   audio.src = encodeURI(song.file);
