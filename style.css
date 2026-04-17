@@ -1,8 +1,8 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: Arial, sans-serif;
   background: #000;
-  color: white;
+  color: #fff;
 }
 
 .topbar {
@@ -12,12 +12,10 @@ body {
 #search {
   width: 100%;
   padding: 10px;
-  border-radius: 10px;
-  border: none;
 }
 
 #main {
-  padding: 20px;
+  padding: 15px;
 }
 
 .artist-card, .album-card {
@@ -26,27 +24,22 @@ body {
 }
 
 .artist-card img, .album-card img {
-  width: 160px;
-  border-radius: 12px;
+  width: 150px;
+  border-radius: 10px;
 }
 
 .artist-hero img {
   width: 100%;
-  height: 260px;
+  height: 250px;
   object-fit: cover;
-  border-radius: 15px;
-}
-
-.artist-overlay {
-  padding: 10px;
 }
 
 .track {
   padding: 10px;
   margin: 5px 0;
-  background: rgba(255,255,255,0.1);
-  border-radius: 8px;
+  background: #222;
   cursor: pointer;
+  border-radius: 6px;
 }
 
 .player {
