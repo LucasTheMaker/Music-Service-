@@ -14,9 +14,9 @@ let currentAlbum = null;
 let currentIndex = 0;
 let isPlaying = false;
 
-/* ======================
+/* =========================
    ALBUMS
-====================== */
+========================= */
 const albums = [
 
 /* YE */
@@ -24,7 +24,7 @@ const albums = [
   title: "ye",
   artist: "Kanye West",
   cover: "images/ye.jpg",
-  description: "2018 introspective album.",
+  description: "2018 album.",
   songs: [
     { title: "I Thought About Killing You", file: "music/ye/I Thought About Killing You.mp3" },
     { title: "Yikes", file: "music/ye/Yikes.mp3" },
@@ -54,7 +54,7 @@ const albums = [
   title: "Late Registration",
   artist: "Kanye West",
   cover: "images/late-registration.jpg",
-  description: "2005 classic album.",
+  description: "2005 album.",
   songs: [
     { title: "Heard Em Say", file: "music/latereg/Heard Em Say.mp3" },
     { title: "Touch The Sky", file: "music/latereg/Touch The Sky.mp3" },
@@ -66,13 +66,11 @@ const albums = [
   ]
 }
 
-/* (other artists stay same as your existing setup) */
-
 ];
 
-/* ======================
+/* =========================
    ARTISTS
-====================== */
+========================= */
 const artists = [
 {
   name: "Kanye West",
@@ -82,11 +80,14 @@ const artists = [
 }
 ];
 
-/* ======================
-   UI
-====================== */
+/* =========================
+   INIT
+========================= */
 window.onload = showHome;
 
+/* =========================
+   HOME
+========================= */
 function showHome() {
   main.innerHTML = "<h1>Artists</h1><div id='list'></div>";
   const list = document.getElementById("list");
@@ -100,6 +101,9 @@ function showHome() {
   });
 }
 
+/* =========================
+   ARTIST PAGE
+========================= */
 function showArtist(i) {
   const artist = artists[i];
 
@@ -126,9 +130,12 @@ function showArtist(i) {
   });
 }
 
+/* =========================
+   ALBUM PAGE
+========================= */
 function showAlbum(album) {
   main.innerHTML = `
-    <img src="${album.cover}" width="200">
+    <img src="${album.cover}" width="220" style="border-radius:15px;">
     <h1>${album.title}</h1>
     <h3>${album.artist}</h3>
     <p>${album.description}</p>
@@ -150,9 +157,9 @@ function showAlbum(album) {
   });
 }
 
-/* ======================
+/* =========================
    PLAYER
-====================== */
+========================= */
 function playSong(song, album, index) {
   audio.src = encodeURI(song.file);
   audio.play();
@@ -169,30 +176,39 @@ function playSong(song, album, index) {
 
 audio.onended = () => {
   if (!currentAlbum) return;
+
   currentIndex++;
   if (currentIndex >= currentAlbum.songs.length) currentIndex = 0;
+
   playSong(currentAlbum.songs[currentIndex], currentAlbum, currentIndex);
 };
 
+/* CONTROLS */
 playBtn.onclick = () => {
   if (!audio.src) return;
+
   if (isPlaying) audio.pause();
   else audio.play();
+
   isPlaying = !isPlaying;
   playBtn.innerText = isPlaying ? "⏸" : "▶";
 };
 
 nextBtn.onclick = () => {
   if (!currentAlbum) return;
+
   currentIndex++;
   if (currentIndex >= currentAlbum.songs.length) currentIndex = 0;
+
   playSong(currentAlbum.songs[currentIndex], currentAlbum, currentIndex);
 };
 
 prevBtn.onclick = () => {
   if (!currentAlbum) return;
+
   currentIndex--;
   if (currentIndex < 0) currentIndex = currentAlbum.songs.length - 1;
+
   playSong(currentAlbum.songs[currentIndex], currentAlbum, currentIndex);
 };
 
