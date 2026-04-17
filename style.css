@@ -2,7 +2,7 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #000;
-  color: #fff;
+  color: white;
 }
 
 .topbar {
@@ -20,26 +20,20 @@ body {
 
 .artist-card, .album-card {
   cursor: pointer;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .artist-card img, .album-card img {
-  width: 150px;
+  width: 140px;
   border-radius: 10px;
-}
-
-.artist-hero img {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
 }
 
 .track {
   padding: 10px;
-  margin: 5px 0;
+  margin: 6px 0;
   background: #222;
-  cursor: pointer;
   border-radius: 6px;
+  cursor: pointer;
 }
 
 .player {
