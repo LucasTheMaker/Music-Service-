@@ -28,9 +28,9 @@ const albums = [
     { title: "I Thought About Killing You", file: "music/ye/I Thought About Killing You.mp3" },
     { title: "Yikes", file: "music/ye/Yikes.mp3" },
     { title: "All Mine", file: "music/ye/All Mine.mp3" },
-    { title: "Wouldn't Leave", file: "music/ye/Wouldnt Leave.mp3" },
+    { title: "Wouldnt Leave", file: "music/ye/Wouldnt Leave.mp3" },
     { title: "No Mistakes", file: "music/ye/No Mistakes.mp3" },
-    { title: "Ghost Town", file: "music/ye/Ghost Town.mp3" },
+    { title: "6. Ghost Town", file: "music/ye/6. Ghost Town.mp3" }, 
     { title: "Violent Crimes", file: "music/ye/Violent Crimes.mp3" }
   ]
 },
@@ -44,18 +44,6 @@ const albums = [
     { title: "We Dont Care", file: "music/dropout/We Dont Care.mp3" },
     { title: "Spaceship", file: "music/dropout/Spaceship.mp3" },
     { title: "Jesus Walks", file: "music/dropout/Jesus Walks.mp3" }
-  ]
-},
-
-{
-  title: "Late Registration",
-  artist: "Kanye West",
-  cover: "images/late-registration.jpg",
-  description: "Classic album.",
-  songs: [
-    { title: "Heard Em Say", file: "music/latereg/Heard Em Say.mp3" },
-    { title: "Touch The Sky", file: "music/latereg/Touch The Sky.mp3" },
-    { title: "Gold Digger", file: "music/latereg/Gold Digger.mp3" }
   ]
 }
 
@@ -78,30 +66,38 @@ const artists = [
 ========================= */
 window.onload = showHome;
 
+/* =========================
+   HOME
+========================= */
 function showHome() {
-  main.innerHTML = "<h1>Artists</h1><div id='list'></div>";
-  const list = document.getElementById("list");
+  try {
+    main.innerHTML = "<h1>Artists</h1><div id='list'></div>";
+    const list = document.getElementById("list");
 
-  artists.forEach((a, i) => {
-    const div = document.createElement("div");
-    div.className = "artist-card";
-    div.innerHTML = `<img src="${a.image}"><h3>${a.name}</h3>`;
-    div.onclick = () => showArtist(i);
-    list.appendChild(div);
-  });
+    artists.forEach((a, i) => {
+      const div = document.createElement("div");
+      div.className = "artist-card";
+      div.innerHTML = `<img src="${a.image}"><h3>${a.name}</h3>`;
+      div.onclick = () => showArtist(i);
+      list.appendChild(div);
+    });
+  } catch (e) {
+    console.log("HOME ERROR", e);
+  }
 }
 
+/* =========================
+   ARTIST PAGE
+========================= */
 function showArtist(i) {
   const artist = artists[i];
 
   main.innerHTML = `
     <div class="artist-hero">
       <img src="${artist.image}">
-      <div class="artist-overlay">
-        <h1>${artist.name}</h1>
-        <p>${artist.bio}</p>
-        <button onclick="showHome()">Back</button>
-      </div>
+      <h1>${artist.name}</h1>
+      <p>${artist.bio}</p>
+      <button onclick="showHome()">Back</button>
     </div>
     <div id="albums"></div>
   `;
@@ -117,6 +113,9 @@ function showArtist(i) {
   });
 }
 
+/* =========================
+   ALBUM PAGE
+========================= */
 function showAlbum(album) {
   main.innerHTML = `
     <img src="${album.cover}" width="200">
@@ -145,9 +144,19 @@ function showAlbum(album) {
   };
 }
 
+/* =========================
+   PLAYER (FIXED)
+========================= */
 function playSong(song, album, index) {
+  if (!song || !song.file) return;
+
+  console.log("PLAYING:", song.file);
+
   audio.src = song.file;
-  audio.play();
+
+  audio.play().catch(err => {
+    console.log("AUDIO ERROR:", err, song.file);
+  });
 
   trackName.innerText = song.title;
   subText.innerText = album.artist;
@@ -198,21 +207,3 @@ prevBtn.onclick = () => {
 };
 
 volume.oninput = () => audio.volume = volume.value;
-
-/* SEARCH */
-searchInput.oninput = () => {
-  const q = searchInput.value.toLowerCase();
-  main.innerHTML = "<h2>Search</h2>";
-
-  albums.forEach(album => {
-    album.songs.forEach(song => {
-      if (song.title.toLowerCase().includes(q)) {
-        const div = document.createElement("div");
-        div.className = "track";
-        div.innerText = song.title;
-        div.onclick = () => playSong(song, album, 0);
-        main.appendChild(div);
-      }
-    });
-  });
-};
