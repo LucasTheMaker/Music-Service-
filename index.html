@@ -7,29 +7,29 @@
 </head>
 <body>
 
-  <div class="topbar">
-    <input id="search" placeholder="Search songs...">
+<div class="topbar">
+  <input id="search" placeholder="Search songs...">
+</div>
+
+<div id="main"></div>
+
+<div class="player">
+  <div>
+    <div id="trackName">Not playing</div>
+    <div id="subText"></div>
   </div>
 
-  <div id="main"></div>
-
-  <div class="player">
-    <div>
-      <div id="trackName">Not playing</div>
-      <div id="subText"></div>
-    </div>
-
-    <div>
-      <button id="prev">⏮</button>
-      <button id="play">▶</button>
-      <button id="next">⏭</button>
-    </div>
-
-    <input id="volume" type="range" min="0" max="1" step="0.01">
+  <div>
+    <button id="prev">⏮</button>
+    <button id="play">▶</button>
+    <button id="next">⏭</button>
   </div>
 
-  <audio id="audio"></audio>
+  <input id="volume" type="range" min="0" max="1" step="0.01">
+</div>
 
-  <script src="app.js"></script>
+<audio id="audio"></audio>
+
+<script src="app.js"></script>
 </body>
 </html>
