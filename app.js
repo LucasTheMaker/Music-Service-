@@ -1,3 +1,4 @@
+
 const audio = document.getElementById("audio");
 
 const playBtn = document.getElementById("play");
@@ -15,6 +16,17 @@ let currentIndex = 0;
 let isPlaying = false;
 
 /* =========================
+   DEBUG (IMPORTANT)
+========================= */
+window.onerror = (msg, src, line) => {
+  console.log("JS ERROR:", msg, "Line:", line);
+};
+
+audio.addEventListener("error", () => {
+  console.log("AUDIO FAILED:", audio.src);
+});
+
+/* =========================
    ALBUMS
 ========================= */
 const albums = [
@@ -30,7 +42,7 @@ const albums = [
     { title: "All Mine", file: "music/ye/All Mine.mp3" },
     { title: "Wouldnt Leave", file: "music/ye/Wouldnt Leave.mp3" },
     { title: "No Mistakes", file: "music/ye/No Mistakes.mp3" },
-    { title: "6. Ghost Town", file: "music/ye/6. Ghost Town.mp3" }, 
+    { title: "6. Ghost Town", file: "music/ye/6. Ghost Town.mp3" },
     { title: "Violent Crimes", file: "music/ye/Violent Crimes.mp3" }
   ]
 },
@@ -62,7 +74,7 @@ const artists = [
 ];
 
 /* =========================
-   INIT
+   START
 ========================= */
 window.onload = showHome;
 
@@ -81,8 +93,9 @@ function showHome() {
       div.onclick = () => showArtist(i);
       list.appendChild(div);
     });
+
   } catch (e) {
-    console.log("HOME ERROR", e);
+    console.log("HOME ERROR:", e);
   }
 }
 
@@ -93,8 +106,8 @@ function showArtist(i) {
   const artist = artists[i];
 
   main.innerHTML = `
-    <div class="artist-hero">
-      <img src="${artist.image}">
+    <div>
+      <img src="${artist.image}" width="100%">
       <h1>${artist.name}</h1>
       <p>${artist.bio}</p>
       <button onclick="showHome()">Back</button>
@@ -114,48 +127,57 @@ function showArtist(i) {
 }
 
 /* =========================
-   ALBUM PAGE
+   ALBUM PAGE (SAFE)
 ========================= */
 function showAlbum(album) {
-  main.innerHTML = `
-    <img src="${album.cover}" width="200">
-    <h1>${album.title}</h1>
-    <h3>${album.artist}</h3>
-    <p>${album.description}</p>
+  try {
+    main.innerHTML = `
+      <img src="${album.cover}" width="200">
+      <h1>${album.title}</h1>
+      <h3>${album.artist}</h3>
+      <p>${album.description}</p>
 
-    <button id="playAlbum">Play Album</button>
-    <button onclick="showHome()">Back</button>
+      <button id="playAlbum">Play Album</button>
+      <button onclick="showHome()">Back</button>
 
-    <div id="tracks"></div>
-  `;
+      <div id="tracks"></div>
+    `;
 
-  const tracks = document.getElementById("tracks");
+    const tracks = document.getElementById("tracks");
 
-  album.songs.forEach((song, i) => {
-    const div = document.createElement("div");
-    div.className = "track";
-    div.innerText = song.title;
-    div.onclick = () => playSong(song, album, i);
-    tracks.appendChild(div);
-  });
+    album.songs.forEach((song, i) => {
+      const div = document.createElement("div");
+      div.className = "track";
+      div.innerText = song.title;
+      div.onclick = () => playSong(song, album, i);
+      tracks.appendChild(div);
+    });
 
-  document.getElementById("playAlbum").onclick = () => {
-    playSong(album.songs[0], album, 0);
-  };
+    document.getElementById("playAlbum").onclick = () => {
+      playSong(album.songs[0], album, 0);
+    };
+
+  } catch (e) {
+    console.log("ALBUM ERROR:", e);
+  }
 }
 
 /* =========================
-   PLAYER (FIXED)
+   PLAYER (SAFE)
 ========================= */
 function playSong(song, album, index) {
-  if (!song || !song.file) return;
+  if (!song || !song.file) {
+    console.log("BAD SONG:", song);
+    return;
+  }
 
-  console.log("PLAYING:", song.file);
+  console.log("PLAY:", song.file);
 
+  audio.pause();
   audio.src = song.file;
 
   audio.play().catch(err => {
-    console.log("AUDIO ERROR:", err, song.file);
+    console.log("PLAY ERROR:", song.file, err);
   });
 
   trackName.innerText = song.title;
@@ -168,6 +190,7 @@ function playSong(song, album, index) {
   playBtn.innerText = "⏸";
 }
 
+/* AUTO NEXT */
 audio.onended = () => {
   if (!currentAlbum) return;
 
