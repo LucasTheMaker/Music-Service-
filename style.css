@@ -20,7 +20,18 @@ body {
   padding: 20px;
 }
 
-/* ARTIST HERO */
+/* ARTIST */
+.artist-card, .album-card {
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.artist-card img, .album-card img {
+  width: 160px;
+  border-radius: 15px;
+}
+
+/* HERO */
 .artist-hero img {
   width: 100%;
   height: 260px;
@@ -34,24 +45,6 @@ body {
   padding: 20px;
 }
 
-.bio-text {
-  white-space: pre-line;
-}
-
-/* CARDS */
-.artist-card img,
-.album-card img {
-  width: 160px;
-  border-radius: 15px;
-}
-
-.artist-card,
-.album-card {
-  cursor: pointer;
-  margin-bottom: 15px;
-}
-
-/* TRACKS */
 .track {
   padding: 10px;
   margin: 5px 0;
@@ -69,12 +62,4 @@ body {
   display: flex;
   justify-content: space-between;
   padding: 10px;
-}
-
-/* MOBILE */
-@media (max-width: 768px) {
-  .player {
-    flex-direction: column;
-    gap: 10px;
-  }
 }
