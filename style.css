@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: black;
+  background: #000;
   color: white;
 }
 
@@ -20,7 +20,6 @@ body {
   padding: 20px;
 }
 
-/* ARTIST */
 .artist-card, .album-card {
   cursor: pointer;
   margin-bottom: 15px;
@@ -28,32 +27,28 @@ body {
 
 .artist-card img, .album-card img {
   width: 160px;
-  border-radius: 15px;
+  border-radius: 12px;
 }
 
-/* HERO */
 .artist-hero img {
   width: 100%;
   height: 260px;
   object-fit: cover;
-  border-radius: 20px;
-  filter: brightness(60%);
+  border-radius: 15px;
 }
 
 .artist-overlay {
-  margin-top: -120px;
-  padding: 20px;
+  padding: 10px;
 }
 
 .track {
   padding: 10px;
   margin: 5px 0;
   background: rgba(255,255,255,0.1);
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-/* PLAYER */
 .player {
   position: fixed;
   bottom: 0;
