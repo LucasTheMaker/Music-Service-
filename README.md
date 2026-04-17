@@ -1,10 +1,22 @@
-# 🎵 Music Service (Apple Music Style Clone)
+# 🎵 Music Service (Web Player)
 
-A simple music streaming web app built with HTML, CSS, and JavaScript.
-
-## 🚀 Live Site
-https://lucasthemaker.github.io/Music-Service-/
+A lightweight Apple Music–style web music player built using HTML, CSS, and JavaScript.  
+It runs entirely in the browser and streams MP3 files stored in this GitHub repository.
 
 ---
 
-## 📁 Project Structure
+# ✨ Features
+
+- 🎤 Artist pages  
+- 💿 Album pages  
+- 🎧 Full track playback  
+- ⏭ Auto-play next song  
+- 🔊 Volume control  
+- 🔍 Search songs  
+- 📱 Mobile responsive layout (basic)  
+
+---
+
+# 📁 Folder Structure (IMPORTANT)
+
+Your repository must follow this exact structure:
