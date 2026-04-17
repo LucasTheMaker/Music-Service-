@@ -15,7 +15,7 @@ let currentIndex = 0;
 let isPlaying = false;
 
 /* =========================
-   ALBUM DATABASE
+   ALBUMS DATABASE
 ========================= */
 const albums = [
 
@@ -24,7 +24,7 @@ const albums = [
   title: "ye",
   artist: "Kanye West",
   cover: "images/ye.jpg",
-  description: "A short introspective 2018 album exploring mental health and personal struggles.",
+  description: "2018 introspective album.",
   songs: [
     { title: "I Thought About Killing You", file: "music/ye/I Thought About Killing You.mp3" },
     { title: "Yikes", file: "music/ye/Yikes.mp3" },
@@ -41,7 +41,7 @@ const albums = [
   title: "The College Dropout",
   artist: "Kanye West",
   cover: "images/dropout.jpg",
-  description: "Kanye West’s debut album that changed hip-hop production.",
+  description: "Debut album.",
   songs: [
     { title: "We Dont Care", file: "music/dropout/We Dont Care.mp3" },
     { title: "Spaceship", file: "music/dropout/Spaceship.mp3" },
@@ -56,7 +56,7 @@ const albums = [
   title: "Late Registration",
   artist: "Kanye West",
   cover: "images/late-registration.jpg",
-  description: "Orchestral hip-hop masterpiece released in 2005.",
+  description: "2005 orchestral hip-hop album.",
   songs: [
     { title: "Heard Em Say", file: "music/latereg/Heard Em Say.mp3" },
     { title: "Touch The Sky", file: "music/latereg/Touch The Sky.mp3" },
@@ -73,7 +73,7 @@ const albums = [
   title: "Thriller",
   artist: "Michael Jackson",
   cover: "images/thriller.jpg",
-  description: "Best-selling album of all time, blending pop, funk, and rock.",
+  description: "Best-selling album of all time.",
   songs: [
     { title: "Wanna Be Startin Somethin", file: "music/thriller/Wanna Be Startin Somethin.mp3" },
     { title: "Baby Be Mine", file: "music/thriller/Baby Be Mine.mp3" },
@@ -90,7 +90,7 @@ const albums = [
 ];
 
 /* =========================
-   ARTISTS
+   ARTISTS DATABASE
 ========================= */
 const artists = [
 {
@@ -99,11 +99,33 @@ const artists = [
   bio: "Influential rapper, producer, and designer.",
   albums: [albums[0], albums[1], albums[2]]
 },
+
 {
   name: "Michael Jackson",
   image: "images/mj.jpg",
   bio: "King of Pop.",
   albums: [albums[3]]
+},
+
+{
+  name: "Bruno Mars",
+  image: "images/bruno.jpg",
+  bio: "Funk-pop and R&B superstar known for hits and live performances.",
+  albums: []
+},
+
+{
+  name: "Jay-Z",
+  image: "images/jayz.jpg",
+  bio: "Hip-hop mogul and one of the greatest rappers of all time.",
+  albums: []
+},
+
+{
+  name: "Tyler, The Creator",
+  image: "images/tyler.jpg",
+  bio: "Alternative hip-hop artist known for experimental sound and storytelling.",
+  albums: []
 }
 ];
 
@@ -185,7 +207,7 @@ function showAlbum(album) {
 }
 
 /* =========================
-   PLAYER SYSTEM
+   PLAYER
 ========================= */
 function playSong(song, album, index) {
   audio.src = encodeURI(song.file);
