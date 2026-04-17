@@ -15,16 +15,15 @@ let currentIndex = 0;
 let isPlaying = false;
 
 /* =========================
-   ALBUMS DATABASE
+   ALBUMS
 ========================= */
 const albums = [
 
-/* YE */
 {
   title: "ye",
   artist: "Kanye West",
   cover: "images/ye.jpg",
-  description: "2018 introspective album.",
+  description: "2018 album.",
   songs: [
     { title: "I Thought About Killing You", file: "music/ye/I Thought About Killing You.mp3" },
     { title: "Yikes", file: "music/ye/Yikes.mp3" },
@@ -36,7 +35,6 @@ const albums = [
   ]
 },
 
-/* COLLEGE DROPOUT */
 {
   title: "The College Dropout",
   artist: "Kanye West",
@@ -45,87 +43,33 @@ const albums = [
   songs: [
     { title: "We Dont Care", file: "music/dropout/We Dont Care.mp3" },
     { title: "Spaceship", file: "music/dropout/Spaceship.mp3" },
-    { title: "Jesus Walks", file: "music/dropout/Jesus Walks.mp3" },
-    { title: "Through The Wire", file: "music/dropout/Through The Wire.mp3" },
-    { title: "Family Business", file: "music/dropout/Family Business.mp3" }
+    { title: "Jesus Walks", file: "music/dropout/Jesus Walks.mp3" }
   ]
 },
 
-/* LATE REGISTRATION */
 {
   title: "Late Registration",
   artist: "Kanye West",
   cover: "images/late-registration.jpg",
-  description: "2005 orchestral hip-hop album.",
+  description: "Classic album.",
   songs: [
     { title: "Heard Em Say", file: "music/latereg/Heard Em Say.mp3" },
     { title: "Touch The Sky", file: "music/latereg/Touch The Sky.mp3" },
-    { title: "Gold Digger", file: "music/latereg/Gold Digger.mp3" },
-    { title: "Drive Slow", file: "music/latereg/Drive Slow.mp3" },
-    { title: "Hey Mama", file: "music/latereg/Hey Mama.mp3" },
-    { title: "Gone", file: "music/latereg/Gone.mp3" },
-    { title: "Late", file: "music/latereg/Late.mp3" }
-  ]
-},
-
-/* THRILLER */
-{
-  title: "Thriller",
-  artist: "Michael Jackson",
-  cover: "images/thriller.jpg",
-  description: "Best-selling album of all time.",
-  songs: [
-    { title: "Wanna Be Startin Somethin", file: "music/thriller/Wanna Be Startin Somethin.mp3" },
-    { title: "Baby Be Mine", file: "music/thriller/Baby Be Mine.mp3" },
-    { title: "The Girl Is Mine", file: "music/thriller/The Girl Is Mine.mp3" },
-    { title: "Thriller", file: "music/thriller/Thriller.mp3" },
-    { title: "Beat It", file: "music/thriller/Beat It.mp3" },
-    { title: "Billie Jean", file: "music/thriller/Billie Jean.mp3" },
-    { title: "Human Nature", file: "music/thriller/Human Nature.mp3" },
-    { title: "P Y T Pretty Young Thing", file: "music/thriller/P Y T Pretty Young Thing.mp3" },
-    { title: "The Lady In My Life", file: "music/thriller/The Lady In My Life.mp3" }
+    { title: "Gold Digger", file: "music/latereg/Gold Digger.mp3" }
   ]
 }
 
 ];
 
 /* =========================
-   ARTISTS DATABASE
+   ARTISTS
 ========================= */
 const artists = [
 {
   name: "Kanye West",
   image: "images/kanye.png",
-  bio: "Influential rapper, producer, and designer.",
-  albums: [albums[0], albums[1], albums[2]]
-},
-
-{
-  name: "Michael Jackson",
-  image: "images/mj.jpg",
-  bio: "King of Pop.",
-  albums: [albums[3]]
-},
-
-{
-  name: "Bruno Mars",
-  image: "images/bruno.jpg",
-  bio: "Funk-pop and R&B superstar known for hits and live performances.",
-  albums: []
-},
-
-{
-  name: "Jay-Z",
-  image: "images/jayz.jpg",
-  bio: "Hip-hop mogul and one of the greatest rappers of all time.",
-  albums: []
-},
-
-{
-  name: "Tyler, The Creator",
-  image: "images/tyler.jpg",
-  bio: "Alternative hip-hop artist known for experimental sound and storytelling.",
-  albums: []
+  bio: "Artist and producer.",
+  albums: albums
 }
 ];
 
@@ -134,9 +78,6 @@ const artists = [
 ========================= */
 window.onload = showHome;
 
-/* =========================
-   HOME
-========================= */
 function showHome() {
   main.innerHTML = "<h1>Artists</h1><div id='list'></div>";
   const list = document.getElementById("list");
@@ -150,9 +91,6 @@ function showHome() {
   });
 }
 
-/* =========================
-   ARTIST PAGE
-========================= */
 function showArtist(i) {
   const artist = artists[i];
 
@@ -179,17 +117,14 @@ function showArtist(i) {
   });
 }
 
-/* =========================
-   ALBUM PAGE
-========================= */
 function showAlbum(album) {
   main.innerHTML = `
-    <img src="${album.cover}" width="220">
+    <img src="${album.cover}" width="200">
     <h1>${album.title}</h1>
     <h3>${album.artist}</h3>
     <p>${album.description}</p>
 
-    <button onclick="playSong(album.songs[0], album, 0)">Play Album</button>
+    <button id="playAlbum">Play Album</button>
     <button onclick="showHome()">Back</button>
 
     <div id="tracks"></div>
@@ -204,13 +139,14 @@ function showAlbum(album) {
     div.onclick = () => playSong(song, album, i);
     tracks.appendChild(div);
   });
+
+  document.getElementById("playAlbum").onclick = () => {
+    playSong(album.songs[0], album, 0);
+  };
 }
 
-/* =========================
-   PLAYER
-========================= */
 function playSong(song, album, index) {
-  audio.src = encodeURI(song.file);
+  audio.src = song.file;
   audio.play();
 
   trackName.innerText = song.title;
