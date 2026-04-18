@@ -10,7 +10,7 @@ let currentAlbum = null;
 let currentIndex = 0;
 let isPlaying = false;
 
-/* ========================= DATASET ========================= */
+/* ========================= LOCKED DATA ========================= */
 const albums = [
   {
     title: "ye", artist: "Kanye West", cover: "images/ye.jpg",
@@ -24,35 +24,15 @@ const albums = [
       { title: "Ghost Town", file: "music/ye/6. Ghost Town.mp3" },
       { title: "Violent Crimes", file: "music/ye/7. Violent Crimes.mp3" }
     ]
-  },
-  {
-    title: "The College Dropout", artist: "Kanye West", cover: "images/dropout.jpg",
-    year: "February 10, 2004", label: "Roc-A-Fella", duration: "21 songs, 76 minutes",
-    songs: [
-      { title: "Intro", file: "music/dropout/Intro.mp3" },
-      { title: "We Don't Care", file: "music/dropout/We Dont Care.mp3" },
-      { title: "Jesus Walks", file: "music/dropout/Jesus Walks.mp3" },
-      { title: "Through The Wire", file: "music/dropout/Through The Wire.mp3" },
-      { title: "Last Call", file: "music/dropout/Last Call.mp3" }
-    ]
-  },
-  {
-    title: "Thriller", artist: "Michael Jackson", cover: "images/thriller.jpg",
-    year: "November 30, 1982", label: "Epic Records", duration: "9 songs, 42 minutes",
-    songs: [
-      { title: "Wanna Be Startin' Somethin'", file: "music/thriller/Wanna Be Startin Somethin.mp3" },
-      { title: "Thriller", file: "music/thriller/Thriller.mp3" },
-      { title: "Billie Jean", file: "music/thriller/Billie Jean.mp3" }
-    ]
   }
 ];
 
 const artists = [
   { name: "Kanye West", image: "images/kanye.png" },
-  { name: "Michael Jackson", image: "images/mj.jpg" }
+  { name: "Michael Jackson", image: "images/mj.jpg" } // Locked MJ Image
 ];
 
-/* ========================= NAVIGATION ========================= */
+/* ========================= RENDER LOGIC ========================= */
 
 function loadHome() {
     main.innerHTML = `<h1>Home</h1><div class="artist-grid" id="artRow"></div><h2>Albums</h2><div class="album-grid" id="albRow"></div>`;
@@ -79,7 +59,7 @@ function openAlbum(i) {
         <div style="display:flex; gap:20px; margin-bottom:25px;">
             <img src="${currentAlbum.cover}" style="width:140px; border-radius:10px;">
             <div>
-                <h1 style="margin:0;">${currentAlbum.title}</h1>
+                <h2 style="margin:0;">${currentAlbum.title}</h2>
                 <p style="color:var(--accent); font-weight:bold;">${currentAlbum.artist}</p>
                 <div style="font-size:12px; color:#666;">${currentAlbum.label} • ${currentAlbum.year}</div>
                 <div style="font-size:12px; color:#555;">${currentAlbum.duration}</div>
@@ -107,17 +87,10 @@ function playSong(idx) {
     playBtn.innerText = "⏸";
 }
 
-/* ========================= CONTROLS ========================= */
-
 playBtn.onclick = () => {
     if (isPlaying) { audio.pause(); playBtn.innerText = "▶"; }
     else { audio.play(); playBtn.innerText = "⏸"; }
     isPlaying = !isPlaying;
 };
 
-nextBtn.onclick = () => { if (currentIndex + 1 < currentAlbum.songs.length) playSong(currentIndex + 1); };
-prevBtn.onclick = () => { if (currentIndex > 0) playSong(currentIndex - 1); };
-audio.onended = () => { if (currentIndex + 1 < currentAlbum.songs.length) playSong(currentIndex + 1); };
-
-// Ensures data renders immediately
 document.addEventListener("DOMContentLoaded", loadHome);
