@@ -36,15 +36,8 @@ const albums = [
       { title: "All Falls Down", file: "music/All Falls Down.mp3" },
       { title: "Spaceship", file: "music/Spaceship.mp3" },
       { title: "Jesus Walks", file: "music/Jesus Walks.mp3" },
-      { title: "Never Let Me Down", file: "music/Never Let Me Down.mp3" },
-      { title: "Get Em High", file: "music/Get Em High.mp3" },
-      { title: "The New Workout Plan", file: "music/The New Workout Plan.mp3" },
-      { title: "Slow Jamz", file: "music/Slow Jamz.mp3" },
-      { title: "School Spirit", file: "music/School Spirit.mp3" },
-      { title: "Two Words", file: "music/Two Words.mp3" },
       { title: "Through The Wire", file: "music/Through The Wire.mp3" },
-      { title: "Family Business", file: "music/Family Business.mp3" },
-      { title: "Last Call", file: "music/Last Call.mp3" }
+      { title: "Family Business", file: "music/Family Business.mp3" }
     ]
   }
 ];
@@ -76,7 +69,7 @@ function renderArtists() {
         const div = document.createElement("div");
         div.className = "artist-card";
         div.innerHTML = `<img src="${artist.image}"><div class="artist-name">${artist.name}</div>`;
-        div.addEventListener("click", () => openArtistPage(i));
+        div.onclick = () => openArtistPage(i);
         row.appendChild(div);
     });
 }
@@ -87,7 +80,7 @@ function renderAlbums() {
         const div = document.createElement("div");
         div.className = "album-card";
         div.innerHTML = `<img src="${album.cover}"><div>${album.title}</div>`;
-        div.addEventListener("click", () => openAlbumPage(i));
+        div.onclick = () => openAlbumPage(i);
         row.appendChild(div);
     });
 }
@@ -109,7 +102,7 @@ function openAlbumPage(i) {
 function openArtistPage(i) {
     const artist = artists[i];
     const view = document.getElementById("detailView");
-    view.innerHTML = `<h3>${artist.name} - Top Songs</h3>`;
+    view.innerHTML = `<h3>${artist.name} - All Songs</h3>`;
     const allSongs = artist.albums.flatMap(a => a.songs);
     allSongs.forEach((song, index) => {
         const div = document.createElement("div");
@@ -126,10 +119,13 @@ function playSong(song, album, index) {
     audio.src = encodeURI(song.file);
     audio.play().then(() => {
         trackName.innerText = song.title;
-        subText.innerText = album ? album.artist : "Artist Track";
+        subText.innerText = album ? album.artist : "Streaming";
         isPlaying = true;
         playBtn.innerText = "⏸";
-    }).catch(err => alert("File not found on GitHub. Check your music folder!"));
+    }).catch(err => {
+        console.error("Playback failed:", err);
+        alert("File not found! Check your 'music' folder on GitHub.");
+    });
 }
 
 playBtn.onclick = () => {
