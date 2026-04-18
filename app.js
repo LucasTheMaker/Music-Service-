@@ -10,7 +10,7 @@ let currentAlbum = null;
 let currentIndex = 0;
 let isPlaying = false;
 
-/* ========================= FULL RESTORED DATA ========================= */
+/* ========================= 100% RESTORED FULL TRACKLISTS ========================= */
 const albums = [
   {
     title: "ye",
@@ -116,7 +116,7 @@ const artists = [
   { name: "Jay-Z", image: "images/jayz.jpg" }
 ];
 
-/* ========================= PLAYER INTERACTION ========================= */
+/* ========================= INTERACTIVE PLAYER ========================= */
 
 playerBar.addEventListener("click", (e) => {
     if (e.target.tagName !== "BUTTON" && e.target.type !== "range") {
