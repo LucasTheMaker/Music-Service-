@@ -36,13 +36,9 @@ const albums = [
     songs: [
       { title: "Intro", file: "music/Intro.mp3" },
       { title: "We Don't Care", file: "music/We Dont Care.mp3" },
-      { title: "Graduation Day", file: "music/Graduation Day.mp3" },
       { title: "All Falls Down", file: "music/All Falls Down.mp3" },
       { title: "Spaceship", file: "music/Spaceship.mp3" },
       { title: "Jesus Walks", file: "music/Jesus Walks.mp3" },
-      { title: "Never Let Me Down", file: "music/Never Let Me Down.mp3" },
-      { title: "Get Em High", file: "music/Get Em High.mp3" },
-      { title: "The New Workout Plan", file: "music/The New Workout Plan.mp3" },
       { title: "Through The Wire", file: "music/Through The Wire.mp3" },
       { title: "Family Business", file: "music/Family Business.mp3" },
       { title: "Last Call", file: "music/Last Call.mp3" }
@@ -58,32 +54,14 @@ const albums = [
       { title: "Touch The Sky", file: "music/Touch The Sky.mp3" },
       { title: "Gold Digger", file: "music/Gold Digger.mp3" },
       { title: "Drive Slow", file: "music/Drive Slow.mp3" },
-      { title: "Crack Music", file: "music/Crack Music.mp3" },
-      { title: "Roses", file: "music/Roses.mp3" },
-      { title: "Bring Me Down", file: "music/Bring Me Down.mp3" },
-      { title: "Addiction", file: "music/Addiction.mp3" },
-      { title: "Diamonds From Sierra Leone", file: "music/Diamonds From Sierra Leone.mp3" },
-      { title: "Hey Mama", file: "music/Hey Mama.mp3" },
-      { title: "Celebration", file: "music/Celebration.mp3" },
-      { title: "Gone", file: "music/Gone.mp3" }
-    ]
-  },
-  {
-    title: "Thriller",
-    artist: "Michael Jackson",
-    cover: "images/thriller.jpg",
-    songs: [
-      { title: "Wanna Be Startin' Somethin'", file: "music/Wanna Be Startin Somethin.mp3" },
-      { title: "Beat It", file: "music/Beat It.mp3" },
-      { title: "Billie Jean", file: "music/Billie Jean.mp3" },
-      { title: "Thriller", file: "music/Thriller.mp3" }
+      { title: "Hey Mama", file: "music/Hey Mama.mp3" }
     ]
   }
 ];
 
 const artists = [
-  { name: "Kanye West", image: "images/kanye_cover.jpg", albums: albums.filter(a => a.artist === "Kanye West") },
-  { name: "Michael Jackson", image: "images/mj.png", albums: albums.filter(a => a.artist === "Michael Jackson") },
+  { name: "Kanye West", image: "images/kanye_cover.jpg", albums: albums },
+  { name: "Michael Jackson", image: "images/mj.png", albums: [] },
   { name: "Bruno Mars", image: "images/bruno.png", albums: [] },
   { name: "Tyler, The Creator", image: "images/tyler.png", albums: [] },
   { name: "Jay-Z", image: "images/jayz.png", albums: [] }
@@ -95,57 +73,61 @@ function loadHome() {
     main.innerHTML = `
         <h1 class="home-title">Home</h1>
         <h2>Artists</h2>
-        <div class="scroll" id="artistRow"></div>
+        <div class="artist-grid" id="artistRow"></div>
         <h2>Albums</h2>
-        <div class="scroll" id="albumRow"></div>
-        <div id="trackView"></div>
+        <div class="album-grid" id="albumRow"></div>
+        <div id="detailView"></div>
     `;
-    loadArtistRow();
-    loadAlbumRow();
+    renderArtists();
+    renderAlbums();
 }
 
-function loadArtistRow() {
+function renderArtists() {
     const row = document.getElementById("artistRow");
     artists.forEach((artist, i) => {
         const div = document.createElement("div");
         div.className = "artist-card";
         div.innerHTML = `<img src="${artist.image}"><div class="artist-name">${artist.name}</div>`;
-        div.onclick = () => openArtist(i);
+        div.onclick = () => openArtistPage(i);
         row.appendChild(div);
     });
 }
 
-function loadAlbumRow() {
+function renderAlbums() {
     const row = document.getElementById("albumRow");
     albums.forEach((album, i) => {
         const div = document.createElement("div");
         div.className = "album-card";
-        div.innerHTML = `<img src="${album.cover}"><div>${album.title}</div>`;
-        div.onclick = () => openAlbum(i);
+        div.innerHTML = `<img src="${album.cover}"><div class="album-title">${album.title}</div>`;
+        div.onclick = () => openAlbumPage(i);
         row.appendChild(div);
     });
 }
 
-function openAlbum(i) {
+function openAlbumPage(i) {
     currentAlbum = albums[i];
-    renderTracklist(currentAlbum.songs, currentAlbum.title);
-}
-
-function openArtist(i) {
-    const artist = artists[i];
-    const artistSongs = artist.albums.flatMap(a => a.songs);
-    renderTracklist(artistSongs, artist.name);
-}
-
-function renderTracklist(songs, title) {
-    const trackView = document.getElementById("trackView");
-    trackView.innerHTML = `<h2>${title}</h2>`;
-    songs.forEach((song, index) => {
+    const view = document.getElementById("detailView");
+    view.innerHTML = `<h3>${currentAlbum.title}</h3>`;
+    currentAlbum.songs.forEach((song, index) => {
         const div = document.createElement("div");
         div.className = "track";
         div.innerText = song.title;
         div.onclick = () => playSong(song, currentAlbum, index);
-        trackView.appendChild(div);
+        view.appendChild(div);
+    });
+}
+
+function openArtistPage(i) {
+    const artist = artists[i];
+    const view = document.getElementById("detailView");
+    view.innerHTML = `<h3>${artist.name} - All Tracks</h3>`;
+    const allSongs = artist.albums.flatMap(a => a.songs);
+    allSongs.forEach((song, index) => {
+        const div = document.createElement("div");
+        div.className = "track";
+        div.innerText = song.title;
+        div.onclick = () => playSong(song, null, index);
+        view.appendChild(div);
     });
 }
 
@@ -155,7 +137,7 @@ function playSong(song, album, index) {
     audio.src = safeFile;
     audio.play().then(() => {
         trackName.innerText = song.title;
-        subText.innerText = album ? album.artist : "Streaming";
+        subText.innerText = album ? album.artist : "Artist Track";
         currentIndex = index;
         isPlaying = true;
         playBtn.innerText = "⏸";
