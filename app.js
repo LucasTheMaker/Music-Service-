@@ -160,6 +160,24 @@ function renderAlbums() {
     });
 }
 
+function openArtistPage(artistName) {
+    const filteredAlbums = albums.filter(a => a.artist.includes(artistName));
+    main.innerHTML = `
+        <button onclick="loadHome()" class="back-btn">← Back</button>
+        <h1 style="margin-top: 10px;">${artistName}</h1>
+        <div class="album-grid" id="artistAlbums"></div>
+    `;
+    
+    const albumRow = document.getElementById("artistAlbums");
+    filteredAlbums.forEach(album => {
+        const div = document.createElement("div");
+        div.className = "album-card";
+        div.innerHTML = `<img src="${album.cover}"><div>${album.title}</div>`;
+        div.onclick = () => openAlbum(albums.indexOf(album));
+        albumRow.appendChild(div);
+    });
+}
+
 function openAlbum(i) {
     currentAlbum = albums[i];
     main.innerHTML = `
