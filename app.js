@@ -8,9 +8,9 @@ const volume = document.getElementById("volume");
 let currentAlbum = null;
 let currentIndex = 0;
 let isPlaying = false;
-let isRepeat = false; // Toggle for repeat mode
+let isRepeat = false; 
 
-/* ========================= FULL DATASET ========================= */
+/* ========================= UPDATED DATA ========================= */
 const albums = [
   {
     title: "ye",
@@ -57,7 +57,7 @@ const albums = [
   {
     title: "Late Registration",
     artist: "Kanye West",
-    cover: "images/late.jpg",
+    cover: "images/late-registration.png",
     songs: [
       { title: "Wake Up Mr. West", file: "music/late/Wake Up Mr West.mp3" },
       { title: "Heard 'Em Say", file: "music/late/Heard Em Say.mp3" },
@@ -112,25 +112,25 @@ const albums = [
 const artists = [
   { 
     name: "Kanye West", 
-    image: "images/kanye_cover.jpg", 
+    image: "images/kanye.png", 
     bio: "American rapper, designer, and producer. One of the most influential musicians of the 21st century.",
     albums: albums.filter(a => a.artist.includes("Kanye West")) 
   },
   { 
     name: "Michael Jackson", 
-    image: "images/mj.png", 
+    image: "images/mj.jpg", 
     bio: "The King of Pop. His 1982 album 'Thriller' remains the best-selling album of all time.",
     albums: albums.filter(a => a.artist === "Michael Jackson") 
   },
   { 
     name: "Jay-Z", 
-    image: "images/jayz.png", 
+    image: "images/jayz.jpg", 
     bio: "New York rapper and business mogul. Co-founder of Roc-A-Fella Records.",
     albums: albums.filter(a => a.artist.includes("Jay-Z")) 
   }
 ];
 
-/* ========================= NAVIGATION & UI RENDERING ========================= */
+/* ========================= LOGIC ========================= */
 
 function loadHome() {
     main.innerHTML = `
@@ -170,13 +170,11 @@ function renderAlbums() {
     });
 }
 
-/* ========================= INDIVIDUAL PAGES ========================= */
-
 function openArtistPage(i) {
     const artist = artists[i];
     main.innerHTML = `
         <div class="detail-page">
-            <button class="back-btn" onclick="loadHome()">← Back to Home</button>
+            <button class="back-btn" onclick="loadHome()">← Back</button>
             <div class="header-hero">
                 <img src="${artist.image}" class="hero-img">
                 <div class="hero-text">
@@ -188,7 +186,6 @@ function openArtistPage(i) {
             <div class="album-grid" id="artistAlbums"></div>
         </div>
     `;
-    
     const albumRow = document.getElementById("artistAlbums");
     artist.albums.forEach(album => {
         const div = document.createElement("div");
@@ -206,10 +203,10 @@ function openAlbumPage(i) {
     currentAlbum = albums[i];
     main.innerHTML = `
         <div class="detail-page">
-            <button class="back-btn" onclick="loadHome()">← Back to Home</button>
+            <button class="back-btn" onclick="loadHome()">← Back</button>
             <div class="album-header" style="display:flex; gap:20px; align-items:center; margin-bottom:30px;">
                 <img src="${currentAlbum.cover}" style="width:200px; border-radius:15px;">
-                <div class="album-info">
+                <div>
                     <h1>${currentAlbum.title}</h1>
                     <p>${currentAlbum.artist}</p>
                 </div>
@@ -217,7 +214,6 @@ function openAlbumPage(i) {
             <div id="trackList"></div>
         </div>
     `;
-    
     const list = document.getElementById("trackList");
     currentAlbum.songs.forEach((song, index) => {
         const div = document.createElement("div");
@@ -228,20 +224,17 @@ function openAlbumPage(i) {
     });
 }
 
-/* ========================= PLAYER LOGIC ========================= */
-
 function playSong(song, album, index) {
     if (!song) return;
     currentIndex = index;
     currentAlbum = album;
-    
     audio.src = encodeURI(song.file);
     audio.play().then(() => {
         trackName.innerText = song.title;
         subText.innerText = album ? album.artist : "Streaming";
         isPlaying = true;
         playBtn.innerText = "⏸";
-    }).catch(err => console.error("Playback error", err));
+    }).catch(err => console.error("Playback failed:", err));
 }
 
 // AUTO-PLAY NEXT SONG OR REPEAT
@@ -265,13 +258,6 @@ playBtn.onclick = () => {
     isPlaying = !isPlaying;
 };
 
-// ADD REPEAT TOGGLE (Optional UI implementation)
-function toggleRepeat() {
-    isRepeat = !isRepeat;
-    alert(isRepeat ? "Repeat ON" : "Repeat OFF");
-}
-
 volume.oninput = () => { audio.volume = volume.value; };
 
-// INITIALIZE THE APP
 loadHome();
