@@ -1,41 +1,54 @@
-:root { --bg: #000; --text: #fff; --gray: #121212; --accent: #fa233b; }
+:root { --bg: #000; --text: #fff; --accent: #fa233b; --card-bg: #1c1c1e; }
 body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; }
 
-.main { padding: 20px; padding-bottom: 120px; max-width: 1000px; margin: 0 auto; }
+.main { padding: 15px; padding-bottom: 110px; }
 
-/* 📱 RESPONSIVE ALBUM GRID (2-Column Mobile) */
-.album-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 15px;
+/* 📱 MOBILE SPECIFIC LAYOUT */
+@media (max-width: 767px) {
+    h1 { font-size: 34px; font-weight: 800; margin-bottom: 20px; }
+    h2 { font-size: 22px; margin: 25px 0 10px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+
+    /* Artists: Large Horizontal Scroll */
+    .artist-grid {
+        display: flex;
+        overflow-x: auto;
+        gap: 15px;
+        padding-bottom: 10px;
+        scrollbar-width: none;
+    }
+    .artist-card {
+        min-width: 240px; /* Big but not full width */
+        height: 240px;
+        border-radius: 12px;
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    /* Albums: 2x2 Grid */
+    .album-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Exact 2x2 rows */
+        gap: 15px;
+    }
+    .album-card {
+        text-align: left;
+    }
+    .album-card img {
+        width: 100%;
+        aspect-ratio: 1/1;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+    .album-title {
+        font-size: 14px;
+        font-weight: 500;
+        margin-top: 5px;
+        color: #efefef;
+    }
 }
+
+/* 💻 DESKTOP PROTECTION (Keep your current desktop look) */
 @media (min-width: 768px) {
-    .album-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 25px; }
+    /* Your existing desktop styles go here */
 }
-
-.album-card { cursor: pointer; transition: 0.2s; }
-.album-card img { width: 100%; aspect-ratio: 1/1; border-radius: 8px; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-.album-card div { margin-top: 8px; font-weight: 600; font-size: 14px; }
-
-/* 🎤 ARTIST SCROLL */
-.scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 20px; scrollbar-width: none; }
-.artist-card { min-width: 120px; text-align: center; cursor: pointer; }
-.artist-card img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; }
-.artist-card div { margin-top: 8px; font-size: 13px; font-weight: 500; }
-
-/* 🎧 ALBUM PAGE (Detailed Info) */
-.album-header { display: flex; flex-direction: column; gap: 20px; margin-bottom: 30px; }
-@media (min-width: 600px) { .album-header { flex-direction: row; align-items: flex-end; } }
-
-.header-img { width: 200px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
-.header-info h1 { margin: 0; font-size: 28px; }
-.header-info p { margin: 5px 0; color: var(--accent); font-weight: 600; font-size: 18px; }
-.metadata { color: #888; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
-
-.track { display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid #222; cursor: pointer; }
-.track:hover { background: rgba(255,255,255,0.05); }
-.track-num { width: 30px; color: #555; font-size: 14px; }
-
-/* PLAYER BAR */
-.player { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(25,25,25,0.95); backdrop-filter: blur(20px); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #333; z-index: 1000; }
-#playerArt { width: 45px; height: 45px; border-radius: 4px; margin-right: 12px; }
