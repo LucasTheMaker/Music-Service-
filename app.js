@@ -13,7 +13,7 @@ let currentAlbum = null;
 let currentIndex = 0;
 let isPlaying = false;
 
-/* ========================= DATA MATCHED TO GITHUB ========================= */
+/* ========================= RESTORED DATA ========================= */
 const albums = [
   {
     title: "ye",
@@ -38,15 +38,11 @@ const albums = [
       { title: "We Don't Care", file: "music/We Dont Care.mp3" },
       { title: "Graduation Day", file: "music/Graduation Day.mp3" },
       { title: "All Falls Down", file: "music/All Falls Down.mp3" },
-      { title: "Ill Fly Away", file: "music/Ill Fly Away.mp3" },
       { title: "Spaceship", file: "music/Spaceship.mp3" },
       { title: "Jesus Walks", file: "music/Jesus Walks.mp3" },
       { title: "Never Let Me Down", file: "music/Never Let Me Down.mp3" },
       { title: "Get Em High", file: "music/Get Em High.mp3" },
       { title: "The New Workout Plan", file: "music/The New Workout Plan.mp3" },
-      { title: "Slow Jamz", file: "music/Slow Jamz.mp3" },
-      { title: "School Spirit", file: "music/School Spirit.mp3" },
-      { title: "Two Words", file: "music/Two Words.mp3" },
       { title: "Through The Wire", file: "music/Through The Wire.mp3" },
       { title: "Family Business", file: "music/Family Business.mp3" },
       { title: "Last Call", file: "music/Last Call.mp3" }
@@ -69,8 +65,7 @@ const albums = [
       { title: "Diamonds From Sierra Leone", file: "music/Diamonds From Sierra Leone.mp3" },
       { title: "Hey Mama", file: "music/Hey Mama.mp3" },
       { title: "Celebration", file: "music/Celebration.mp3" },
-      { title: "Gone", file: "music/Gone.mp3" },
-      { title: "Late", file: "music/Late.mp3" }
+      { title: "Gone", file: "music/Gone.mp3" }
     ]
   },
   {
@@ -81,9 +76,7 @@ const albums = [
       { title: "Wanna Be Startin' Somethin'", file: "music/Wanna Be Startin Somethin.mp3" },
       { title: "Beat It", file: "music/Beat It.mp3" },
       { title: "Billie Jean", file: "music/Billie Jean.mp3" },
-      { title: "Thriller", file: "music/Thriller.mp3" },
-      { title: "Human Nature", file: "music/Human Nature.mp3" },
-      { title: "P.Y.T.", file: "music/P Y T Pretty Young Thing.mp3" }
+      { title: "Thriller", file: "music/Thriller.mp3" }
     ]
   }
 ];
@@ -96,7 +89,7 @@ const artists = [
   { name: "Jay-Z", image: "images/jayz.png", albums: [] }
 ];
 
-/* ========================= LOGIC ========================= */
+/* ========================= CORE LOGIC ========================= */
 
 function loadHome() {
     main.innerHTML = `
