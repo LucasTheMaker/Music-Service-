@@ -9,7 +9,7 @@ let currentAlbum = null;
 let currentIndex = 0;
 let isPlaying = false;
 
-/* ========================= DATA ========================= */
+/* ========================= DATA (MATCHED TO GITHUB) ========================= */
 const albums = [
   {
     title: "ye",
@@ -32,12 +32,11 @@ const albums = [
     songs: [
       { title: "Intro", file: "music/Intro.mp3" },
       { title: "We Don't Care", file: "music/We Dont Care.mp3" },
-      { title: "Graduation Day", file: "music/Graduation Day.mp3" },
       { title: "All Falls Down", file: "music/All Falls Down.mp3" },
-      { title: "Spaceship", file: "music/Spaceship.mp3" },
       { title: "Jesus Walks", file: "music/Jesus Walks.mp3" },
       { title: "Through The Wire", file: "music/Through The Wire.mp3" },
-      { title: "Family Business", file: "music/Family Business.mp3" }
+      { title: "Family Business", file: "music/Family Business.mp3" },
+      { title: "Last Call", file: "music/Last Call.mp3" }
     ]
   }
 ];
@@ -52,12 +51,11 @@ const artists = [
 
 function loadHome() {
     main.innerHTML = `
-        <h1>Home</h1>
-        <h2>Artists</h2>
+        <div class="section-title">Artists</div>
         <div class="artist-grid" id="artistRow"></div>
-        <h2>Albums</h2>
+        <div class="section-title">Albums</div>
         <div class="album-grid" id="albumRow"></div>
-        <div id="detailView" style="margin-top:30px;"></div>
+        <div id="detailView"></div>
     `;
     renderArtists();
     renderAlbums();
@@ -79,7 +77,7 @@ function renderAlbums() {
     albums.forEach((album, i) => {
         const div = document.createElement("div");
         div.className = "album-card";
-        div.innerHTML = `<img src="${album.cover}"><div>${album.title}</div>`;
+        div.innerHTML = `<img src="${album.cover}"><div><strong>${album.title}</strong></div><div style="font-size:12px; opacity:0.6">${album.artist}</div>`;
         div.onclick = () => openAlbumPage(i);
         row.appendChild(div);
     });
@@ -88,11 +86,11 @@ function renderAlbums() {
 function openAlbumPage(i) {
     currentAlbum = albums[i];
     const view = document.getElementById("detailView");
-    view.innerHTML = `<h3>${currentAlbum.title}</h3>`;
+    view.innerHTML = `<div class="section-title">${currentAlbum.title}</div>`;
     currentAlbum.songs.forEach((song, index) => {
         const div = document.createElement("div");
         div.className = "track";
-        div.innerText = song.title;
+        div.innerHTML = `<span class="track-num">${index + 1}</span> <span>${song.title}</span>`;
         div.onclick = () => playSong(song, currentAlbum, index);
         view.appendChild(div);
     });
@@ -102,12 +100,12 @@ function openAlbumPage(i) {
 function openArtistPage(i) {
     const artist = artists[i];
     const view = document.getElementById("detailView");
-    view.innerHTML = `<h3>${artist.name} - All Songs</h3>`;
+    view.innerHTML = `<div class="section-title">${artist.name} - All Tracks</div>`;
     const allSongs = artist.albums.flatMap(a => a.songs);
     allSongs.forEach((song, index) => {
         const div = document.createElement("div");
         div.className = "track";
-        div.innerText = song.title;
+        div.innerHTML = `<span class="track-num">${index + 1}</span> <span>${song.title}</span>`;
         div.onclick = () => playSong(song, null, index);
         view.appendChild(div);
     });
@@ -116,15 +114,16 @@ function openArtistPage(i) {
 
 function playSong(song, album, index) {
     if (!song) return;
-    audio.src = encodeURI(song.file);
+    const safePath = encodeURI(song.file);
+    audio.src = safePath;
     audio.play().then(() => {
         trackName.innerText = song.title;
         subText.innerText = album ? album.artist : "Streaming";
         isPlaying = true;
         playBtn.innerText = "⏸";
     }).catch(err => {
-        console.error("Playback failed:", err);
-        alert("File not found! Check your 'music' folder on GitHub.");
+        console.error("Playback error:", err);
+        alert("Make sure the file name on GitHub is exactly: " + song.file);
     });
 }
 
