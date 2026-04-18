@@ -48,33 +48,29 @@ const albums = [
   }
 ];
 
-function renderMusic() {
-  // Target every possible container in your HTML
-  const containers = [
-    document.getElementById('album-grid'),
-    document.getElementById('album-container'),
-    document.querySelector('.album-grid'),
-    document.querySelector('.main-content')
-  ];
+function renderAlbums() {
+  // Your index.html uses class="album-grid"
+  const container = document.querySelector('.album-grid');
 
-  const target = containers.find(c => c !== null);
-
-  if (!target) {
-    console.error("Target container not found!");
-    return;
+  if (!container) {
+      console.error("Could not find .album-grid container");
+      return;
   }
 
-  target.innerHTML = albums.map(album => `
-    <div class="album-card" onclick="window.location.href='album.html?id=${album.id}'" style="cursor:pointer; background: #1a1a1a; padding: 15px; border-radius: 10px; margin: 10px;">
-      <img src="${album.cover}" alt="${album.title}" style="width:100%; border-radius: 5px;" onerror="this.src='https://via.placeholder.com/150?text=Music'">
-      <div style="margin-top: 10px;">
-        <h3 style="color: white; margin: 0; font-size: 1rem;">${album.title}</h3>
-        <p style="color: #aaa; margin: 5px 0 0 0; font-size: 0.9rem;">${album.artist}</p>
+  container.innerHTML = albums.map(album => `
+    <div class="album-card" onclick="location.href='album.html?id=${album.id}'">
+      <img src="${album.cover}" alt="${album.title}" onerror="this.src='https://via.placeholder.com/300?text=Music'">
+      <div class="album-info">
+        <h3>${album.title}</h3>
+        <p>${album.artist}</p>
       </div>
     </div>
   `).join('');
 }
 
-// Run immediately and also on load to be safe
-renderMusic();
-window.onload = renderMusic;
+// Run when the page is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderAlbums);
+} else {
+    renderAlbums();
+}
