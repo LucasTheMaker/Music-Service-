@@ -28,13 +28,12 @@ const albums = [
     tracks: [
       { number: 1, title: "Intro", duration: "0:19" },
       { number: 2, title: "We Don't Care", duration: "3:59" },
-      { number: 3, title: "Graduation Day", duration: "1:21" },
       { number: 4, title: "All Falls Down", duration: "3:43" },
       { number: 7, title: "Jesus Walks", duration: "3:13" },
       { number: 12, title: "Slow Jamz", duration: "5:16" },
       { number: 19, title: "Through The Wire", duration: "3:41" },
-      { number: 20, title: "Family Business", duration: "4:38" }
-      // Add more tracks as needed
+      { number: 20, title: "Family Business", duration: "4:38" },
+      { number: 21, title: "Last Call", duration: "12:40" }
     ]
   },
   {
@@ -48,9 +47,9 @@ const albums = [
       { number: 2, title: "Heard 'Em Say", duration: "3:23" },
       { number: 3, title: "Touch the Sky", duration: "3:56" },
       { number: 4, title: "Gold Digger", duration: "3:27" },
-      { number: 9, title: "Roses", duration: "4:05" },
       { number: 13, title: "Diamonds From Sierra Leone (Remix)", duration: "3:53" },
-      { number: 16, title: "Hey Mama", duration: "5:05" }
+      { number: 16, title: "Hey Mama", duration: "5:05" },
+      { number: 19, title: "Gone", duration: "5:33" }
     ]
   },
   {
@@ -71,18 +70,28 @@ const albums = [
   }
 ];
 
-// Logic to render the UI
-function loadAlbums() {
-  const container = document.getElementById('album-grid');
-  if (!container) return;
+function initApp() {
+  const container = document.getElementById('album-grid') || document.querySelector('.album-container');
+  
+  if (!container) {
+    console.error("Could not find the album container in your HTML.");
+    return;
+  }
 
   container.innerHTML = albums.map(album => `
-    <div class="album-card" onclick="openAlbum('${album.id}')">
-      <img src="${album.cover}" alt="${album.title}">
-      <h3>${album.title}</h3>
-      <p>${album.artist}</p>
+    <div class="album-card" onclick="window.location.href='album.html?id=${album.id}'" style="cursor: pointer;">
+      <img src="${album.cover}" alt="${album.title}" onerror="this.src='https://via.placeholder.com/150?text=No+Cover'">
+      <div class="album-info">
+        <h3>${album.title}</h3>
+        <p>${album.artist}</p>
+      </div>
     </div>
   `).join('');
 }
 
-document.addEventListener('DOMContentLoaded', loadAlbums);
+// Run the initialization
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
