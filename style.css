@@ -1,10 +1,47 @@
-:root { --bg: #000; --text: #fff; --accent: #fa233b; }
-body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; }
-.main { padding: 15px; padding-bottom: 120px; }
-.artist-grid { display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; }
-.artist-card { min-width: 150px; text-align: center; cursor: pointer; }
-.artist-card img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; }
-.album-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-.album-card img { width: 100%; border-radius: 12px; }
-.player { position: fixed; bottom: 0; width: 100%; background: #111; padding: 15px; display: flex; justify-content: space-between; border-top: 1px solid #333; }
-.track { padding: 10px 0; border-bottom: 1px solid #222; cursor: pointer; }
+body {
+  background-color: #121212; /* Deeper dark mode */
+  color: #ffffff;
+  font-family: 'Inter', sans-serif; /* Cleaner, modern font */
+}
+
+/* Album Card Container */
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px;
+  padding: 20px;
+}
+
+/* Individual Album Card */
+.album-card {
+  background: #181818;
+  padding: 16px;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+.album-card:hover {
+  background: #282828;
+  cursor: pointer;
+}
+
+.album-card img {
+  width: 100%;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  margin-bottom: 12px;
+}
+
+/* The Bottom Player Bar */
+.player-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 90px;
+  background: #000;
+  border-top: 1px solid #282828;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
