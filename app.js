@@ -9,8 +9,23 @@ let currentAlbum = null;
 let currentIndex = 0;
 let isPlaying = false;
 
-/* ========================= DATASET ========================= */
+/* ========================= FULL DATASET WITH METADATA ========================= */
 const albums = [
+  {
+    title: "ye",
+    artist: "Kanye West",
+    cover: "images/ye.jpg",
+    year: "June 1, 2018", label: "GOOD Music", duration: "7 songs, 23 minutes",
+    songs: [
+      { title: "I Thought About Killing You", file: "music/ye/1. I Thought About Killing You.mp3" },
+      { title: "Yikes", file: "music/ye/2. Yikes.mp3" },
+      { title: "All Mine", file: "music/ye/3. All Mine.mp3" },
+      { title: "Wouldn't Leave", file: "music/ye/4. Wouldn't Leave.mp3" },
+      { title: "No Mistakes", file: "music/ye/5. No Mistakes.mp3" },
+      { title: "Ghost Town", file: "music/ye/6. Ghost Town.mp3" },
+      { title: "Violent Crimes", file: "music/ye/7. Violent Crimes.mp3" }
+    ]
+  },
   {
     title: "The College Dropout",
     artist: "Kanye West",
@@ -88,7 +103,63 @@ const albums = [
   }
 ];
 
+const artists = [
+  { name: "Kanye West", image: "images/kanye.png" },
+  { name: "Michael Jackson", image: "images/mj.jpg" },
+  { name: "Jay-Z", image: "images/jayz.jpg" }
+];
+
 /* ========================= NAVIGATION & PLAYBACK ========================= */
+
+function loadHome() {
+    main.innerHTML = `
+        <h1 style="font-size: 32px; margin-bottom: 25px;">Home</h1>
+        <div class="scroll" id="artistRow"></div>
+        <h2 style="margin: 30px 0 15px;">Recently Added</h2>
+        <div class="album-grid" id="albumRow"></div>
+    `;
+    renderArtists();
+    renderAlbums();
+}
+
+function renderArtists() {
+    const row = document.getElementById("artistRow");
+    artists.forEach(artist => {
+        const div = document.createElement("div");
+        div.className = "artist-card";
+        div.innerHTML = `<img src="${artist.image}"><div>${artist.name}</div>`;
+        div.onclick = () => openArtistPage(artist.name);
+        row.appendChild(div);
+    });
+}
+
+function renderAlbums() {
+    const row = document.getElementById("albumRow");
+    albums.forEach((album, i) => {
+        const div = document.createElement("div");
+        div.className = "album-card";
+        div.innerHTML = `<img src="${album.cover}"><div><strong>${album.title}</strong></div>`;
+        div.onclick = () => openAlbum(i);
+        row.appendChild(div);
+    });
+}
+
+function openArtistPage(artistName) {
+    const filteredAlbums = albums.filter(a => a.artist.includes(artistName));
+    main.innerHTML = `
+        <button onclick="loadHome()" class="back-btn">← Home</button>
+        <h1 style="margin-top: 10px;">${artistName}</h1>
+        <div class="album-grid" id="artistAlbums"></div>
+    `;
+    const albumRow = document.getElementById("artistAlbums");
+    filteredAlbums.forEach(album => {
+        const div = document.createElement("div");
+        div.className = "album-card";
+        div.innerHTML = `<img src="${album.cover}"><div>${album.title}</div>`;
+        div.onclick = () => openAlbum(albums.indexOf(album));
+        albumRow.appendChild(div);
+    });
+}
 
 function openAlbum(i) {
     currentAlbum = albums[i];
@@ -133,11 +204,16 @@ function playSong(index) {
     playBtn.innerText = "⏸";
 }
 
-// ⏭️ AUTO-PLAY NEXT SONG
 audio.onended = () => {
     if (currentIndex + 1 < currentAlbum.songs.length) {
         playSong(currentIndex + 1);
     }
 };
 
-/* Rest of navigation (loadHome, renderArtists, etc.) remains the same */
+playBtn.onclick = () => {
+    if (isPlaying) { audio.pause(); playBtn.innerText = "▶"; }
+    else { audio.play(); playBtn.innerText = "⏸"; }
+    isPlaying = !isPlaying;
+};
+
+loadHome();
