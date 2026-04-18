@@ -8,6 +8,7 @@ const volume = document.getElementById("volume");
 let currentAlbum = null;
 let currentIndex = 0;
 let isPlaying = false;
+let isRepeat = false; // Toggle for repeat mode
 
 /* ========================= FULL DATASET ========================= */
 const albums = [
@@ -129,7 +130,7 @@ const artists = [
   }
 ];
 
-/* ========================= CORE NAVIGATION ========================= */
+/* ========================= NAVIGATION & UI RENDERING ========================= */
 
 function loadHome() {
     main.innerHTML = `
@@ -169,11 +170,13 @@ function renderAlbums() {
     });
 }
 
+/* ========================= INDIVIDUAL PAGES ========================= */
+
 function openArtistPage(i) {
     const artist = artists[i];
     main.innerHTML = `
         <div class="detail-page">
-            <button class="back-btn" onclick="loadHome()">← Back</button>
+            <button class="back-btn" onclick="loadHome()">← Back to Home</button>
             <div class="header-hero">
                 <img src="${artist.image}" class="hero-img">
                 <div class="hero-text">
@@ -185,6 +188,7 @@ function openArtistPage(i) {
             <div class="album-grid" id="artistAlbums"></div>
         </div>
     `;
+    
     const albumRow = document.getElementById("artistAlbums");
     artist.albums.forEach(album => {
         const div = document.createElement("div");
@@ -202,10 +206,10 @@ function openAlbumPage(i) {
     currentAlbum = albums[i];
     main.innerHTML = `
         <div class="detail-page">
-            <button class="back-btn" onclick="loadHome()">← Back</button>
+            <button class="back-btn" onclick="loadHome()">← Back to Home</button>
             <div class="album-header" style="display:flex; gap:20px; align-items:center; margin-bottom:30px;">
                 <img src="${currentAlbum.cover}" style="width:200px; border-radius:15px;">
-                <div>
+                <div class="album-info">
                     <h1>${currentAlbum.title}</h1>
                     <p>${currentAlbum.artist}</p>
                 </div>
@@ -213,6 +217,7 @@ function openAlbumPage(i) {
             <div id="trackList"></div>
         </div>
     `;
+    
     const list = document.getElementById("trackList");
     currentAlbum.songs.forEach((song, index) => {
         const div = document.createElement("div");
@@ -223,16 +228,36 @@ function openAlbumPage(i) {
     });
 }
 
+/* ========================= PLAYER LOGIC ========================= */
+
 function playSong(song, album, index) {
     if (!song) return;
+    currentIndex = index;
+    currentAlbum = album;
+    
     audio.src = encodeURI(song.file);
     audio.play().then(() => {
         trackName.innerText = song.title;
         subText.innerText = album ? album.artist : "Streaming";
         isPlaying = true;
         playBtn.innerText = "⏸";
-    }).catch(err => console.error("Playback failed:", err));
+    }).catch(err => console.error("Playback error", err));
 }
+
+// AUTO-PLAY NEXT SONG OR REPEAT
+audio.onended = () => {
+    if (isRepeat) {
+        audio.currentTime = 0;
+        audio.play();
+    } else if (currentAlbum && currentIndex + 1 < currentAlbum.songs.length) {
+        currentIndex++;
+        const nextSong = currentAlbum.songs[currentIndex];
+        playSong(nextSong, currentAlbum, currentIndex);
+    } else {
+        isPlaying = false;
+        playBtn.innerText = "▶";
+    }
+};
 
 playBtn.onclick = () => {
     if (isPlaying) { audio.pause(); playBtn.innerText = "▶"; }
@@ -240,6 +265,13 @@ playBtn.onclick = () => {
     isPlaying = !isPlaying;
 };
 
+// ADD REPEAT TOGGLE (Optional UI implementation)
+function toggleRepeat() {
+    isRepeat = !isRepeat;
+    alert(isRepeat ? "Repeat ON" : "Repeat OFF");
+}
+
 volume.oninput = () => { audio.volume = volume.value; };
 
+// INITIALIZE THE APP
 loadHome();
