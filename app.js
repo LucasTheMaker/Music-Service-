@@ -30,7 +30,7 @@ const albums = [
     year: "2004", label: "Roc-A-Fella", duration: "21 songs",
     songs: [
       { title: "Intro", file: "music/dropout/Intro.mp3" },
-      { title: "We Don't Care", file: "music/dropout/We Dont Care.mp3" },
+      { title: "We Don't Care", file: "music/dropout/We Don't Care.mp3" },
       { title: "Graduation Day", file: "music/dropout/Graduation Day.mp3" },
       { title: "All Falls Down", file: "music/dropout/All Falls Down.mp3" },
       { title: "I'll Fly Away", file: "music/dropout/Ill Fly Away.mp3" },
@@ -125,7 +125,7 @@ function loadHome() {
 
 function openArtist(i) {
     const artist = artists[i];
-    main.innerHTML = `<button onclick="loadHome()" style="background:none; border:none; color:#888; cursor:pointer;">← Home</button><h1>${artist.name}</h1><div id="trackList"></div>`;
+    main.innerHTML = `<button onclick="loadHome()" style="background:none; border:none; color:#888; cursor:pointer; margin-bottom: 20px;">← Home</button><h1>${artist.name}</h1><div id="trackList"></div>`;
     const filteredSongs = albums.filter(alb => alb.artist === artist.name).flatMap(alb => alb.songs);
     filteredSongs.forEach((s) => {
         const d = document.createElement("div"); d.className = "track"; d.style = "padding:15px 0; border-bottom:1px solid #222; cursor:pointer;";
@@ -137,26 +137,4 @@ function openArtist(i) {
 
 function openAlbum(i) {
     currentAlbum = albums[i];
-    main.innerHTML = `<button onclick="loadHome()" style="background:none; border:none; color:#888; cursor:pointer; margin-bottom:15px;">← Home</button><div style="display:flex; gap:20px; margin-bottom:25px;"><img src="${currentAlbum.cover}" style="width:120px; border-radius:10px;"><div><h2 style="margin:0;">${currentAlbum.title}</h2><p style="color:var(--accent); font-weight:bold;">${currentAlbum.artist}</p></div></div><div id="trackList"></div>`;
-    currentAlbum.songs.forEach((s, idx) => {
-        const d = document.createElement("div"); d.className = "track"; d.style = "padding:15px 0; border-bottom:1px solid #222; cursor:pointer;";
-        d.innerHTML = `<span style="color:#444; margin-right:15px;">${idx+1}</span> ${s.title}`;
-        d.onclick = () => playSong(idx);
-        document.getElementById("trackList").appendChild(d);
-    });
-}
-
-function playSong(idx) {
-    currentIndex = idx;
-    const s = currentAlbum.songs[currentIndex];
-    audio.src = encodeURI(s.file);
-    audio.play();
-    trackName.innerText = s.title;
-    subText.innerText = currentAlbum.artist;
-    isPlaying = true;
-    playBtn.innerText = "⏸";
-}
-
-playBtn.onclick = () => { if (isPlaying) { audio.pause(); playBtn.innerText = "▶"; isPlaying = false; } else { audio.play(); playBtn.innerText = "⏸"; isPlaying = true; } };
-
-document.addEventListener("DOMContentLoaded", loadHome);
+    main.innerHTML = `<button onclick="loadHome()" style="background:none; border:none; color:#888;
