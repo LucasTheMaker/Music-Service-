@@ -16,7 +16,7 @@ const albums = [
     title: "ye", 
     artist: "Kanye West", 
     cover: "images/ye.jpg",
-    year: "June 1, 2018", label: "GOOD Music", duration: "7 songs, 23 minutes",
+    year: "2018", label: "GOOD Music", duration: "7 songs",
     songs: [
       { title: "I Thought About Killing You", file: "music/ye/1.mp3" },
       { title: "Yikes", file: "music/ye/2.mp3" },
@@ -31,7 +31,7 @@ const albums = [
     title: "The College Dropout",
     artist: "Kanye West",
     cover: "images/dropout.jpg",
-    year: "February 10, 2004", label: "Roc-A-Fella", duration: "21 songs, 76 minutes",
+    year: "2004", label: "Roc-A-Fella", duration: "21 songs",
     songs: [
       { title: "Intro", file: "music/dropout/1.mp3" },
       { title: "We Don't Care", file: "music/dropout/2.mp3" },
@@ -55,40 +55,54 @@ const albums = [
       { title: "Family Business", file: "music/dropout/20.mp3" },
       { title: "Last Call", file: "music/dropout/21.mp3" }
     ]
+  },
+  {
+    title: "Late Registration",
+    artist: "Kanye West",
+    cover: "images/late-registration.png",
+    year: "2005", label: "Roc-A-Fella", duration: "21 songs",
+    songs: [
+      { title: "Wake Up Mr. West", file: "music/late/1.mp3" },
+      { title: "Heard 'Em Say", file: "music/late/2.mp3" },
+      { title: "Touch The Sky", file: "music/late/3.mp3" },
+      { title: "Gold Digger", file: "music/late/4.mp3" },
+      { title: "Skit #1", file: "music/late/5.mp3" },
+      { title: "Drive Slow", file: "music/late/6.mp3" },
+      { title: "My Way Home", file: "music/late/7.mp3" },
+      { title: "Crack Music", file: "music/late/8.mp3" },
+      { title: "Roses", file: "music/late/9.mp3" },
+      { title: "Bring Me Down", file: "music/late/10.mp3" },
+      { title: "Addiction", file: "music/late/11.mp3" },
+      { title: "Skit #2", file: "music/late/12.mp3" },
+      { title: "Diamonds From Sierra Leone (Remix)", file: "music/late/13.mp3" },
+      { title: "We Major", file: "music/late/14.mp3" },
+      { title: "Skit #3", file: "music/late/15.mp3" },
+      { title: "Hey Mama", file: "music/late/16.mp3" },
+      { title: "Celebration", file: "music/late/17.mp3" },
+      { title: "Skit #4", file: "music/late/18.mp3" },
+      { title: "Gone", file: "music/late/19.mp3" },
+      { title: "Diamonds From Sierra Leone", file: "music/late/20.mp3" },
+      { title: "Late", file: "music/late/21.mp3" }
+    ]
+  },
+  {
+    title: "Thriller",
+    artist: "Michael Jackson",
+    cover: "images/thriller.jpg",
+    year: "1982", label: "Epic", duration: "9 songs",
+    songs: [
+      { title: "Wanna Be Startin' Somethin'", file: "music/thriller/1.mp3" },
+      { title: "Baby Be Mine", file: "music/thriller/2.mp3" },
+      { title: "The Girl Is Mine", file: "music/thriller/3.mp3" },
+      { title: "Thriller", file: "music/thriller/4.mp3" },
+      { title: "Beat It", file: "music/thriller/5.mp3" },
+      { title: "Billie Jean", file: "music/thriller/6.mp3" },
+      { title: "Human Nature", file: "music/thriller/7.mp3" },
+      { title: "P.Y.T. (Pretty Young Thing)", file: "music/thriller/8.mp3" },
+      { title: "The Lady in My Life", file: "music/thriller/9.mp3" }
+    ]
   }
 ];
 
 const artists = [
-  { name: "Kanye West", image: "images/kanye.png" },
-  { name: "Michael Jackson", image: "images/mj.jpg" }
-];
-
-/* ========================= RENDERING ========================= */
-
-function loadHome() {
-    main.innerHTML = `<h1>Home</h1><div class="artist-grid" id="artRow"></div><h2>Albums</h2><div class="album-grid" id="albRow"></div>`;
-    const artRow = document.getElementById("artRow");
-    const albRow = document.getElementById("albRow");
-
-    artists.forEach((a, i) => {
-        const d = document.createElement("div"); d.className = "artist-card";
-        d.innerHTML = `<img src="${a.image}"><div class="artist-name">${a.name}</div>`;
-        d.onclick = () => openArtist(i);
-        artRow.appendChild(d);
-    });
-    
-    albums.forEach((alb, i) => {
-        const d = document.createElement("div"); d.className = "album-card";
-        d.innerHTML = `<img src="${alb.cover}"><div class="album-title">${alb.title}</div>`;
-        d.onclick = () => openAlbum(i);
-        albRow.appendChild(d);
-    });
-}
-
-function openArtist(i) {
-    const artist = artists[i];
-    main.innerHTML = `<button onclick="loadHome()" style="background:none; border:none; color:#888; cursor:pointer;">← Home</button><h1>${artist.name}</h1><div id="trackList"></div>`;
-    // Filter songs belonging to this artist
-    const filteredSongs = albums.filter(alb => alb.artist === artist.name).flatMap(alb => alb.songs);
-    filteredSongs.forEach((s) => {
-        const d = document.createElement("div"); d.style = "padding:15px 0; border-bottom:1px solid #222; cursor:
+  { name: "Kanye West", image: "images/kanye.png"
