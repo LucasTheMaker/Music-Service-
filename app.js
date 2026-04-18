@@ -13,7 +13,7 @@ let currentAlbum = null;
 let currentIndex = 0;
 let isPlaying = false;
 
-/* ========================= RESTORED DATA ========================= */
+/* ========================= DATA MATCHED TO GITHUB ========================= */
 const albums = [
   {
     title: "ye",
@@ -23,7 +23,7 @@ const albums = [
       { title: "I Thought About Killing You", file: "music/1. I Thought About Killing You.mp3" },
       { title: "Yikes", file: "music/2. Yikes.mp3" },
       { title: "All Mine", file: "music/3. All Mine.mp3" },
-      { title: "Wouldn't Leave", file: "music/4. Wouldn’t Leave.mp3" },
+      { title: "Wouldn't Leave", file: "music/4. Wouldn't Leave.mp3" },
       { title: "No Mistakes", file: "music/5. No Mistakes.mp3" },
       { title: "Ghost Town", file: "music/6. Ghost Town.mp3" },
       { title: "Violent Crimes", file: "music/7. Violent Crimes.mp3" }
@@ -34,12 +34,22 @@ const albums = [
     artist: "Kanye West",
     cover: "images/dropout.jpg",
     songs: [
-      { title: "We Don't Care", file: "music/dropout/We Dont Care.mp3" },
-      { title: "All Falls Down", file: "music/dropout/All Falls Down.mp3" },
-      { title: "Spaceship", file: "music/dropout/Spaceship.mp3" },
-      { title: "Jesus Walks", file: "music/dropout/Jesus Walks.mp3" },
-      { title: "Through The Wire", file: "music/dropout/Through The Wire.mp3" },
-      { title: "Family Business", file: "music/dropout/Family Business.mp3" }
+      { title: "Intro", file: "music/Intro.mp3" },
+      { title: "We Don't Care", file: "music/We Dont Care.mp3" },
+      { title: "Graduation Day", file: "music/Graduation Day.mp3" },
+      { title: "All Falls Down", file: "music/All Falls Down.mp3" },
+      { title: "Ill Fly Away", file: "music/Ill Fly Away.mp3" },
+      { title: "Spaceship", file: "music/Spaceship.mp3" },
+      { title: "Jesus Walks", file: "music/Jesus Walks.mp3" },
+      { title: "Never Let Me Down", file: "music/Never Let Me Down.mp3" },
+      { title: "Get Em High", file: "music/Get Em High.mp3" },
+      { title: "The New Workout Plan", file: "music/The New Workout Plan.mp3" },
+      { title: "Slow Jamz", file: "music/Slow Jamz.mp3" },
+      { title: "School Spirit", file: "music/School Spirit.mp3" },
+      { title: "Two Words", file: "music/Two Words.mp3" },
+      { title: "Through The Wire", file: "music/Through The Wire.mp3" },
+      { title: "Family Business", file: "music/Family Business.mp3" },
+      { title: "Last Call", file: "music/Last Call.mp3" }
     ]
   },
   {
@@ -47,10 +57,20 @@ const albums = [
     artist: "Kanye West",
     cover: "images/late.jpg",
     songs: [
-      { title: "Heard 'Em Say", file: "music/late/Heard Em Say.mp3" },
-      { title: "Touch The Sky", file: "music/late/Touch The Sky.mp3" },
-      { title: "Gold Digger", file: "music/late/Gold Digger.mp3" },
-      { title: "Hey Mama", file: "music/late/Hey Mama.mp3" }
+      { title: "Wake Up Mr. West", file: "music/Wake Up Mr West.mp3" },
+      { title: "Heard 'Em Say", file: "music/Heard Em Say.mp3" },
+      { title: "Touch The Sky", file: "music/Touch The Sky.mp3" },
+      { title: "Gold Digger", file: "music/Gold Digger.mp3" },
+      { title: "Drive Slow", file: "music/Drive Slow.mp3" },
+      { title: "Crack Music", file: "music/Crack Music.mp3" },
+      { title: "Roses", file: "music/Roses.mp3" },
+      { title: "Bring Me Down", file: "music/Bring Me Down.mp3" },
+      { title: "Addiction", file: "music/Addiction.mp3" },
+      { title: "Diamonds From Sierra Leone", file: "music/Diamonds From Sierra Leone.mp3" },
+      { title: "Hey Mama", file: "music/Hey Mama.mp3" },
+      { title: "Celebration", file: "music/Celebration.mp3" },
+      { title: "Gone", file: "music/Gone.mp3" },
+      { title: "Late", file: "music/Late.mp3" }
     ]
   },
   {
@@ -58,10 +78,12 @@ const albums = [
     artist: "Michael Jackson",
     cover: "images/thriller.jpg",
     songs: [
-      { title: "Wanna Be Startin' Somethin'", file: "music/mj/Wanna Be Startin Somethin.mp3" },
-      { title: "Thriller", file: "music/mj/Thriller.mp3" },
-      { title: "Beat It", file: "music/mj/Beat It.mp3" },
-      { title: "Billie Jean", file: "music/mj/Billie Jean.mp3" }
+      { title: "Wanna Be Startin' Somethin'", file: "music/Wanna Be Startin Somethin.mp3" },
+      { title: "Beat It", file: "music/Beat It.mp3" },
+      { title: "Billie Jean", file: "music/Billie Jean.mp3" },
+      { title: "Thriller", file: "music/Thriller.mp3" },
+      { title: "Human Nature", file: "music/Human Nature.mp3" },
+      { title: "P.Y.T.", file: "music/P Y T Pretty Young Thing.mp3" }
     ]
   }
 ];
@@ -74,7 +96,7 @@ const artists = [
   { name: "Jay-Z", image: "images/jayz.png", albums: [] }
 ];
 
-/* ========================= CORE LOGIC ========================= */
+/* ========================= LOGIC ========================= */
 
 function loadHome() {
     main.innerHTML = `
@@ -136,7 +158,6 @@ function renderTracklist(songs, title) {
 
 function playSong(song, album, index) {
     if (!song) return;
-    // encodeURI handles the spaces in filenames like "1. I Thought About Killing You.mp3"
     const safeFile = encodeURI(song.file);
     audio.src = safeFile;
     audio.play().then(() => {
@@ -145,12 +166,9 @@ function playSong(song, album, index) {
         currentIndex = index;
         isPlaying = true;
         playBtn.innerText = "⏸";
-    }).catch(err => {
-        console.error("Playback failed:", err);
-    });
+    }).catch(err => console.error("Playback failed:", err));
 }
 
-/* Controls */
 playBtn.onclick = () => {
     if (isPlaying) { audio.pause(); playBtn.innerText = "▶"; }
     else { audio.play(); playBtn.innerText = "⏸"; }
