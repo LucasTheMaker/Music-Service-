@@ -36,25 +36,20 @@ const albums = [
     songs: [
       { title: "Intro", file: "music/dropout/Intro.mp3" },
       { title: "We Don't Care", file: "music/dropout/We Dont Care.mp3" },
-      { title: "Graduation Day", file: "music/dropout/Graduation Day.mp3" },
-      { title: "All Falls Down", file: "music/dropout/All Falls Down.mp3" },
-      { title: "I'll Fly Away", file: "music/dropout/Ill Fly Away.mp3" },
-      { title: "Spaceship", file: "music/dropout/Spaceship.mp3" },
       { title: "Jesus Walks", file: "music/dropout/Jesus Walks.mp3" },
-      { title: "Never Let Me Down", file: "music/dropout/Never Let Me Down.mp3" },
-      { title: "Get Em High", file: "music/dropout/Get Em High.mp3" },
-      { title: "Workout Plan", file: "music/dropout/Workout Plan.mp3" },
-      { title: "The New Workout Plan", file: "music/dropout/The New Workout Plan.mp3" },
-      { title: "Slow Jamz", file: "music/dropout/Slow Jamz.mp3" },
-      { title: "Breathe In Breathe Out", file: "music/dropout/Breathe In Breathe Out.mp3" },
-      { title: "School Spirit Skit 1", file: "music/dropout/School Spirit Skit 1.mp3" },
-      { title: "School Spirit", file: "music/dropout/School Spirit.mp3" },
-      { title: "School Spirit Skit 2", file: "music/dropout/School Spirit Skit 2.mp3" },
-      { title: "Lil Jimmy Skit", file: "music/dropout/Lil Jimmy Skit.mp3" },
-      { title: "Two Words", file: "music/dropout/Two Words.mp3" },
       { title: "Through The Wire", file: "music/dropout/Through The Wire.mp3" },
-      { title: "Family Business", file: "music/dropout/Family Business.mp3" },
       { title: "Last Call", file: "music/dropout/Last Call.mp3" }
+    ]
+  },
+  {
+    title: "Late Registration",
+    artist: "Kanye West",
+    cover: "images/late-registration.png",
+    year: "August 30, 2005", label: "Roc-A-Fella Records", duration: "21 songs, 1 hour 10 minutes",
+    songs: [
+      { title: "Wake Up Mr. West", file: "music/late/Wake Up Mr West.mp3" },
+      { title: "Touch The Sky", file: "music/late/Touch The Sky.mp3" },
+      { title: "Gold Digger", file: "music/late/Gold Digger.mp3" }
     ]
   },
   {
@@ -64,14 +59,8 @@ const albums = [
     year: "November 30, 1982", label: "Epic Records", duration: "9 songs, 42 minutes",
     songs: [
       { title: "Wanna Be Startin' Somethin'", file: "music/thriller/Wanna Be Startin Somethin.mp3" },
-      { title: "Baby Be Mine", file: "music/thriller/Baby Be Mine.mp3" },
-      { title: "The Girl Is Mine", file: "music/thriller/The Girl Is Mine.mp3" },
       { title: "Thriller", file: "music/thriller/Thriller.mp3" },
-      { title: "Beat It", file: "music/thriller/Beat It.mp3" },
-      { title: "Billie Jean", file: "music/thriller/Billie Jean.mp3" },
-      { title: "Human Nature", file: "music/thriller/Human Nature.mp3" },
-      { title: "P.Y.T. (Pretty Young Thing)", file: "music/thriller/P Y T Pretty Young Thing.mp3" },
-      { title: "The Lady in My Life", file: "music/thriller/The Lady In My Life.mp3" }
+      { title: "Billie Jean", file: "music/thriller/Billie Jean.mp3" }
     ]
   }
 ];
@@ -81,17 +70,19 @@ const artists = [
   { name: "Michael Jackson", image: "images/mj.jpg" }
 ];
 
-/* ========================= LOGIC ========================= */
-
-playerBar.addEventListener("click", (e) => {
-    if (e.target.tagName !== "BUTTON") { playerBar.classList.toggle("expanded"); }
-});
+/* ========================= RENDERING ========================= */
 
 function loadHome() {
-    main.innerHTML = `<h1>Home</h1><h2>Artists</h2><div class="artist-grid" id="artRow"></div><h2>Albums</h2><div class="album-grid" id="albRow"></div>`;
+    main.innerHTML = `
+        <h1>Home</h1>
+        <div class="artist-grid" id="artRow"></div>
+        <h2 style="margin-top:30px;">Albums</h2>
+        <div class="album-grid" id="albRow"></div>
+    `;
     artists.forEach(a => {
         const d = document.createElement("div"); d.className = "artist-card";
         d.innerHTML = `<img src="${a.image}"><div class="artist-name">${a.name}</div>`;
+        d.onclick = () => openArtistPage(a.name);
         document.getElementById("artRow").appendChild(d);
     });
     albums.forEach((alb, i) => {
@@ -104,10 +95,23 @@ function loadHome() {
 
 function openAlbum(i) {
     currentAlbum = albums[i];
-    main.innerHTML = `<button onclick="loadHome()">← Home</button><div class="album-header"><img src="${currentAlbum.cover}" style="width:180px;"><div class="header-info"><h1>${currentAlbum.title}</h1><p>${currentAlbum.artist}</p><div class="metadata">${currentAlbum.label} • ${currentAlbum.year}</div><div class="metadata">${currentAlbum.duration}</div></div></div><div id="trackList"></div>`;
+    main.innerHTML = `
+        <button onclick="loadHome()" style="background:none; border:none; color:#888; margin-bottom:15px; cursor:pointer;">← Home</button>
+        <div style="display:flex; gap:15px; margin-bottom:20px;">
+            <img src="${currentAlbum.cover}" style="width:120px; border-radius:8px;">
+            <div>
+                <h2 style="margin:0;">${currentAlbum.title}</h2>
+                <p style="color:var(--accent); margin:5px 0; font-weight:600;">${currentAlbum.artist}</p>
+                <div style="font-size:11px; color:#666; text-transform:uppercase;">${currentAlbum.label} • ${currentAlbum.year}</div>
+                <div style="font-size:11px; color:#555;">${currentAlbum.duration}</div>
+            </div>
+        </div>
+        <div id="trackList"></div>
+    `;
     currentAlbum.songs.forEach((s, idx) => {
-        const d = document.createElement("div"); d.className = "track";
-        d.innerHTML = `<span>${idx + 1}</span> ${s.title}`;
+        const d = document.createElement("div");
+        d.style = "padding:12px 0; border-bottom:1px solid #222; cursor:pointer;";
+        d.innerHTML = `<span style="color:#444; margin-right:10px;">${idx+1}</span> ${s.title}`;
         d.onclick = () => playSong(idx);
         document.getElementById("trackList").appendChild(d);
     });
@@ -116,16 +120,24 @@ function openAlbum(i) {
 function playSong(idx) {
     currentIndex = idx;
     const s = currentAlbum.songs[currentIndex];
-    audio.src = encodeURI(s.file); audio.play();
-    trackName.innerText = s.title; subText.innerText = currentAlbum.artist;
-    if (!document.getElementById("playerArt")) { const img = document.createElement("img"); img.id = "playerArt"; playerBar.prepend(img); }
-    document.getElementById("playerArt").src = currentAlbum.cover;
-    isPlaying = true; playBtn.innerText = "⏸";
+    audio.src = encodeURI(s.file);
+    audio.play();
+    trackName.innerText = s.title;
+    subText.innerText = currentAlbum.artist;
+    isPlaying = true;
+    playBtn.innerText = "⏸";
 }
 
+/* ========================= CONTROLS ========================= */
+
+playBtn.onclick = () => {
+    if (isPlaying) { audio.pause(); playBtn.innerText = "▶"; }
+    else { audio.play(); playBtn.innerText = "⏸"; }
+    isPlaying = !isPlaying;
+};
+
+nextBtn.onclick = () => { if (currentIndex + 1 < currentAlbum.songs.length) playSong(currentIndex + 1); };
+prevBtn.onclick = () => { if (currentIndex > 0) playSong(currentIndex - 1); };
 audio.onended = () => { if (currentIndex + 1 < currentAlbum.songs.length) playSong(currentIndex + 1); };
-playBtn.onclick = (e) => { e.stopPropagation(); if (isPlaying) { audio.pause(); playBtn.innerText = "▶"; } else { audio.play(); playBtn.innerText = "⏸"; } isPlaying = !isPlaying; };
-nextBtn.onclick = (e) => { e.stopPropagation(); if (currentIndex + 1 < currentAlbum.songs.length) playSong(currentIndex + 1); };
-prevBtn.onclick = (e) => { e.stopPropagation(); if (currentIndex > 0) playSong(currentIndex - 1); };
 
 loadHome();
