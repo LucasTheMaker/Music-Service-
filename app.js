@@ -49,26 +49,30 @@ const albums = [
 ];
 
 function renderAlbums() {
-  // Your index.html uses class="album-grid"
-  const container = document.querySelector('.album-grid');
+    // 1. Try to find your existing grid
+    let container = document.querySelector('.album-grid') || document.querySelector('.main-content');
+    
+    // 2. Fallback: If the container is missing, target the body
+    if (!container) {
+        container = document.body;
+    }
 
-  if (!container) {
-      console.error("Could not find .album-grid container");
-      return;
-  }
+    // 3. Generate HTML
+    const albumHTML = albums.map(album => `
+        <div class="album-card" onclick="location.href='album.html?id=${album.id}'" style="cursor:pointer;">
+            <img src="${album.cover}" alt="${album.title}" onerror="this.src='https://via.placeholder.com/300?text=Music+Cover'">
+            <div class="album-info">
+                <h3>${album.title}</h3>
+                <p>${album.artist}</p>
+            </div>
+        </div>
+    `).join('');
 
-  container.innerHTML = albums.map(album => `
-    <div class="album-card" onclick="location.href='album.html?id=${album.id}'">
-      <img src="${album.cover}" alt="${album.title}" onerror="this.src='https://via.placeholder.com/300?text=Music'">
-      <div class="album-info">
-        <h3>${album.title}</h3>
-        <p>${album.artist}</p>
-      </div>
-    </div>
-  `).join('');
+    // 4. Inject
+    container.innerHTML = albumHTML;
 }
 
-// Run when the page is ready
+// Run as soon as possible
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', renderAlbums);
 } else {
