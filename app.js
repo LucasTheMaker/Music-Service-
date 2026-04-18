@@ -5,18 +5,14 @@ const nextBtn = document.getElementById("next");
 const main = document.getElementById("main");
 const trackName = document.getElementById("trackName");
 const subText = document.getElementById("subText");
-const playerBar = document.querySelector(".player");
 
 let currentAlbum = null;
 let currentIndex = 0;
 let isPlaying = false;
 
-/* ========================= DATASET ========================= */
 const albums = [
   {
-    title: "ye",
-    artist: "Kanye West",
-    cover: "images/ye.jpg",
+    title: "ye", artist: "Kanye West", cover: "images/ye.jpg",
     year: "June 1, 2018", label: "GOOD Music", duration: "7 songs, 23 minutes",
     songs: [
       { title: "I Thought About Killing You", file: "music/ye/1. I Thought About Killing You.mp3" },
@@ -29,10 +25,8 @@ const albums = [
     ]
   },
   {
-    title: "The College Dropout",
-    artist: "Kanye West",
-    cover: "images/dropout.jpg",
-    year: "February 10, 2004", label: "Roc-A-Fella Records", duration: "21 songs, 1 hour 16 minutes",
+    title: "The College Dropout", artist: "Kanye West", cover: "images/dropout.jpg",
+    year: "February 10, 2004", label: "Roc-A-Fella", duration: "21 songs, 76 minutes",
     songs: [
       { title: "Intro", file: "music/dropout/Intro.mp3" },
       { title: "We Don't Care", file: "music/dropout/We Dont Care.mp3" },
@@ -42,20 +36,7 @@ const albums = [
     ]
   },
   {
-    title: "Late Registration",
-    artist: "Kanye West",
-    cover: "images/late-registration.png",
-    year: "August 30, 2005", label: "Roc-A-Fella Records", duration: "21 songs, 1 hour 10 minutes",
-    songs: [
-      { title: "Wake Up Mr. West", file: "music/late/Wake Up Mr West.mp3" },
-      { title: "Touch The Sky", file: "music/late/Touch The Sky.mp3" },
-      { title: "Gold Digger", file: "music/late/Gold Digger.mp3" }
-    ]
-  },
-  {
-    title: "Thriller",
-    artist: "Michael Jackson",
-    cover: "images/thriller.jpg",
+    title: "Thriller", artist: "Michael Jackson", cover: "images/thriller.jpg",
     year: "November 30, 1982", label: "Epic Records", duration: "9 songs, 42 minutes",
     songs: [
       { title: "Wanna Be Startin' Somethin'", file: "music/thriller/Wanna Be Startin Somethin.mp3" },
@@ -70,48 +51,44 @@ const artists = [
   { name: "Michael Jackson", image: "images/mj.jpg" }
 ];
 
-/* ========================= RENDERING ========================= */
-
 function loadHome() {
-    main.innerHTML = `
-        <h1>Home</h1>
-        <div class="artist-grid" id="artRow"></div>
-        <h2 style="margin-top:30px;">Albums</h2>
-        <div class="album-grid" id="albRow"></div>
-    `;
+    main.innerHTML = `<h1>Home</h1><div class="artist-grid" id="artRow"></div><h2>Albums</h2><div class="album-grid" id="albRow"></div>`;
+    const artRow = document.getElementById("artRow");
+    const albRow = document.getElementById("albRow");
+
     artists.forEach(a => {
         const d = document.createElement("div"); d.className = "artist-card";
         d.innerHTML = `<img src="${a.image}"><div class="artist-name">${a.name}</div>`;
-        d.onclick = () => openArtistPage(a.name);
-        document.getElementById("artRow").appendChild(d);
+        artRow.appendChild(d);
     });
+
     albums.forEach((alb, i) => {
         const d = document.createElement("div"); d.className = "album-card";
         d.innerHTML = `<img src="${alb.cover}"><div class="album-title">${alb.title}</div>`;
         d.onclick = () => openAlbum(i);
-        document.getElementById("albRow").appendChild(d);
+        albRow.appendChild(d);
     });
 }
 
 function openAlbum(i) {
     currentAlbum = albums[i];
     main.innerHTML = `
-        <button onclick="loadHome()" style="background:none; border:none; color:#888; margin-bottom:15px; cursor:pointer;">← Home</button>
-        <div style="display:flex; gap:15px; margin-bottom:20px;">
-            <img src="${currentAlbum.cover}" style="width:120px; border-radius:8px;">
+        <button onclick="loadHome()" style="background:none; border:none; color:#888; cursor:pointer;">← Home</button>
+        <div style="display:flex; gap:20px; margin: 20px 0;">
+            <img src="${currentAlbum.cover}" style="width:150px; border-radius:10px;">
             <div>
-                <h2 style="margin:0;">${currentAlbum.title}</h2>
-                <p style="color:var(--accent); margin:5px 0; font-weight:600;">${currentAlbum.artist}</p>
-                <div style="font-size:11px; color:#666; text-transform:uppercase;">${currentAlbum.label} • ${currentAlbum.year}</div>
-                <div style="font-size:11px; color:#555;">${currentAlbum.duration}</div>
+                <h1 style="margin:0;">${currentAlbum.title}</h1>
+                <p style="color:var(--accent); font-weight:bold;">${currentAlbum.artist}</p>
+                <div style="font-size:12px; color:#555;">${currentAlbum.label} • ${currentAlbum.year}</div>
+                <div style="font-size:12px; color:#555;">${currentAlbum.duration}</div>
             </div>
         </div>
         <div id="trackList"></div>
     `;
     currentAlbum.songs.forEach((s, idx) => {
         const d = document.createElement("div");
-        d.style = "padding:12px 0; border-bottom:1px solid #222; cursor:pointer;";
-        d.innerHTML = `<span style="color:#444; margin-right:10px;">${idx+1}</span> ${s.title}`;
+        d.style = "padding:15px 0; border-bottom:1px solid #222; cursor:pointer;";
+        d.innerHTML = `<span style="color:#444; margin-right:15px;">${idx+1}</span> ${s.title}`;
         d.onclick = () => playSong(idx);
         document.getElementById("trackList").appendChild(d);
     });
@@ -128,16 +105,10 @@ function playSong(idx) {
     playBtn.innerText = "⏸";
 }
 
-/* ========================= CONTROLS ========================= */
-
 playBtn.onclick = () => {
     if (isPlaying) { audio.pause(); playBtn.innerText = "▶"; }
     else { audio.play(); playBtn.innerText = "⏸"; }
     isPlaying = !isPlaying;
 };
-
-nextBtn.onclick = () => { if (currentIndex + 1 < currentAlbum.songs.length) playSong(currentIndex + 1); };
-prevBtn.onclick = () => { if (currentIndex > 0) playSong(currentIndex - 1); };
-audio.onended = () => { if (currentIndex + 1 < currentAlbum.songs.length) playSong(currentIndex + 1); };
 
 loadHome();
