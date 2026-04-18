@@ -9,7 +9,7 @@ let currentAlbum = null;
 let currentIndex = 0;
 let isPlaying = false;
 
-/* ========================= VERIFIED TRACKLIST DATA ========================= */
+/* ========================= FULL DATASET ========================= */
 const albums = [
   {
     title: "ye",
@@ -31,10 +31,10 @@ const albums = [
     cover: "images/dropout.jpg",
     songs: [
       { title: "Intro", file: "music/dropout/Intro.mp3" },
-      { title: "We Don't Care", file: "music/dropout/We Don't Care.mp3" },
+      { title: "We Don't Care", file: "music/dropout/We Dont Care.mp3" },
       { title: "Graduation Day", file: "music/dropout/Graduation Day.mp3" },
       { title: "All Falls Down", file: "music/dropout/All Falls Down.mp3" },
-      { title: "I'll Fly Away", file: "music/dropout/I'll Fly Away.mp3" },
+      { title: "I'll Fly Away", file: "music/dropout/Ill Fly Away.mp3" },
       { title: "Spaceship", file: "music/dropout/Spaceship.mp3" },
       { title: "Jesus Walks", file: "music/dropout/Jesus Walks.mp3" },
       { title: "Never Let Me Down", file: "music/dropout/Never Let Me Down.mp3" },
@@ -64,21 +64,30 @@ const albums = [
       { title: "Gold Digger", file: "music/late/Gold Digger.mp3" },
       { title: "Skit #1", file: "music/late/Skit 1.mp3" },
       { title: "Drive Slow", file: "music/late/Drive Slow.mp3" },
-      { title: "My Way Home", file: "music/late/My Way Home.mp3" },
       { title: "Crack Music", file: "music/late/Crack Music.mp3" },
       { title: "Roses", file: "music/late/Roses.mp3" },
       { title: "Bring Me Down", file: "music/late/Bring Me Down.mp3" },
       { title: "Addiction", file: "music/late/Addiction.mp3" },
       { title: "Skit #2", file: "music/late/Skit 2.mp3" },
-      { title: "Diamonds From Sierra Leone - Remix", file: "music/late/Diamonds From Sierra Leone.mp3" },
+      { title: "Diamonds From Sierra Leone (Remix)", file: "music/late/Diamonds From Sierra Leone.mp3" },
       { title: "We Major", file: "music/late/We Major.mp3" },
       { title: "Skit #3", file: "music/late/Skit 3.mp3" },
       { title: "Hey Mama", file: "music/late/Hey Mama.mp3" },
       { title: "Celebration", file: "music/late/Celebration.mp3" },
       { title: "Skit #4", file: "music/late/Skit 4.mp3" },
       { title: "Gone", file: "music/late/Gone.mp3" },
-      { title: "Diamonds From Sierra Leone - Bonus Track", file: "music/late/Diamonds From Sierra Leone Bonus.mp3" },
+      { title: "Diamonds From Sierra Leone", file: "music/late/Diamonds From Sierra Leone Bonus.mp3" },
       { title: "Late", file: "music/late/Late.mp3" }
+    ]
+  },
+  {
+    title: "Watch The Throne",
+    artist: "Jay-Z & Kanye West",
+    cover: "images/wtt.jpg",
+    songs: [
+      { title: "No Church In The Wild", file: "music/wtt/No Church In The Wild.mp3" },
+      { title: "Niggas In Paris", file: "music/wtt/Niggas In Paris.mp3" },
+      { title: "Otis", file: "music/wtt/Otis.mp3" }
     ]
   },
   {
@@ -96,17 +105,6 @@ const albums = [
       { title: "P.Y.T. (Pretty Young Thing)", file: "music/thriller/P Y T Pretty Young Thing.mp3" },
       { title: "The Lady in My Life", file: "music/thriller/The Lady In My Life.mp3" }
     ]
-  },
-  {
-    title: "Watch The Throne",
-    artist: "Jay-Z & Kanye West",
-    cover: "images/wtt.jpg",
-    songs: [
-      { title: "No Church In The Wild", file: "music/wtt/No Church In The Wild.mp3" },
-      { title: "Lift Off", file: "music/wtt/Lift Off.mp3" },
-      { title: "Niggas In Paris", file: "music/wtt/Niggas In Paris.mp3" },
-      { title: "Otis", file: "music/wtt/Otis.mp3" }
-    ]
   }
 ];
 
@@ -114,24 +112,24 @@ const artists = [
   { 
     name: "Kanye West", 
     image: "images/kanye_cover.jpg", 
-    bio: "Visionary artist and producer known for redefining hip-hop through soul-sampling and boundary-pushing production.",
+    bio: "American rapper, designer, and producer. One of the most influential musicians of the 21st century.",
     albums: albums.filter(a => a.artist.includes("Kanye West")) 
   },
   { 
     name: "Michael Jackson", 
     image: "images/mj.png", 
-    bio: "The King of Pop. His artistry in music and dance remains the gold standard of global entertainment.",
+    bio: "The King of Pop. His 1982 album 'Thriller' remains the best-selling album of all time.",
     albums: albums.filter(a => a.artist === "Michael Jackson") 
   },
   { 
     name: "Jay-Z", 
     image: "images/jayz.png", 
-    bio: "Hip-hop's first billionaire and a lyrical master who bridged the gap between street anthems and high-level business.",
+    bio: "New York rapper and business mogul. Co-founder of Roc-A-Fella Records.",
     albums: albums.filter(a => a.artist.includes("Jay-Z")) 
   }
 ];
 
-/* ========================= NAVIGATION & UI RENDERING ========================= */
+/* ========================= CORE NAVIGATION ========================= */
 
 function loadHome() {
     main.innerHTML = `
@@ -176,4 +174,72 @@ function openArtistPage(i) {
     main.innerHTML = `
         <div class="detail-page">
             <button class="back-btn" onclick="loadHome()">← Back</button>
-            <div class
+            <div class="header-hero">
+                <img src="${artist.image}" class="hero-img">
+                <div class="hero-text">
+                    <h1>${artist.name}</h1>
+                    <p class="bio">${artist.bio}</p>
+                </div>
+            </div>
+            <h2>Discography</h2>
+            <div class="album-grid" id="artistAlbums"></div>
+        </div>
+    `;
+    const albumRow = document.getElementById("artistAlbums");
+    artist.albums.forEach(album => {
+        const div = document.createElement("div");
+        div.className = "album-card";
+        div.innerHTML = `<img src="${album.cover}"><div>${album.title}</div>`;
+        div.onclick = () => {
+            const index = albums.findIndex(a => a.title === album.title);
+            openAlbumPage(index);
+        };
+        albumRow.appendChild(div);
+    });
+}
+
+function openAlbumPage(i) {
+    currentAlbum = albums[i];
+    main.innerHTML = `
+        <div class="detail-page">
+            <button class="back-btn" onclick="loadHome()">← Back</button>
+            <div class="album-header" style="display:flex; gap:20px; align-items:center; margin-bottom:30px;">
+                <img src="${currentAlbum.cover}" style="width:200px; border-radius:15px;">
+                <div>
+                    <h1>${currentAlbum.title}</h1>
+                    <p>${currentAlbum.artist}</p>
+                </div>
+            </div>
+            <div id="trackList"></div>
+        </div>
+    `;
+    const list = document.getElementById("trackList");
+    currentAlbum.songs.forEach((song, index) => {
+        const div = document.createElement("div");
+        div.className = "track";
+        div.innerHTML = `<span class="track-num">${index + 1}</span> <span>${song.title}</span>`;
+        div.onclick = () => playSong(song, currentAlbum, index);
+        list.appendChild(div);
+    });
+}
+
+function playSong(song, album, index) {
+    if (!song) return;
+    audio.src = encodeURI(song.file);
+    audio.play().then(() => {
+        trackName.innerText = song.title;
+        subText.innerText = album ? album.artist : "Streaming";
+        isPlaying = true;
+        playBtn.innerText = "⏸";
+    }).catch(err => console.error("Playback failed:", err));
+}
+
+playBtn.onclick = () => {
+    if (isPlaying) { audio.pause(); playBtn.innerText = "▶"; }
+    else { audio.play(); playBtn.innerText = "⏸"; }
+    isPlaying = !isPlaying;
+};
+
+volume.oninput = () => { audio.volume = volume.value; };
+
+loadHome();
