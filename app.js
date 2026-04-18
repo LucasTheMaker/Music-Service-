@@ -92,4 +92,88 @@ const albums = [
     year: "November 30, 1982", label: "Epic Records", duration: "9 songs, 42 minutes",
     songs: [
       { title: "Wanna Be Startin' Somethin'", file: "music/thriller/1.mp3" },
-      { title: "Baby Be Mine", file: "music/thriller/2.mp3
+      { title: "Baby Be Mine", file: "music/thriller/2.mp3" },
+      { title: "The Girl Is Mine", file: "music/thriller/3.mp3" },
+      { title: "Thriller", file: "music/thriller/4.mp3" },
+      { title: "Beat It", file: "music/thriller/5.mp3" },
+      { title: "Billie Jean", file: "music/thriller/6.mp3" },
+      { title: "Human Nature", file: "music/thriller/7.mp3" },
+      { title: "P.Y.T. (Pretty Young Thing)", file: "music/thriller/8.mp3" },
+      { title: "The Lady in My Life", file: "music/thriller/9.mp3" }
+    ]
+  }
+];
+
+const artists = [
+  { name: "Kanye West", image: "images/kanye.png" },
+  { name: "Michael Jackson", image: "images/mj.jpg" }
+];
+
+/* ========================= RENDER LOGIC ========================= */
+
+function loadHome() {
+    main.innerHTML = `
+        <h1>Home</h1>
+        <div class="artist-grid" id="artRow"></div>
+        <h2 style="margin-top:30px;">Albums</h2>
+        <div class="album-grid" id="albRow"></div>
+    `;
+    const artRow = document.getElementById("artRow");
+    artists.forEach(a => {
+        const d = document.createElement("div"); d.className = "artist-card";
+        d.innerHTML = `<img src="${a.image}"><div class="artist-name">${a.name}</div>`;
+        d.onclick = () => openArtistPage(a.name);
+        artRow.appendChild(d);
+    });
+    
+    const albRow = document.getElementById("albRow");
+    albums.forEach((alb, i) => {
+        const d = document.createElement("div"); d.className = "album-card";
+        d.innerHTML = `<img src="${alb.cover}"><div class="album-title">${alb.title}</div>`;
+        d.onclick = () => openAlbum(i);
+        albRow.appendChild(d);
+    });
+}
+
+function openAlbum(i) {
+    currentAlbum = albums[i];
+    main.innerHTML = `
+        <button onclick="loadHome()" style="background:none; border:none; color:#888; cursor:pointer; margin-bottom:15px;">← Home</button>
+        <div style="display:flex; gap:20px; margin-bottom:25px;">
+            <img src="${currentAlbum.cover}" style="width:140px; border-radius:10px;">
+            <div>
+                <h2 style="margin:0;">${currentAlbum.title}</h2>
+                <p style="color:var(--accent); font-weight:bold;">${currentAlbum.artist}</p>
+                <div style="font-size:12px; color:#666;">${currentAlbum.label} • ${currentAlbum.year}</div>
+                <div style="font-size:12px; color:#555;">${currentAlbum.duration}</div>
+            </div>
+        </div>
+        <div id="trackList"></div>
+    `;
+    currentAlbum.songs.forEach((s, idx) => {
+        const d = document.createElement("div");
+        d.style = "padding:15px 0; border-bottom:1px solid #222; cursor:pointer;";
+        d.innerHTML = `<span style="color:#444; margin-right:15px;">${idx+1}</span> ${s.title}`;
+        d.onclick = () => playSong(idx);
+        document.getElementById("trackList").appendChild(d);
+    });
+}
+
+function playSong(idx) {
+    currentIndex = idx;
+    const s = currentAlbum.songs[currentIndex];
+    audio.src = encodeURI(s.file);
+    audio.play();
+    trackName.innerText = s.title;
+    subText.innerText = currentAlbum.artist;
+    isPlaying = true;
+    playBtn.innerText = "⏸";
+}
+
+playBtn.onclick = () => {
+    if (isPlaying) { audio.pause(); playBtn.innerText = "▶"; }
+    else { audio.play(); playBtn.innerText = "⏸"; }
+    isPlaying = !isPlaying;
+};
+
+document.addEventListener("DOMContentLoaded", loadHome);
