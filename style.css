@@ -1,47 +1,27 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #000;
-  color: white;
-}
+:root { --bg: black; --text: white; }
+body.light { --bg: white; --text: black; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; }
 
-.topbar {
-  padding: 10px;
-}
+.topbar { display: flex; justify-content: space-between; padding: 15px; }
+#search { width: 70%; padding: 10px; border-radius: 12px; border: none; }
 
-#search {
-  width: 100%;
-  padding: 10px;
-}
+.main { padding: 20px; padding-bottom: 120px; }
 
-#main {
-  padding: 15px;
-}
+/* Artist Hero Row */
+.artist-grid { display: flex; overflow-x: auto; gap: 16px; padding-bottom: 10px; }
+.artist-card { min-width: 260px; height: 320px; border-radius: 20px; overflow: hidden; position: relative; cursor: pointer; }
+.artist-card img { width: 100%; height: 100%; object-fit: cover; }
+.artist-name { position: absolute; bottom: 15px; left: 15px; font-size: 22px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
 
-.artist-card, .album-card {
-  cursor: pointer;
-  margin-bottom: 12px;
-}
+/* Album Grid */
+.album-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 10px; }
+.album-card { cursor: pointer; text-align: center; }
+.album-card img { width: 100%; aspect-ratio: 1/1; border-radius: 12px; object-fit: cover; }
+.album-title { margin-top: 5px; font-size: 14px; opacity: 0.9; }
 
-.artist-card img, .album-card img {
-  width: 140px;
-  border-radius: 10px;
-}
+/* Tracks */
+.track { padding: 14px; margin: 6px 0; background: rgba(255,255,255,0.08); border-radius: 12px; cursor: pointer; transition: 0.2s; }
+.track:hover { background: rgba(255,255,255,0.15); }
 
-.track {
-  padding: 10px;
-  margin: 6px 0;
-  background: #222;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.player {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: #111;
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-}
+.player { position: fixed; bottom: 0; width: 100%; background: #111; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #333; z-index: 100; }
+button { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
