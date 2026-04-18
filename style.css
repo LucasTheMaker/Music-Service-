@@ -1,28 +1,10 @@
 :root { --bg: #000; --text: #fff; --accent: #fa233b; }
-body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; overflow-x: hidden; }
-.main { padding: 15px; padding-bottom: 120px; min-height: 100vh; }
-
-/* 📱 MOBILE VIEW */
-@media (max-width: 767px) {
-    .artist-grid { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 15px; scrollbar-width: none; }
-    .artist-card { min-width: 160px; height: 280px; border-radius: 12px; position: relative; overflow: hidden; flex-shrink: 0; }
-    .artist-card img { width: 100%; height: 100%; object-fit: cover; object-position: center 15%; }
-    .artist-name { position: absolute; bottom: 12px; left: 12px; font-weight: bold; font-size: 18px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
-    .album-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .album-card img { width: 100%; aspect-ratio: 1/1; border-radius: 10px; object-fit: cover; }
-    .player { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(20, 20, 20, 0.95); padding: 15px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #333; z-index: 9999; }
-}
-
-/* 💻 DESKTOP VIEW */
-@media (min-width: 768px) {
-    .artist-grid { display: flex; gap: 30px; padding: 20px 0; }
-    .artist-card { width: 200px; text-align: center; cursor: pointer; }
-    .artist-card img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; }
-    .album-grid { display: flex; flex-wrap: wrap; gap: 25px; }
-    .album-card { width: 180px; cursor: pointer; }
-    .album-card img { width: 180px; height: 180px; border-radius: 12px; }
-    .player { position: fixed; bottom: 0; left: 0; right: 0; height: 90px; background: #111; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; border-top: 1px solid #222; }
-}
-
-.track { padding: 15px 0; border-bottom: 1px solid #222; cursor: pointer; }
-button { background: none; border: none; color: white; cursor: pointer; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; }
+.main { padding: 15px; padding-bottom: 120px; }
+.artist-grid { display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; }
+.artist-card { min-width: 150px; text-align: center; cursor: pointer; }
+.artist-card img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; }
+.album-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.album-card img { width: 100%; border-radius: 12px; }
+.player { position: fixed; bottom: 0; width: 100%; background: #111; padding: 15px; display: flex; justify-content: space-between; border-top: 1px solid #333; }
+.track { padding: 10px 0; border-bottom: 1px solid #222; cursor: pointer; }
