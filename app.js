@@ -20,13 +20,13 @@ const albums = [
     artist: "Kanye West",
     cover: "images/ye.jpg",
     songs: [
-      { title: "I Thought About Killing You", file: "music/ye/I Thought About Killing You.mp3" },
-      { title: "Yikes", file: "music/ye/Yikes.mp3" },
-      { title: "All Mine", file: "music/ye/All Mine.mp3" },
-      { title: "Wouldn't Leave", file: "music/ye/Wouldnt Leave.mp3" },
-      { title: "No Mistakes", file: "music/ye/No Mistakes.mp3" },
-      { title: "Ghost Town", file: "music/ye/Ghost Town.mp3" },
-      { title: "Violent Crimes", file: "music/ye/Violent Crimes.mp3" }
+      { title: "I Thought About Killing You", file: "music/1. I Thought About Killing You.mp3" },
+      { title: "Yikes", file: "music/2. Yikes.mp3" },
+      { title: "All Mine", file: "music/3. All Mine.mp3" },
+      { title: "Wouldn't Leave", file: "music/4. Wouldn’t Leave.mp3" },
+      { title: "No Mistakes", file: "music/5. No Mistakes.mp3" },
+      { title: "Ghost Town", file: "music/6. Ghost Town.mp3" },
+      { title: "Violent Crimes", file: "music/7. Violent Crimes.mp3" }
     ]
   },
   {
@@ -67,7 +67,7 @@ const albums = [
 ];
 
 const artists = [
-  { name: "Kanye West", image: "images/kanye.png", albums: albums.filter(a => a.artist === "Kanye West") },
+  { name: "Kanye West", image: "images/kanye_cover.jpg", albums: albums.filter(a => a.artist === "Kanye West") },
   { name: "Michael Jackson", image: "images/mj.png", albums: albums.filter(a => a.artist === "Michael Jackson") },
   { name: "Bruno Mars", image: "images/bruno.png", albums: [] },
   { name: "Tyler, The Creator", image: "images/tyler.png", albums: [] },
@@ -136,7 +136,7 @@ function renderTracklist(songs, title) {
 
 function playSong(song, album, index) {
     if (!song) return;
-    // This Fixes the "songs won't play" issue by encoding special characters and spaces
+    // encodeURI handles the spaces in filenames like "1. I Thought About Killing You.mp3"
     const safeFile = encodeURI(song.file);
     audio.src = safeFile;
     audio.play().then(() => {
@@ -147,7 +147,6 @@ function playSong(song, album, index) {
         playBtn.innerText = "⏸";
     }).catch(err => {
         console.error("Playback failed:", err);
-        alert("Song not found! Ensure the file exists in the correct folder.");
     });
 }
 
@@ -159,4 +158,6 @@ playBtn.onclick = () => {
 };
 
 volume.oninput = () => { audio.volume = volume.value; };
-themeToggle.onclick = () => { document.body.classList.toggle
+themeToggle.onclick = () => { document.body.classList.toggle("light"); };
+
+loadHome();
