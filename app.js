@@ -1,15 +1,23 @@
-const audio = document.getElementById("audio");
-const playBtn = document.getElementById("play");
-const prevBtn = document.getElementById("prev");
-const nextBtn = document.getElementById("next");
-const main = document.getElementById("main");
-const trackName = document.getElementById("trackName");
-const subText = document.getElementById("subText");
+/* ========================= UPDATED ARTIST RENDER ========================= */
+function loadArtists() {
+    const row = document.getElementById("artistRow");
+    row.innerHTML = "";
+    artists.forEach(a => {
+        const d = document.createElement("div");
+        d.className = "artist-card";
+        // This attribute allows the CSS to target MJ specifically
+        d.setAttribute("data-artist", a.name); 
+        
+        d.innerHTML = `
+            <img src="${a.image}">
+            <div class="artist-name">${a.name}</div>
+        `;
+        d.onclick = () => openArtistPage(a.name);
+        row.appendChild(d);
+    });
+}
 
-let currentAlbum = null;
-let currentIndex = 0;
-let isPlaying = false;
-
+/* ========================= RESTORED ALBUM DATA ========================= */
 const albums = [
   {
     title: "ye", artist: "Kanye West", cover: "images/ye.jpg",
@@ -45,70 +53,3 @@ const albums = [
     ]
   }
 ];
-
-const artists = [
-  { name: "Kanye West", image: "images/kanye.png" },
-  { name: "Michael Jackson", image: "images/mj.jpg" }
-];
-
-function loadHome() {
-    main.innerHTML = `<h1>Home</h1><div class="artist-grid" id="artRow"></div><h2>Albums</h2><div class="album-grid" id="albRow"></div>`;
-    const artRow = document.getElementById("artRow");
-    const albRow = document.getElementById("albRow");
-
-    artists.forEach(a => {
-        const d = document.createElement("div"); d.className = "artist-card";
-        d.innerHTML = `<img src="${a.image}"><div class="artist-name">${a.name}</div>`;
-        artRow.appendChild(d);
-    });
-
-    albums.forEach((alb, i) => {
-        const d = document.createElement("div"); d.className = "album-card";
-        d.innerHTML = `<img src="${alb.cover}"><div class="album-title">${alb.title}</div>`;
-        d.onclick = () => openAlbum(i);
-        albRow.appendChild(d);
-    });
-}
-
-function openAlbum(i) {
-    currentAlbum = albums[i];
-    main.innerHTML = `
-        <button onclick="loadHome()" style="background:none; border:none; color:#888; cursor:pointer;">← Home</button>
-        <div style="display:flex; gap:20px; margin: 20px 0;">
-            <img src="${currentAlbum.cover}" style="width:150px; border-radius:10px;">
-            <div>
-                <h1 style="margin:0;">${currentAlbum.title}</h1>
-                <p style="color:var(--accent); font-weight:bold;">${currentAlbum.artist}</p>
-                <div style="font-size:12px; color:#555;">${currentAlbum.label} • ${currentAlbum.year}</div>
-                <div style="font-size:12px; color:#555;">${currentAlbum.duration}</div>
-            </div>
-        </div>
-        <div id="trackList"></div>
-    `;
-    currentAlbum.songs.forEach((s, idx) => {
-        const d = document.createElement("div");
-        d.style = "padding:15px 0; border-bottom:1px solid #222; cursor:pointer;";
-        d.innerHTML = `<span style="color:#444; margin-right:15px;">${idx+1}</span> ${s.title}`;
-        d.onclick = () => playSong(idx);
-        document.getElementById("trackList").appendChild(d);
-    });
-}
-
-function playSong(idx) {
-    currentIndex = idx;
-    const s = currentAlbum.songs[currentIndex];
-    audio.src = encodeURI(s.file);
-    audio.play();
-    trackName.innerText = s.title;
-    subText.innerText = currentAlbum.artist;
-    isPlaying = true;
-    playBtn.innerText = "⏸";
-}
-
-playBtn.onclick = () => {
-    if (isPlaying) { audio.pause(); playBtn.innerText = "▶"; }
-    else { audio.play(); playBtn.innerText = "⏸"; }
-    isPlaying = !isPlaying;
-};
-
-loadHome();
