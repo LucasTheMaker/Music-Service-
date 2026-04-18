@@ -52,19 +52,18 @@ const artists = [
   { name: "Michael Jackson", image: "images/mj.jpg" }
 ];
 
-/* ========================= RENDERING ========================= */
+/* ========================= NAVIGATION ========================= */
 
 function loadHome() {
     main.innerHTML = `<h1>Home</h1><div class="artist-grid" id="artRow"></div><h2>Albums</h2><div class="album-grid" id="albRow"></div>`;
     const artRow = document.getElementById("artRow");
-    const albRow = document.getElementById("albRow");
-
     artists.forEach(a => {
         const d = document.createElement("div"); d.className = "artist-card";
         d.innerHTML = `<img src="${a.image}"><div class="artist-name">${a.name}</div>`;
+        d.onclick = () => openArtistPage(a.name);
         artRow.appendChild(d);
     });
-
+    const albRow = document.getElementById("albRow");
     albums.forEach((alb, i) => {
         const d = document.createElement("div"); d.className = "album-card";
         d.innerHTML = `<img src="${alb.cover}"><div class="album-title">${alb.title}</div>`;
@@ -76,13 +75,13 @@ function loadHome() {
 function openAlbum(i) {
     currentAlbum = albums[i];
     main.innerHTML = `
-        <button onclick="loadHome()" style="background:none; border:none; color:#888; cursor:pointer;">← Home</button>
-        <div style="display:flex; gap:20px; margin: 20px 0;">
-            <img src="${currentAlbum.cover}" style="width:150px; border-radius:10px;">
+        <button onclick="loadHome()" style="background:none; border:none; color:#888; cursor:pointer; margin-bottom:15px;">← Home</button>
+        <div style="display:flex; gap:20px; margin-bottom:25px;">
+            <img src="${currentAlbum.cover}" style="width:140px; border-radius:10px;">
             <div>
                 <h1 style="margin:0;">${currentAlbum.title}</h1>
                 <p style="color:var(--accent); font-weight:bold;">${currentAlbum.artist}</p>
-                <div style="font-size:12px; color:#555;">${currentAlbum.label} • ${currentAlbum.year}</div>
+                <div style="font-size:12px; color:#666;">${currentAlbum.label} • ${currentAlbum.year}</div>
                 <div style="font-size:12px; color:#555;">${currentAlbum.duration}</div>
             </div>
         </div>
@@ -108,11 +107,17 @@ function playSong(idx) {
     playBtn.innerText = "⏸";
 }
 
+/* ========================= CONTROLS ========================= */
+
 playBtn.onclick = () => {
     if (isPlaying) { audio.pause(); playBtn.innerText = "▶"; }
     else { audio.play(); playBtn.innerText = "⏸"; }
     isPlaying = !isPlaying;
 };
 
-// Start the app correctly
+nextBtn.onclick = () => { if (currentIndex + 1 < currentAlbum.songs.length) playSong(currentIndex + 1); };
+prevBtn.onclick = () => { if (currentIndex > 0) playSong(currentIndex - 1); };
+audio.onended = () => { if (currentIndex + 1 < currentAlbum.songs.length) playSong(currentIndex + 1); };
+
+// Ensures data renders immediately
 document.addEventListener("DOMContentLoaded", loadHome);
