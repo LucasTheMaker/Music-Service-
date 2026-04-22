@@ -1,70 +1,75 @@
+console.log("🚀 app.js loaded");
+
 const audio = new Audio();
 
 let currentAlbum = null;
 let currentIndex = 0;
 
 /* =========================
-   DATA
+   DATA SAFETY WRAP
 ========================= */
-const artists = [
+const artists = window.artists || [
 {
   id: "kanye",
   name: "Kanye West",
   image: "images/kanye.png",
-  bio: "Highly influential rapper and producer."
+  bio: "Artist"
 }
 ];
 
-const albums = [
+const albums = window.albums || [
 {
   id: "ye",
   title: "ye",
   artist: "Kanye West",
   cover: "music/ye/cover.jpg",
   tracks: [
-    { number: 1, title: "I Thought About Killing You", file: "music/ye/1. I Thought About Killing You.mp3" },
-    { number: 6, title: "Ghost Town", file: "music/ye/6. Ghost Town.mp3" }
-  ]
-},
-{
-  id: "dropout",
-  title: "The College Dropout",
-  artist: "Kanye West",
-  cover: "music/dropout/cover.jpg",
-  tracks: [
-    { number: 1, title: "We Don't Care", file: "music/dropout/We Dont Care.mp3" },
-    { number: 2, title: "Spaceship", file: "music/dropout/Spaceship.mp3" }
+    { number: 1, title: "Ghost Town", file: "music/ye/6. Ghost Town.mp3" }
   ]
 }
 ];
 
 /* =========================
-   BOOT SAFE (FIX BLACK SCREEN)
+   BOOT SYSTEM (FAIL SAFE)
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM READY");
+
   const app = document.getElementById("app");
 
   if (!app) {
-    console.error("❌ Missing #app container");
+    console.error("❌ #app not found in HTML");
     return;
   }
 
-  renderHome();
-  setupPlayer();
+  try {
+    renderHome();
+    setupPlayer();
+    console.log("✅ App rendered successfully");
+  } catch (err) {
+    console.error("❌ RENDER ERROR:", err);
+
+    app.innerHTML = `
+      <h2 style="color:red">App crashed</h2>
+      <p>Check console for error</p>
+    `;
+  }
 });
 
 /* =========================
-   HOME PAGE (APPLE STYLE)
+   HOME
 ========================= */
 function renderHome() {
   const app = document.getElementById("app");
+
+  console.log("Rendering home...");
 
   app.innerHTML = `
     <h2>Artists</h2>
     <div class="artist-grid">
       ${artists.map(a => `
-        <div class="artist-card" onclick="openArtist('${a.id}')">
-          <img src="${a.image}" onerror="this.style.display='none'">
+        <div onclick="openArtist('${a.id}')">
+          <img src="${a.image}">
           <p>${a.name}</p>
         </div>
       `).join("")}
@@ -73,36 +78,7 @@ function renderHome() {
     <h2>Albums</h2>
     <div class="album-grid">
       ${albums.map(a => `
-        <div class="album-card" onclick="openAlbum('${a.id}')">
-          <img src="${a.cover}" onerror="this.style.display='none'">
-          <p>${a.title}</p>
-        </div>
-      `).join("")}
-    </div>
-  `;
-}
-
-/* =========================
-   ARTIST PAGE
-========================= */
-function openArtist(id) {
-  const artist = artists.find(a => a.id === id);
-  const app = document.getElementById("app");
-
-  app.innerHTML = `
-    <button onclick="renderHome()">← Back</button>
-
-    <div class="artist-header">
-      <img src="${artist.image}">
-      <h1>${artist.name}</h1>
-      <p>${artist.bio}</p>
-    </div>
-
-    <h2>Albums</h2>
-
-    <div class="album-grid">
-      ${albums.filter(a => a.artist === artist.name).map(a => `
-        <div class="album-card" onclick="openAlbum('${a.id}')">
+        <div onclick="openAlbum('${a.id}')">
           <img src="${a.cover}">
           <p>${a.title}</p>
         </div>
@@ -112,24 +88,26 @@ function openArtist(id) {
 }
 
 /* =========================
-   ALBUM PAGE
+   ALBUM
 ========================= */
 function openAlbum(id) {
   const album = albums.find(a => a.id === id);
   const app = document.getElementById("app");
 
+  if (!album) {
+    console.error("Album not found:", id);
+    return;
+  }
+
   app.innerHTML = `
-    <button onclick="renderHome()">← Home</button>
+    <button onclick="renderHome()">← Back</button>
 
-    <div class="album-header">
-      <img src="${album.cover}">
-      <h1>${album.title}</h1>
-      <p>${album.artist}</p>
-    </div>
+    <h1>${album.title}</h1>
+    <p>${album.artist}</p>
 
-    <div class="tracklist">
+    <div>
       ${album.tracks.map((t, i) => `
-        <div class="track" onclick="playSong('${album.id}', ${i})">
+        <div onclick="playSong('${album.id}', ${i})">
           ${t.number}. ${t.title}
         </div>
       `).join("")}
@@ -138,14 +116,21 @@ function openAlbum(id) {
 }
 
 /* =========================
-   PLAYER LOGIC
+   PLAYER
 ========================= */
 function playSong(albumId, index) {
   const album = albums.find(a => a.id === albumId);
   const song = album.tracks[index];
 
+  if (!song) {
+    console.error("Song missing:", index);
+    return;
+  }
+
   currentAlbum = album;
   currentIndex = index;
+
+  console.log("Playing:", song.file);
 
   audio.src = song.file;
   audio.play();
@@ -161,17 +146,5 @@ function setupPlayer() {
   document.getElementById("play-btn").onclick = () => {
     if (!audio.src) return;
     audio.paused ? audio.play() : audio.pause();
-  };
-
-  document.getElementById("next-btn").onclick = () => {
-    if (!currentAlbum) return;
-    currentIndex = (currentIndex + 1) % currentAlbum.tracks.length;
-    playSong(currentAlbum.id, currentIndex);
-  };
-
-  document.getElementById("prev-btn").onclick = () => {
-    if (!currentAlbum) return;
-    currentIndex = (currentIndex - 1 + currentAlbum.tracks.length) % currentAlbum.tracks.length;
-    playSong(currentAlbum.id, currentIndex);
   };
 }
