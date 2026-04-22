@@ -1,38 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music App</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music App</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <nav class="navbar">
-    <div class="search-container">
-        <input type="text" placeholder="Search music..." id="search-input">
-        <button id="search-btn">🌙</button>
-    </div>
+  <input id="search-input" placeholder="Search music...">
 </nav>
 
 <main class="container">
-    <div id="album-grid" class="album-grid"></div>
+  <div id="app"></div>
 </main>
 
 <footer class="player-bar">
-    <div class="current-track">
-        <div class="track-info">
-            <p id="player-track-title">Nothing Playing</p>
-            <p id="player-track-artist">Select a track</p>
-        </div>
-    </div>
-    <div class="player-controls">
-        <button id="prev-btn">⏮</button>
-        <button id="play-btn">▶</button>
-        <button id="next-btn">⏭</button>
-    </div>
+  <div>
+    <p id="player-track-title">Nothing Playing</p>
+    <p id="player-track-artist">Select a song</p>
+  </div>
+
+  <div>
+    <button id="prev-btn">⏮</button>
+    <button id="play-btn">▶</button>
+    <button id="next-btn">⏭</button>
+  </div>
 </footer>
 
 <script src="app.js"></script>
+
 </body>
 </html>
