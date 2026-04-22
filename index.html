@@ -7,31 +7,32 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="search-container">
-            <input type="text" placeholder="Search music..." id="search-input">
-            <button id="search-btn">🌙</button>
-        </div>
-    </nav>
 
-    <main class="container">
-        <div id="album-grid" class="album-grid"></div>
-    </main>
+<nav class="navbar">
+    <div class="search-container">
+        <input type="text" placeholder="Search music..." id="search-input">
+        <button id="search-btn">🌙</button>
+    </div>
+</nav>
 
-    <footer class="player-bar">
-        <div class="current-track">
-            <div class="track-info">
-                <p id="player-track-title" class="track-title">Nothing Playing</p>
-                <p id="player-track-artist" class="track-subtitle">Select a track to begin</p>
-            </div>
-        </div>
-        <div class="player-controls">
-            <button id="prev-btn" class="control-btn">⏮</button>
-            <button id="play-btn" class="control-btn play-pause">▶</button>
-            <button id="next-btn" class="control-btn">⏭</button>
-        </div>
-    </footer>
+<main class="container">
+    <div id="album-grid" class="album-grid"></div>
+</main>
 
-    <script src="app.js"></script>
+<footer class="player-bar">
+    <div class="current-track">
+        <div class="track-info">
+            <p id="player-track-title">Nothing Playing</p>
+            <p id="player-track-artist">Select a track</p>
+        </div>
+    </div>
+    <div class="player-controls">
+        <button id="prev-btn">⏮</button>
+        <button id="play-btn">▶</button>
+        <button id="next-btn">⏭</button>
+    </div>
+</footer>
+
+<script src="app.js"></script>
 </body>
 </html>
