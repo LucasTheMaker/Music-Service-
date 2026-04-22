@@ -1,61 +1,60 @@
 body {
   margin: 0;
-  font-family: Arial;
   background: #0d0d0d;
   color: white;
+  font-family: Arial;
 }
 
 #app {
   padding: 15px;
-  padding-bottom: 80px;
+  padding-bottom: 90px;
 }
 
-/* =========================
-   SECTIONS
-========================= */
-.section-title {
-  margin-top: 10px;
-}
-
-/* =========================
-   ARTIST ROW
-========================= */
-.artist-row {
+/* ARTIST SCROLL */
+.scroll {
   display: flex;
-  gap: 10px;
   overflow-x: auto;
+  gap: 10px;
 }
 
-/* =========================
-   ALBUM GRID (2x2 MOBILE STYLE)
-========================= */
-.album-grid {
+.chip {
+  background: #222;
+  padding: 8px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* 2x2 MOBILE GRID */
+.grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
 
-.album-card {
+.card {
   background: #1c1c1c;
   padding: 10px;
   border-radius: 12px;
 }
 
-.album-card img {
+.card img {
   width: 100%;
   border-radius: 10px;
 }
 
-/* =========================
-   PLAYER BAR (SMALL APPLE STYLE)
-========================= */
+/* HERO */
+.hero {
+  width: 100%;
+  border-radius: 12px;
+}
+
+/* PLAYER */
 #player {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background: #111;
+  background: black;
   padding: 8px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
