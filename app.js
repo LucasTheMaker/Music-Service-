@@ -2,6 +2,7 @@ const audio = new Audio();
 
 let currentAlbum = null;
 let currentIndex = 0;
+let isPlaying = false;
 
 /* =========================
    ARTISTS
@@ -13,59 +14,12 @@ const artists = [
 ];
 
 /* =========================
-   ALBUMS (ONLY COVER FIXES + LABEL ADDED)
+   ALBUMS (DO NOT TOUCH TRACKLISTS)
 ========================= */
-const albums = [
-
-{
-id: "dropout",
-title: "The College Dropout",
-artist: "Kanye West",
-label: "Roc-A-Fella Records",
-cover: "music/dropout/dropout.jpg",   // FIXED
-tracks: window.albums?.find(a => a.id === "dropout")?.tracks || []
-},
-
-{
-id: "late",
-title: "Late Registration",
-artist: "Kanye West",
-label: "Roc-A-Fella Records",
-cover: "music/late/late-registration.png",  // FIXED
-tracks: window.albums?.find(a => a.id === "late")?.tracks || []
-},
-
-{
-id: "ye",
-title: "ye",
-artist: "Kanye West",
-label: "GOOD Music",
-cover: "music/ye/ye.jpg",  // FIXED
-tracks: window.albums?.find(a => a.id === "ye")?.tracks || []
-},
-
-{
-id: "thriller",
-title: "Thriller",
-artist: "Michael Jackson",
-label: "Epic Records",
-cover: "music/thriller/cover.jpg",
-tracks: window.albums?.find(a => a.id === "thriller")?.tracks || []
-},
-
-{
-id: "romantic",
-title: "The Romantic",
-artist: "Bruno Mars",
-label: "Atlantic Records",
-cover: "music/romantic/cover.jpg",
-tracks: window.albums?.find(a => a.id === "romantic")?.tracks || []
-}
-
-];
+const albums = window.albums || [];
 
 /* =========================
-   HOME RENDER
+   RENDER HOME
 ========================= */
 document.addEventListener("DOMContentLoaded", renderHome);
 
@@ -80,7 +34,6 @@ ${albums.map(a => `
 <div class="album-card" onclick="openAlbum('${a.id}')">
 <img src="${a.cover}">
 <p>${a.title}</p>
-<small>${a.label}</small>
 </div>
 `).join("")}
 </div>
@@ -112,7 +65,6 @@ app.innerHTML = `
 
 <h1>${album.title}</h1>
 <p>${album.artist}</p>
-<p><strong>${album.label}</strong></p>
 
 <div class="tracklist">
 ${album.tracks.map((t,i) => `
@@ -125,7 +77,7 @@ ${t.number}. ${t.title}
 }
 
 /* =========================
-   AUDIO PLAYER (UNCHANGED FIX)
+   🔥 PLAYER (FIXED, NO DATA TOUCH)
 ========================= */
 function playSong(albumId, index) {
 const album = albums.find(a => a.id === albumId);
@@ -136,16 +88,43 @@ currentIndex = index;
 
 audio.src = song.file;
 
+/* ERROR HANDLING */
 audio.onerror = () => {
-console.error("Missing:", song.file);
-document.getElementById("player-track-title").innerText =
-"Missing: " + song.title;
+console.error("Missing file:", song.file);
 };
 
+/* PLAY */
 audio.oncanplay = () => {
 audio.play();
+isPlaying = true;
 
+document.getElementById("player-cover").src = album.cover;
 document.getElementById("player-track-title").innerText = song.title;
 document.getElementById("player-track-artist").innerText = album.artist;
 };
+}
+
+/* =========================
+   CONTROLS
+========================= */
+function togglePlay() {
+if (audio.paused) {
+audio.play();
+} else {
+audio.pause();
+}
+}
+
+function nextSong() {
+if (!currentAlbum) return;
+currentIndex++;
+if (currentIndex >= currentAlbum.tracks.length) currentIndex = 0;
+playSong(currentAlbum.id, currentIndex);
+}
+
+function prevSong() {
+if (!currentAlbum) return;
+currentIndex--;
+if (currentIndex < 0) currentIndex = currentAlbum.tracks.length - 1;
+playSong(currentAlbum.id, currentIndex);
 }
