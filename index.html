@@ -18,13 +18,15 @@
 </main>
 
 <footer class="player-bar">
-  <div>
+  <div class="track-info">
     <p id="player-track-title">Nothing Playing</p>
     <p id="player-track-artist">Select a song</p>
   </div>
 
-  <div>
-    <button id="play-btn">▶</button>
+  <div class="controls">
+    <button onclick="prevSong()">⏮</button>
+    <button onclick="togglePlay()">▶</button>
+    <button onclick="nextSong()">⏭</button>
   </div>
 </footer>
 
