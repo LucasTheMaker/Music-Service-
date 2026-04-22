@@ -5,7 +5,9 @@ body {
   font-family: Arial;
 }
 
-/* HOME GRID */
+/* =========================
+   GRID LAYOUT
+========================= */
 .album-grid, .artist-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -13,17 +15,14 @@ body {
   padding: 20px;
 }
 
-/* CARDS */
-.album-card, .artist-card {
-  cursor: pointer;
-}
-
 .album-card img, .artist-card img {
   width: 100%;
   border-radius: 12px;
 }
 
-/* TRACKLIST */
+/* =========================
+   TRACKLIST
+========================= */
 .tracklist div {
   padding: 12px;
   margin: 6px 0;
@@ -33,24 +32,81 @@ body {
 }
 
 /* =========================
-   🔥 SHRUNK NOW PLAYING BAR
+   🔥 COMPACT NOW PLAYING BAR
 ========================= */
 .player-bar {
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 55px; /* reduced */
-  background: black;
+  height: 60px;
+  background: #000;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 5px 10px;
-  font-size: 12px;
+  justify-content: space-between;
+  padding: 6px 12px;
+  box-sizing: border-box;
 }
 
-/* MOBILE */
+/* LEFT SIDE */
+.now-playing-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.now-playing-left img {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+/* TEXT */
+.now-playing-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  min-width: 0;
+}
+
+.now-playing-text .title {
+  font-size: 13px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.now-playing-text .artist {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* CONTROLS */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.controls button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* =========================
+   MOBILE
+========================= */
 @media (max-width: 768px) {
   .album-grid, .artist-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .player-bar {
+    height: 55px;
   }
 }
