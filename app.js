@@ -4,123 +4,161 @@ let currentAlbum = null;
 let currentIndex = 0;
 
 /* =========================
-   ALBUM DATA
+   DATA
 ========================= */
-const albums = [
-
+const artists = [
 {
-    id: "romantic",
-    title: "The Romantic",
-    artist: "Bruno Mars",
-    cover: "music/romantic/romantic.png",
-    tracks: [
-        { number: 1, title: "Risk It All", file: "music/romantic/01 Risk It All.mp3" },
-        { number: 2, title: "Cha Cha Cha", file: "music/romantic/02 Cha Cha Cha.mp3" },
-        { number: 3, title: "I Just Might", file: "music/romantic/03 I Just Might.mp3" }
-    ]
-},
-
-{
-    id: "dropout",
-    title: "The College Dropout",
-    artist: "Kanye West",
-    cover: "music/dropout/cover.jpg",
-    tracks: [
-        { number: 1, title: "Intro", file: "music/dropout/Intro.mp3" },
-        { number: 2, title: "We Don't Care", file: "music/dropout/We Dont Care.mp3" },
-        { number: 3, title: "Spaceship", file: "music/dropout/Spaceship.mp3" }
-    ]
-},
-
-{
-    id: "ye",
-    title: "ye",
-    artist: "Kanye West",
-    cover: "music/ye/cover.jpg",
-    tracks: [
-        { number: 1, title: "I Thought About Killing You", file: "music/ye/1. I Thought About Killing You.mp3" },
-        { number: 6, title: "Ghost Town", file: "music/ye/6. Ghost Town.mp3" }
-    ]
+  id: "kanye",
+  name: "Kanye West",
+  image: "images/kanye.png",
+  bio: "Highly influential rapper and producer."
 }
+];
 
+const albums = [
+{
+  id: "ye",
+  title: "ye",
+  artist: "Kanye West",
+  cover: "music/ye/cover.jpg",
+  tracks: [
+    { number: 1, title: "I Thought About Killing You", file: "music/ye/1. I Thought About Killing You.mp3" },
+    { number: 6, title: "Ghost Town", file: "music/ye/6. Ghost Town.mp3" }
+  ]
+},
+{
+  id: "dropout",
+  title: "The College Dropout",
+  artist: "Kanye West",
+  cover: "music/dropout/cover.jpg",
+  tracks: [
+    { number: 1, title: "We Don't Care", file: "music/dropout/We Dont Care.mp3" },
+    { number: 2, title: "Spaceship", file: "music/dropout/Spaceship.mp3" }
+  ]
+}
 ];
 
 /* =========================
-   RENDER HOME
+   APP START
 ========================= */
-function renderAlbums() {
-    const container = document.getElementById('album-grid');
-    if (!container) return;
+window.onload = renderHome;
 
-    container.innerHTML = albums.map(album => `
-        <div class="album-card" onclick="window.location.href='album.html?id=${album.id}'">
-            <img src="${album.cover}">
-            <h3>${album.title}</h3>
-            <p>${album.artist}</p>
+/* =========================
+   HOME (APPLE MUSIC STYLE)
+========================= */
+function renderHome() {
+  const app = document.getElementById("app");
+
+  app.innerHTML = `
+    <h2>Artists</h2>
+    <div class="artist-grid">
+      ${artists.map(a => `
+        <div class="artist-card" onclick="openArtist('${a.id}')">
+          <img src="${a.image}">
+          <p>${a.name}</p>
         </div>
-    `).join('');
+      `).join("")}
+    </div>
+
+    <h2>Albums</h2>
+    <div class="album-grid-mobile">
+      ${albums.map(a => `
+        <div class="album-card" onclick="openAlbum('${a.id}')">
+          <img src="${a.cover}">
+          <p>${a.title}</p>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+/* =========================
+   ARTIST PAGE
+========================= */
+function openArtist(id) {
+  const artist = artists.find(a => a.id === id);
+  const app = document.getElementById("app");
+
+  app.innerHTML = `
+    <button onclick="renderHome()">← Back</button>
+
+    <div class="artist-header">
+      <img src="${artist.image}">
+      <h1>${artist.name}</h1>
+      <p>${artist.bio}</p>
+    </div>
+
+    <div class="album-grid-mobile">
+      ${albums.filter(a => a.artist === artist.name).map(a => `
+        <div class="album-card" onclick="openAlbum('${a.id}')">
+          <img src="${a.cover}">
+          <p>${a.title}</p>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+/* =========================
+   ALBUM PAGE
+========================= */
+function openAlbum(id) {
+  const album = albums.find(a => a.id === id);
+  const app = document.getElementById("app");
+
+  app.innerHTML = `
+    <button onclick="renderHome()">← Home</button>
+
+    <div class="album-header">
+      <img src="${album.cover}">
+      <h1>${album.title}</h1>
+      <p>${album.artist}</p>
+    </div>
+
+    <div class="tracklist">
+      ${album.tracks.map((t, i) => `
+        <div class="track" onclick="playSong('${album.id}', ${i})">
+          ${t.number}. ${t.title}
+        </div>
+      `).join("")}
+    </div>
+  `;
 }
 
 /* =========================
    PLAYER
 ========================= */
 function playSong(albumId, index) {
-    const album = albums.find(a => a.id === albumId);
-    if (!album) return;
+  const album = albums.find(a => a.id === albumId);
+  const song = album.tracks[index];
 
-    const song = album.tracks[index];
-    if (!song) return;
+  currentAlbum = album;
+  currentIndex = index;
 
-    currentAlbum = album;
-    currentIndex = index;
+  audio.src = song.file;
+  audio.play();
 
-    audio.src = song.file;
-
-    audio.play().catch(err => {
-        console.log("AUDIO ERROR:", song.file);
-    });
-
-    const titleEl = document.getElementById("player-track-title");
-    const artistEl = document.getElementById("player-track-artist");
-
-    if (titleEl) titleEl.innerText = song.title;
-    if (artistEl) artistEl.innerText = album.artist;
+  document.getElementById("player-track-title").innerText = song.title;
+  document.getElementById("player-track-artist").innerText = album.artist;
 }
 
-/* =========================
-   CONTROLS
-========================= */
+/* CONTROLS */
 document.addEventListener("DOMContentLoaded", () => {
 
-    renderAlbums();
+  document.getElementById("play-btn").onclick = () => {
+    if (!audio.src) return;
+    audio.paused ? audio.play() : audio.pause();
+  };
 
-    const playBtn = document.getElementById("play-btn");
-    const nextBtn = document.getElementById("next-btn");
-    const prevBtn = document.getElementById("prev-btn");
+  document.getElementById("next-btn").onclick = () => {
+    if (!currentAlbum) return;
+    currentIndex = (currentIndex + 1) % currentAlbum.tracks.length;
+    playSong(currentAlbum.id, currentIndex);
+  };
 
-    if (playBtn) {
-        playBtn.onclick = () => {
-            if (!audio.src) return;
-            if (audio.paused) audio.play();
-            else audio.pause();
-        };
-    }
-
-    if (nextBtn) {
-        nextBtn.onclick = () => {
-            if (!currentAlbum) return;
-            currentIndex++;
-            if (currentIndex >= currentAlbum.tracks.length) currentIndex = 0;
-            playSong(currentAlbum.id, currentIndex);
-        };
-    }
-
-    if (prevBtn) {
-        prevBtn.onclick = () => {
-            if (!currentAlbum) return;
-            currentIndex--;
-            if (currentIndex < 0) currentIndex = currentAlbum.tracks.length - 1;
-            playSong(currentAlbum.id, currentIndex);
-        };
-    }
+  document.getElementById("prev-btn").onclick = () => {
+    if (!currentAlbum) return;
+    currentIndex = (currentIndex - 1 + currentAlbum.tracks.length) % currentAlbum.tracks.length;
+    playSong(currentAlbum.id, currentIndex);
+  };
 });
