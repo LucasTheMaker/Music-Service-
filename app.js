@@ -26,25 +26,9 @@ const albums = [
         tracks: [
             { number: 1, title: "Intro", file: "Intro.mp3" },
             { number: 2, title: "We Don't Care", file: "We Don't Care.mp3" },
-            { number: 3, title: "Graduation Day", file: "Graduation Day.mp3" },
             { number: 4, title: "All Falls Down", file: "All Falls Down.mp3" },
-            { number: 5, title: "I'll Fly Away", file: "Ill Fly Away.mp3" },
-            { number: 6, title: "Spaceship", file: "Spaceship.mp3" },
             { number: 7, title: "Jesus Walks", file: "Jesus Walks.mp3" },
-            { number: 8, title: "Never Let Me Down", file: "Never Let Me Down.mp3" },
-            { number: 9, title: "Get Em High", file: "Get Em High.mp3" },
-            { number: 10, title: "Workout Plan", file: "Workout Plan.mp3" },
-            { number: 11, title: "The New Workout Plan", file: "The New Workout Plan.mp3" },
-            { number: 12, title: "Slow Jamz", file: "Slow Jamz.mp3" },
-            { number: 13, title: "Breathe In Breathe Out", file: "Breathe In Breathe Out.mp3" },
-            { number: 14, title: "School Spirit Skit 1", file: "School Spirit Skit 1.mp3" },
-            { number: 15, title: "School Spirit", file: "School Spirit.mp3" },
-            { number: 16, title: "School Spirit Skit 2", file: "School Spirit Skit 2.mp3" },
-            { number: 17, title: "Lil Jimmy Skit", file: "Lil Jimmy Skit.mp3" },
-            { number: 18, title: "Two Words", file: "Two Words.mp3" },
-            { number: 19, title: "Through The Wire", file: "Through The Wire.mp3" },
-            { number: 20, title: "Family Business", file: "Family Business.mp3" },
-            { number: 21, title: "Last Call", file: "Last Call.mp3" }
+            { number: 19, title: "Through The Wire", file: "Through The Wire.mp3" }
         ]
     },
     {
@@ -57,24 +41,7 @@ const albums = [
             { number: 1, title: "Wake Up Mr. West", file: "Wake Up Mr West.mp3" },
             { number: 2, title: "Heard 'Em Say", file: "Heard Em Say.mp3" },
             { number: 3, title: "Touch The Sky", file: "Touch The Sky.mp3" },
-            { number: 4, title: "Gold Digger", file: "Gold Digger.mp3" },
-            { number: 5, title: "Skit #1", file: "Skit 1.mp3" },
-            { number: 6, title: "Drive Slow", file: "Drive Slow.mp3" },
-            { number: 7, title: "My Way Home", file: "My Way Home.mp3" },
-            { number: 8, title: "Crack Music", file: "Crack Music.mp3" },
-            { number: 9, title: "Roses", file: "Roses.mp3" },
-            { number: 10, title: "Bring Me Down", file: "Bring Me Down.mp3" },
-            { number: 11, title: "Addiction", file: "Addiction.mp3" },
-            { number: 12, title: "Skit #2", file: "Skit 2.mp3" },
-            { number: 13, title: "Diamonds From Sierra Leone - Remix", file: "Diamonds From Sierra Leone Remix.mp3" },
-            { number: 14, title: "We Major", file: "We Major.mp3" },
-            { number: 15, title: "Skit #3", file: "Skit 3.mp3" },
-            { number: 16, title: "Hey Mama", file: "Hey Mama.mp3" },
-            { number: 17, title: "Celebration", file: "Celebration.mp3" },
-            { number: 18, title: "Skit #4", file: "Skit 4.mp3" },
-            { number: 19, title: "Gone", file: "Gone.mp3" },
-            { number: 20, title: "Diamonds From Sierra Leone", file: "Diamonds From Sierra Leone.mp3" },
-            { number: 21, title: "Late", file: "Late.mp3" }
+            { number: 4, title: "Gold Digger", file: "Gold Digger.mp3" }
         ]
     },
     {
@@ -82,15 +49,11 @@ const albums = [
         title: "ye",
         artist: "Kanye West",
         cover: "music/ye/cover.jpg",
-        distributor: "© 2018 Getting Out Our Dreams II, LLC Distributed By Def Jam, A Division of UMG Recordings, Inc.",
+        distributor: "© 2018 G.O.O.D. Music / Def Jam",
         tracks: [
             { number: 1, title: "I Thought About Killing You", file: "I Thought About Killing You.mp3" },
             { number: 2, title: "Yikes", file: "Yikes.mp3" },
-            { number: 3, title: "All Mine", file: "All Mine.mp3" },
-            { number: 4, title: "Wouldn't Leave", file: "Wouldnt Leave.mp3" },
-            { number: 5, title: "No Mistakes", file: "No Mistakes.mp3" },
-            { number: 6, title: "Ghost Town", file: "Ghost Town.mp3" },
-            { number: 7, title: "Violent Crimes", file: "Violent Crimes.mp3" }
+            { number: 3, title: "All Mine", file: "All Mine.mp3" }
         ]
     },
     {
@@ -101,40 +64,85 @@ const albums = [
         distributor: "℗ 1982 MJJ Productions Inc.",
         tracks: [
             { number: 1, title: "Wanna Be Startin' Somethin'", file: "Wanna Be Startin Somethin.mp3" },
-            { number: 2, title: "Baby Be Mine", file: "Baby Be Mine.mp3" },
-            { number: 3, title: "The Girl Is Mine", file: "The Girl Is Mine.mp3" },
             { number: 4, title: "Thriller", file: "Thriller.mp3" },
-            { number: 5, title: "Beat It", file: "Beat It.mp3" },
-            { number: 6, title: "Billie Jean", file: "Billie Jean.mp3" },
-            { number: 7, title: "Human Nature", file: "Human Nature.mp3" },
-            { number: 8, title: "P.Y.T. (Pretty Young Thing)", file: "PYT.mp3" },
-            { number: 9, title: "The Lady in My Life", file: "The Lady in My Life.mp3" }
+            { number: 6, title: "Billie Jean", file: "Billie Jean.mp3" }
         ]
-    },
-    {
-        id: "wtt",
-        title: "Watch The Throne",
-        artist: "Jay-Z & Kanye West",
-        cover: "music/wtt/cover.jpg",
-        distributor: "℗ 2011 Roc-A-Fella Records, LLC",
-        tracks: []
     }
 ];
 
-function renderAlbums() {
-    const container = document.getElementById('album-grid');
-    if (!container) return;
+const artists = [
+    { id: "mj", name: "Michael Jackson", hero: "images/mj-hero.jpg" },
+    { id: "kanye", name: "Kanye West", hero: "images/kanye-hero.jpg" }
+];
 
-    container.innerHTML = albums.map(album => `
-        <div class="album-card" onclick="window.location.href='album.html?id=${album.id}'" style="cursor: pointer;">
-            <img src="${album.cover}" alt="${album.title}" onerror="this.src='https://via.placeholder.com/300?text=Cover+Missing'">
-            <div class="album-info">
-                <h3>${album.title}</h3>
-                <p>${album.artist}</p>
-                <span class="distributor-tag" style="display:none;">${album.distributor}</span>
-            </div>
-        </div>
-    `).join('');
+// --- THE ROUTER (Fixes the White Page/Clicking) ---
+function init() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const albumId = urlParams.get('id');
+    const artistId = urlParams.get('artist_id');
+
+    if (window.location.pathname.includes('album.html') && albumId) {
+        renderAlbumPage(albumId);
+    } else if (window.location.pathname.includes('artist.html') && artistId) {
+        renderArtistPage(artistId);
+    } else {
+        renderHomePage();
+    }
 }
 
-document.addEventListener('DOMContentLoaded', renderAlbums);
+function renderHomePage() {
+    const container = document.getElementById('home-content');
+    if (!container) return;
+
+    container.innerHTML = `
+        <div class="section">
+            <h2>Top Picks for You</h2>
+            <div class="horizontal-scroll">
+                ${artists.map(a => `
+                    <div class="artist-card" onclick="location.href='artist.html?artist_id=${a.id}'">
+                        <img src="${a.hero}">
+                        <h3>${a.name} Essentials</h3>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+        <div class="section">
+            <h2>Albums</h2>
+            <div class="album-grid">
+                ${albums.map(al => `
+                    <div class="album-card" onclick="location.href='album.html?id=${al.id}'">
+                        <img src="${al.cover}">
+                        <h3>${al.title}</h3>
+                        <p>${al.artist}</p>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function renderAlbumPage(id) {
+    const album = albums.find(a => a.id === id);
+    const container = document.getElementById('album-content');
+    if (!album || !container) return;
+
+    document.title = `${album.title} - ${album.artist}`;
+    container.innerHTML = `
+        <div class="album-header">
+            <img src="${album.cover}">
+            <h1>${album.title}</h1>
+            <p>${album.artist}</p>
+        </div>
+        <div class="tracklist-grid">
+            ${album.tracks.map(t => `
+                <div class="track-item">
+                    <span>${t.number}</span>
+                    <p>${t.title}</p>
+                </div>
+            `).join('')}
+        </div>
+        <p class="distro">${album.distributor}</p>
+    `;
+}
+
+window.onload = init;
