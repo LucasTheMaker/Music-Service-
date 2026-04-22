@@ -18,16 +18,24 @@
 </main>
 
 <footer class="player-bar">
-  <div class="track-info">
-    <p id="player-track-title">Nothing Playing</p>
-    <p id="player-track-artist">Select a song</p>
+
+  <!-- LEFT: COVER + TEXT -->
+  <div class="now-playing-left">
+    <img id="player-cover" src="" />
+
+    <div class="now-playing-text">
+      <div id="player-track-title" class="title">Nothing Playing</div>
+      <div id="player-track-artist" class="artist">Select a song</div>
+    </div>
   </div>
 
+  <!-- CONTROLS -->
   <div class="controls">
     <button onclick="prevSong()">⏮</button>
-    <button onclick="togglePlay()">▶</button>
+    <button onclick="togglePlay()" id="play-btn">▶</button>
     <button onclick="nextSong()">⏭</button>
   </div>
+
 </footer>
 
 <script src="app.js"></script>
