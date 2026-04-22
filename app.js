@@ -3,41 +3,33 @@ const audio = new Audio();
 let currentAlbum = null;
 let currentIndex = 0;
 
-/* =========================
-   START
-========================= */
 document.addEventListener("DOMContentLoaded", () => {
   renderHome();
 });
 
-/* =========================
-   SAFE LOAD
-========================= */
 const albums = window.albums || [];
 
-console.log("ALBUMS LOADED:", albums);
-
 /* =========================
-   ARTISTS
-========================= */
-const artists = [
-  { id: "kanye", name: "Kanye West" },
-  { id: "mj", name: "Michael Jackson" }
-];
-
-/* =========================
-   HOME PAGE
+   HOME (APPLE MUSIC STYLE)
 ========================= */
 function renderHome() {
   const app = document.getElementById("app");
 
   app.innerHTML = `
-    <h2>Artists</h2>
+    <h2 class="section-title">Artists</h2>
 
-    <div class="artist-grid">
-      ${artists.map(a => `
-        <div class="artist-card" onclick="openArtist('${a.name}')">
-          <p>${a.name}</p>
+    <div class="artist-row">
+      <div onclick="filterArtist('Kanye West')">Kanye West</div>
+      <div onclick="filterArtist('Michael Jackson')">Michael Jackson</div>
+    </div>
+
+    <h2 class="section-title">Albums</h2>
+
+    <div class="album-grid">
+      ${albums.map(a => `
+        <div class="album-card" onclick="openAlbum('${a.id}')">
+          <img src="${a.cover}">
+          <p>${a.title}</p>
         </div>
       `).join("")}
     </div>
@@ -45,30 +37,27 @@ function renderHome() {
 }
 
 /* =========================
-   ARTIST PAGE (FIXED FILTER)
+   FILTER BY ARTIST
 ========================= */
-function openArtist(name) {
+function filterArtist(name) {
   const app = document.getElementById("app");
 
-  const artistAlbums = albums.filter(a =>
+  const filtered = albums.filter(a =>
     a.artist.toLowerCase().includes(name.toLowerCase())
   );
 
   app.innerHTML = `
     <button onclick="renderHome()">← Back</button>
 
-    <h1>${name}</h1>
+    <h2>${name}</h2>
 
     <div class="album-grid">
-      ${artistAlbums.length
-        ? artistAlbums.map(a => `
-            <div class="album-card" onclick="openAlbum('${a.id}')">
-              <img src="${a.cover}" width="150">
-              <p>${a.title}</p>
-            </div>
-          `).join("")
-        : "<p>No albums found</p>"
-      }
+      ${filtered.map(a => `
+        <div class="album-card" onclick="openAlbum('${a.id}')">
+          <img src="${a.cover}">
+          <p>${a.title}</p>
+        </div>
+      `).join("")}
     </div>
   `;
 }
@@ -83,10 +72,12 @@ function openAlbum(id) {
   app.innerHTML = `
     <button onclick="renderHome()">← Back</button>
 
-    <h1>${album.title}</h1>
+    <img src="${album.cover}" class="cover">
+
+    <h2>${album.title}</h2>
     <p>${album.artist}</p>
 
-    <div class="tracklist">
+    <div class="tracks">
       ${album.tracks.map((t,i) => `
         <div onclick="playSong('${album.id}', ${i})">
           ${t.number}. ${t.title}
@@ -97,7 +88,7 @@ function openAlbum(id) {
 }
 
 /* =========================
-   AUDIO
+   PLAYER
 ========================= */
 function playSong(albumId, index) {
   const album = albums.find(a => a.id === albumId);
@@ -108,11 +99,11 @@ function playSong(albumId, index) {
 
   audio.src = song.file;
   audio.play();
+
+  document.getElementById("now-title").innerText =
+    song.title + " • " + album.artist;
 }
 
-/* =========================
-   CONTROLS
-========================= */
 function togglePlay() {
   if (audio.paused) audio.play();
   else audio.pause();
