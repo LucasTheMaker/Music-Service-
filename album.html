@@ -1,65 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Album</title>
-    <link rel="stylesheet" href="style.css">
+  <title>Album</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<main class="container">
-    <div id="album-page"></div>
-</main>
+  <div id="album-page"></div>
 
-<footer class="player-bar">
-    <div class="current-track">
-        <div class="track-info">
-            <p id="player-track-title">Nothing Playing</p>
-            <p id="player-track-artist">Select a track</p>
-        </div>
-    </div>
-    <div class="player-controls">
-        <button id="prev-btn">⏮</button>
-        <button id="play-btn">▶</button>
-        <button id="next-btn">⏭</button>
-    </div>
-</footer>
+  <script src="albums.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
 
-<script src="app.js"></script>
+    const album = window.albums.find(a => a.id === id);
 
-<script>
-const params = new URLSearchParams(window.location.search);
-const albumId = params.get("id");
+    const container = document.getElementById("album-page");
 
-const album = albums.find(a => a.id === albumId);
-
-const container = document.getElementById("album-page");
-
-if (!album) {
-    container.innerHTML = "<h2>Album not found</h2>";
-} else {
     container.innerHTML = `
-        <img src="${album.cover}" style="width:200px">
-        <h1>${album.title}</h1>
-        <h3>${album.artist}</h3>
+      <h1>${album.title}</h1>
+      <p>${album.artist}</p>
 
-        <div id="tracklist"></div>
+      ${album.tracks.map(t => `
+        <div>${t.number}. ${t.title}</div>
+      `).join("")}
     `;
-
-    const tracklist = document.getElementById("tracklist");
-
-    album.tracks.forEach((track, i) => {
-        const div = document.createElement("div");
-        div.className = "track";
-        div.innerText = track.number + ". " + track.title;
-
-        div.onclick = () => playSong(album.id, i);
-
-        tracklist.appendChild(div);
-    });
-}
-</script>
+  </script>
 
 </body>
 </html>
