@@ -1,37 +1,21 @@
 body {
+  margin: 0;
   background: #121212;
   color: white;
   font-family: Arial;
-  margin: 0;
 }
 
-.navbar {
+/* GRID */
+.artist-grid,
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
   padding: 10px;
 }
 
-#app {
-  padding: 15px;
-}
-
-/* ARTISTS */
-.artist-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
-.artist-card img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-/* ALBUMS (2x2 MOBILE STYLE) */
-.album-grid-mobile {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
+/* CARDS */
+.artist-card img,
 .album-card img {
   width: 100%;
   border-radius: 10px;
@@ -39,9 +23,9 @@ body {
 
 /* TRACKLIST */
 .track {
-  padding: 10px;
+  padding: 12px;
   background: #222;
-  margin: 6px 0;
+  margin: 6px;
   border-radius: 6px;
   cursor: pointer;
 }
@@ -51,7 +35,7 @@ body {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background: #000;
+  background: black;
   display: flex;
   justify-content: space-between;
   padding: 10px;
