@@ -1,42 +1,31 @@
-body {
-  margin: 0;
-  background: #121212;
-  color: white;
-  font-family: Arial;
-}
-
-/* GRID */
-.artist-grid,
-.album-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  padding: 10px;
-}
-
-/* CARDS */
-.artist-card img,
-.album-card img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-/* TRACKLIST */
-.track {
-  padding: 12px;
-  background: #222;
-  margin: 6px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-/* PLAYER */
-.player-bar {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: black;
+.album-header {
   display: flex;
-  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
   padding: 10px;
+}
+
+/* THIS IS YOUR "CUT IMAGE IN HALF" LOOK */
+.album-art {
+  width: 50%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.album-info {
+  width: 50%;
+}
+
+/* MOBILE OVERRIDE */
+@media (max-width: 768px) {
+  .album-header {
+    flex-direction: row;
+  }
+
+  .album-art {
+    width: 50%;
+    height: 140px;
+    object-fit: cover;
+  }
 }
