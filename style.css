@@ -1,112 +1,93 @@
 body {
   margin: 0;
-  background: #121212;
+  font-family: Arial, sans-serif;
+  background: #0d0d0d;
   color: white;
-  font-family: Arial;
 }
 
 /* =========================
-   GRID LAYOUT
+   APP CONTAINER
 ========================= */
-.album-grid, .artist-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
+#app {
   padding: 20px;
-}
-
-.album-card img, .artist-card img {
-  width: 100%;
-  border-radius: 12px;
+  padding-bottom: 120px;
 }
 
 /* =========================
-   TRACKLIST
+   GRIDS
 ========================= */
-.tracklist div {
-  padding: 12px;
-  margin: 6px 0;
-  background: #1e1e1e;
-  border-radius: 8px;
+.artist-grid,
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+/* =========================
+   CARDS
+========================= */
+.artist-card,
+.album-card {
+  background: #1a1a1a;
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
   cursor: pointer;
 }
 
+.artist-card img,
+.album-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
 /* =========================
-   🔥 COMPACT NOW PLAYING BAR
+   NOW PLAYING BAR (FIXED SMALL VERSION)
 ========================= */
-.player-bar {
+#player-bar {
   position: fixed;
   bottom: 0;
-  width: 100%;
+  left: 0;
+  right: 0;
+
   height: 60px;
-  background: #000;
+  background: #181818;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 12px;
-  box-sizing: border-box;
+
+  padding: 5px 10px;
 }
 
-/* LEFT SIDE */
-.now-playing-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-}
-
-.now-playing-left img {
-  width: 40px;
-  height: 40px;
+#player-cover {
+  width: 45px;
+  height: 45px;
   border-radius: 6px;
-  object-fit: cover;
 }
 
-/* TEXT */
-.now-playing-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.1;
-  min-width: 0;
+.player-info {
+  flex: 1;
+  margin-left: 10px;
+  overflow: hidden;
 }
 
-.now-playing-text .title {
-  font-size: 13px;
-  font-weight: bold;
+#player-track-title {
+  font-size: 12px;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.now-playing-text .artist {
-  font-size: 11px;
+#player-track-artist {
+  font-size: 10px;
   opacity: 0.7;
-}
-
-/* CONTROLS */
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .controls button {
   background: none;
   border: none;
   color: white;
-  font-size: 16px;
+  font-size: 18px;
+  margin: 0 3px;
   cursor: pointer;
-}
-
-/* =========================
-   MOBILE
-========================= */
-@media (max-width: 768px) {
-  .album-grid, .artist-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .player-bar {
-    height: 55px;
-  }
 }
