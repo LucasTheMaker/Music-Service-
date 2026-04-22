@@ -4,18 +4,13 @@ let currentAlbum = null;
 let currentIndex = 0;
 
 /* =========================
-   SAFETY: PREVENT BLANK SCREEN
+   SAFE START
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
-  if (!document.getElementById("app")) {
-    console.error("❌ Missing #app in HTML");
-    return;
-  }
+  const app = document.getElementById("app");
 
-  if (!window.albums) {
-    console.error("❌ albums.js not loaded BEFORE app.js");
-    document.getElementById("app").innerHTML =
-      "<h2 style='padding:20px'>Albums failed to load</h2>";
+  if (!app) {
+    document.body.innerHTML = "<h2 style='color:white;padding:20px'>Missing #app div</h2>";
     return;
   }
 
@@ -35,40 +30,29 @@ const artists = [
    ARTIST BIOS
 ========================= */
 const artistData = {
-  kanye: {
-    name: "Kanye West",
-    bio: "American rapper, producer, and designer known for shaping modern hip-hop."
-  },
-  mj: {
-    name: "Michael Jackson",
-    bio: "The King of Pop and one of the most influential entertainers in history."
-  },
-  bruno: {
-    name: "Bruno Mars",
-    bio: "Pop and R&B artist known for funk-inspired global hits."
-  }
+  kanye: { name: "Kanye West", bio: "Rap artist and producer." },
+  mj: { name: "Michael Jackson", bio: "King of Pop." },
+  bruno: { name: "Bruno Mars", bio: "Pop and R&B artist." }
 };
 
 /* =========================
-   SAFE ALBUM LOAD
+   ALBUMS (SAFE FALLBACK)
 ========================= */
 const albums = window.albums || [];
 
 /* =========================
-   HOME PAGE (ARTIST FIRST)
+   HOME PAGE
 ========================= */
 function renderHome() {
   const app = document.getElementById("app");
 
-  if (!app) return;
-
   app.innerHTML = `
     <h2>Artists</h2>
 
-    <div class="artist-featured-grid">
+    <div class="artist-grid">
       ${artists.map(a => `
-        <div class="artist-card featured" onclick="openArtist('${a.id}')">
-          <img src="${a.image}">
+        <div class="artist-card" onclick="openArtist('${a.id}')">
+          <img src="${a.image}" style="width:120px;border-radius:50%">
           <p>${a.name}</p>
         </div>
       `).join("")}
@@ -94,19 +78,15 @@ function openArtist(id) {
   const app = document.getElementById("app");
   const artist = artistData[id];
 
-  if (!artist) return;
-
   const artistAlbums = albums.filter(a =>
-    a.artist.toLowerCase().includes(artist.name.toLowerCase())
+    a.artist?.toLowerCase().includes(artist.name.toLowerCase())
   );
 
   app.innerHTML = `
     <button onclick="renderHome()">← Back</button>
 
-    <div class="artist-header">
-      <h1>${artist.name}</h1>
-      <p>${artist.bio}</p>
-    </div>
+    <h1>${artist.name}</h1>
+    <p>${artist.bio}</p>
 
     <h3>Albums</h3>
 
@@ -125,10 +105,8 @@ function openArtist(id) {
    ALBUM PAGE
 ========================= */
 function openAlbum(id) {
-  const album = albums.find(a => a.id === id);
   const app = document.getElementById("app");
-
-  if (!album) return;
+  const album = albums.find(a => a.id === id);
 
   app.innerHTML = `
     <button onclick="renderHome()">← Back</button>
@@ -149,113 +127,20 @@ function openAlbum(id) {
 }
 
 /* =========================
-   AUDIO ENGINE (ALL FIXES INCLUDED)
+   AUDIO (SAFE)
 ========================= */
 function playSong(albumId, index) {
   const album = albums.find(a => a.id === albumId);
   const song = album.tracks[index];
 
-  if (!album || !song) return;
-
   currentAlbum = album;
   currentIndex = index;
 
-  let file = song.file;
+  audio.src = song.file;
+  audio.play();
 
-  /* YE FIX */
-  if (album.id === "ye") {
-    const yeMap = {
-      "1. I Thought About Killing You.mp3": "1. I Thought About Killing You.mp3",
-      "2. Yikes.mp3": "2. Yikes.mp3",
-      "3. All Mine.mp3": "3. All Mine.mp3",
-      "4. Wouldn't Leave.mp3": "4. Wouldn't Leave.mp3",
-      "5. No Mistakes.mp3": "5. No Mistakes.mp3",
-      "6. Ghost Town.mp3": "6. Ghost Town.mp3",
-      "7. Violent Crimes.mp3": "7. Violent Crimes.mp3"
-    };
-    file = yeMap[file] || file;
-  }
-
-  /* LATE REG FIX */
-  if (album.id === "late") {
-    const lateMap = {
-      "Skits 1.mp3": "Skits 1.mp3",
-      "Skits 2.mp3": "Skits 2.mp3",
-      "Skits 3.mp3": "Skits 3.mp3",
-      "Skits 4.mp3": "Skits 4.mp3",
-      "Diamonds From Sierra Leone.mp3": "Diamonds From Sierra Leone.mp3",
-      "Diamonds From Sierra Leone Remix.mp3": "Diamonds From Sierra Leone Remix.mp3"
-    };
-    file = lateMap[file] || file;
-  }
-
-  /* THRILLER FIX */
-  if (album.id === "thriller") {
-    const thrillerMap = {
-      "Wanna Be Startin Somethin.mp3": "Wanna Be Startin Somethin.mp3",
-      "Baby Be Mine.mp3": "Baby Be Mine.mp3",
-      "The Girl Is Mine.mp3": "The Girl Is Mine.mp3",
-      "Thriller.mp3": "Thriller.mp3",
-      "Beat It.mp3": "Beat It.mp3",
-      "Billie Jean.mp3": "Billie Jean.mp3",
-      "Human Nature.mp3": "Human Nature.mp3",
-      "P Y T Pretty Young Thing.mp3": "P Y T Pretty Young Thing.mp3",
-      "The Lady In My Life.mp3": "The Lady In My Life.mp3"
-    };
-    file = thrillerMap[file] || file;
-  }
-
-  /* ROMANTIC FIX */
-  if (album.id === "romantic") {
-    const romanticMap = {
-      "01 Risk It All.mp3": "01 Risk It All.mp3",
-      "02 Cha Cha Cha.mp3": "02 Cha Cha Cha.mp3",
-      "03 I Just Might.mp3": "03 I Just Might.mp3",
-      "04 God Was Showing Off.mp3": "04 God Was Showing Off.mp3",
-      "05 Why You Wanna Fight-.mp3": "05 Why You Wanna Fight-.mp3",
-      "06 On My Soul.mp3": "06 On My Soul.mp3",
-      "07 Something Serious.mp3": "07 Something Serious.mp3",
-      "08 Nothing Left.mp3": "08 Nothing Left.mp3",
-      "09 Dance With Me.mp3": "09 Dance With Me.mp3"
-    };
-    file = romanticMap[file] || file;
-  }
-
-  audio.pause();
-  audio.src = file;
-  audio.load();
-
-  audio.onerror = () => {
-    console.error("❌ Missing file:", file);
-  };
-
-  audio.oncanplay = () => {
-    audio.play();
-
-    document.getElementById("player-cover").src = album.cover;
+  if (document.getElementById("player-track-title")) {
     document.getElementById("player-track-title").innerText = song.title;
     document.getElementById("player-track-artist").innerText = album.artist;
-  };
-}
-
-/* =========================
-   CONTROLS
-========================= */
-function togglePlay() {
-  if (audio.paused) audio.play();
-  else audio.pause();
-}
-
-function nextSong() {
-  if (!currentAlbum) return;
-  currentIndex++;
-  if (currentIndex >= currentAlbum.tracks.length) currentIndex = 0;
-  playSong(currentAlbum.id, currentIndex);
-}
-
-function prevSong() {
-  if (!currentAlbum) return;
-  currentIndex--;
-  if (currentIndex < 0) currentIndex = currentAlbum.tracks.length - 1;
-  playSong(currentAlbum.id, currentIndex);
+  }
 }
