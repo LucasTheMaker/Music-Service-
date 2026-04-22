@@ -7,28 +7,34 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="header">
-        <input type="text" placeholder="Search music..." class="search-bar">
-        <button class="theme-toggle">🌙</button>
-    </header>
+    <nav class="navbar">
+        <div class="search-container">
+            <input type="text" placeholder="Search music..." id="search-input">
+            <button id="search-btn">🌙</button>
+        </div>
+    </nav>
 
-    <main class="main-content">
-        <div class="album-grid" id="album-grid"></div>
+    <main class="container">
+        <div id="album-grid" class="album-grid">
+            </div>
     </main>
 
     <footer class="player-bar">
-        <div class="now-playing">
-            <p id="current-track-title">Nothing Playing</p>
-            <p id="current-track-artist">Select a track to begin</p>
+        <div class="current-track">
+            <div class="track-info">
+                <p id="player-track-title" class="track-title">Nothing Playing</p>
+                <p id="player-track-artist" class="track-subtitle">Select a track to begin</p>
+            </div>
         </div>
-        <div class="controls">
-            <button id="prev">⏮</button>
-            <button id="play-pause">▶</button>
-            <button id="next">⏭</button>
+
+        <div class="player-controls">
+            <button id="prev-btn" class="control-btn">⏮</button>
+            <button id="play-btn" class="control-btn play-pause">▶</button>
+            <button id="next-btn" class="control-btn">⏭</button>
         </div>
-        <div class="progress-container">
-            <div class="progress-bar"></div>
-        </div>
+
+        <div class="volume-container">
+            </div>
     </footer>
 
     <script src="app.js"></script>
