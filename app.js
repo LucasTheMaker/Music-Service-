@@ -4,17 +4,13 @@ let currentAlbum = null;
 let currentIndex = 0;
 
 /* =========================
-   SAFETY BOOT (PREVENT BLANK SCREEN)
+   STARTUP SAFETY
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   const app = document.getElementById("app");
 
   if (!app) {
-    document.body.innerHTML = `
-      <h2 style="color:red;padding:20px">
-        ❌ ERROR: Missing <div id="app"></div> in index.html
-      </h2>
-    `;
+    document.body.innerHTML = "<h2 style='color:red'>Missing #app</h2>";
     return;
   }
 
@@ -25,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
    ARTISTS
 ========================= */
 const artists = [
-  { id: "kanye", name: "Kanye West", image: "images/kanye.jpg" },
+  { id: "kanye", name: "Kanye West", image: "images/kanye.png" },
   { id: "mj", name: "Michael Jackson", image: "images/mj.jpg" },
   { id: "bruno", name: "Bruno Mars", image: "images/bruno.jpg" }
 ];
@@ -36,25 +32,25 @@ const artists = [
 const artistData = {
   kanye: {
     name: "Kanye West",
-    bio: "Influential rapper and producer shaping modern hip-hop."
+    bio: "Influential rapper, producer, and designer."
   },
   mj: {
     name: "Michael Jackson",
-    bio: "The King of Pop and global music icon."
+    bio: "The King of Pop."
   },
   bruno: {
     name: "Bruno Mars",
-    bio: "Pop and R&B artist known for funk-inspired hits."
+    bio: "Pop and R&B artist with funk influence."
   }
 };
 
 /* =========================
-   SAFE ALBUM LOADING
+   ALBUM DATA
 ========================= */
 const albums = window.albums || [];
 
 /* =========================
-   HOME PAGE (ARTISTS FIRST FIXED)
+   HOME (ARTISTS ONLY)
 ========================= */
 function renderHome() {
   const app = document.getElementById("app");
@@ -70,22 +66,11 @@ function renderHome() {
         </div>
       `).join("")}
     </div>
-
-    <h2>Albums</h2>
-
-    <div class="album-grid">
-      ${albums.length ? albums.map(a => `
-        <div class="album-card" onclick="openAlbum('${a.id}')">
-          <img src="${a.cover}">
-          <p>${a.title}</p>
-        </div>
-      `).join("") : "<p style='color:white'>No albums loaded</p>"}
-    </div>
   `;
 }
 
 /* =========================
-   ARTIST PAGE
+   ARTIST PAGE (ALBUMS PER ARTIST)
 ========================= */
 function openArtist(id) {
   const app = document.getElementById("app");
@@ -94,7 +79,7 @@ function openArtist(id) {
   if (!artist) return;
 
   const artistAlbums = albums.filter(a =>
-    a.artist?.toLowerCase().includes(artist.name.toLowerCase())
+    (a.artist || "").toLowerCase() === artist.name.toLowerCase()
   );
 
   app.innerHTML = `
@@ -144,7 +129,7 @@ function openAlbum(id) {
 }
 
 /* =========================
-   AUDIO ENGINE (SAFE + COMPATIBLE)
+   AUDIO ENGINE (SAFE)
 ========================= */
 function playSong(albumId, index) {
   const album = albums.find(a => a.id === albumId);
@@ -155,34 +140,12 @@ function playSong(albumId, index) {
   currentAlbum = album;
   currentIndex = index;
 
-  let file = song.file;
-
-  /* YE */
-  if (album.id === "ye") {
-    file = song.file;
-  }
-
-  /* LATE REG */
-  if (album.id === "late") {
-    file = song.file;
-  }
-
-  /* THRILLER */
-  if (album.id === "thriller") {
-    file = song.file;
-  }
-
-  /* ROMANTIC */
-  if (album.id === "romantic") {
-    file = song.file;
-  }
-
   audio.pause();
-  audio.src = file;
+  audio.src = song.file;
   audio.load();
 
   audio.onerror = () => {
-    console.error("❌ Missing file:", file);
+    console.error("Missing:", song.file);
   };
 
   audio.oncanplay = () => {
