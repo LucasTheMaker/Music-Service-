@@ -4,13 +4,17 @@ let currentAlbum = null;
 let currentIndex = 0;
 
 /* =========================
-   SAFE START
+   SAFETY BOOT (PREVENT BLANK SCREEN)
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   const app = document.getElementById("app");
 
   if (!app) {
-    document.body.innerHTML = "<h2 style='color:white;padding:20px'>Missing #app div</h2>";
+    document.body.innerHTML = `
+      <h2 style="color:red;padding:20px">
+        ❌ ERROR: Missing <div id="app"></div> in index.html
+      </h2>
+    `;
     return;
   }
 
@@ -30,18 +34,27 @@ const artists = [
    ARTIST BIOS
 ========================= */
 const artistData = {
-  kanye: { name: "Kanye West", bio: "Rap artist and producer." },
-  mj: { name: "Michael Jackson", bio: "King of Pop." },
-  bruno: { name: "Bruno Mars", bio: "Pop and R&B artist." }
+  kanye: {
+    name: "Kanye West",
+    bio: "Influential rapper and producer shaping modern hip-hop."
+  },
+  mj: {
+    name: "Michael Jackson",
+    bio: "The King of Pop and global music icon."
+  },
+  bruno: {
+    name: "Bruno Mars",
+    bio: "Pop and R&B artist known for funk-inspired hits."
+  }
 };
 
 /* =========================
-   ALBUMS (SAFE FALLBACK)
+   SAFE ALBUM LOADING
 ========================= */
 const albums = window.albums || [];
 
 /* =========================
-   HOME PAGE
+   HOME PAGE (ARTISTS FIRST FIXED)
 ========================= */
 function renderHome() {
   const app = document.getElementById("app");
@@ -61,12 +74,12 @@ function renderHome() {
     <h2>Albums</h2>
 
     <div class="album-grid">
-      ${albums.map(a => `
+      ${albums.length ? albums.map(a => `
         <div class="album-card" onclick="openAlbum('${a.id}')">
           <img src="${a.cover}">
           <p>${a.title}</p>
         </div>
-      `).join("")}
+      `).join("") : "<p style='color:white'>No albums loaded</p>"}
     </div>
   `;
 }
@@ -77,6 +90,8 @@ function renderHome() {
 function openArtist(id) {
   const app = document.getElementById("app");
   const artist = artistData[id];
+
+  if (!artist) return;
 
   const artistAlbums = albums.filter(a =>
     a.artist?.toLowerCase().includes(artist.name.toLowerCase())
@@ -108,6 +123,8 @@ function openAlbum(id) {
   const app = document.getElementById("app");
   const album = albums.find(a => a.id === id);
 
+  if (!album) return;
+
   app.innerHTML = `
     <button onclick="renderHome()">← Back</button>
 
@@ -127,20 +144,70 @@ function openAlbum(id) {
 }
 
 /* =========================
-   AUDIO (SAFE)
+   AUDIO ENGINE (SAFE + COMPATIBLE)
 ========================= */
 function playSong(albumId, index) {
   const album = albums.find(a => a.id === albumId);
-  const song = album.tracks[index];
+  const song = album?.tracks?.[index];
+
+  if (!album || !song) return;
 
   currentAlbum = album;
   currentIndex = index;
 
-  audio.src = song.file;
-  audio.play();
+  let file = song.file;
 
-  if (document.getElementById("player-track-title")) {
-    document.getElementById("player-track-title").innerText = song.title;
-    document.getElementById("player-track-artist").innerText = album.artist;
+  /* YE */
+  if (album.id === "ye") {
+    file = song.file;
   }
+
+  /* LATE REG */
+  if (album.id === "late") {
+    file = song.file;
+  }
+
+  /* THRILLER */
+  if (album.id === "thriller") {
+    file = song.file;
+  }
+
+  /* ROMANTIC */
+  if (album.id === "romantic") {
+    file = song.file;
+  }
+
+  audio.pause();
+  audio.src = file;
+  audio.load();
+
+  audio.onerror = () => {
+    console.error("❌ Missing file:", file);
+  };
+
+  audio.oncanplay = () => {
+    audio.play();
+  };
+}
+
+/* =========================
+   CONTROLS
+========================= */
+function togglePlay() {
+  if (audio.paused) audio.play();
+  else audio.pause();
+}
+
+function nextSong() {
+  if (!currentAlbum) return;
+  currentIndex++;
+  if (currentIndex >= currentAlbum.tracks.length) currentIndex = 0;
+  playSong(currentAlbum.id, currentIndex);
+}
+
+function prevSong() {
+  if (!currentAlbum) return;
+  currentIndex--;
+  if (currentIndex < 0) currentIndex = currentAlbum.tracks.length - 1;
+  playSong(currentAlbum.id, currentIndex);
 }
