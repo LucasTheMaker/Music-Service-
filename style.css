@@ -5,18 +5,8 @@ body {
   font-family: Arial;
 }
 
-/* =========================
-   HOME GRID (DESKTOP DEFAULT)
-========================= */
-.album-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
-  padding: 20px;
-}
-
-/* ARTISTS */
-.artist-grid {
+/* GRID DESKTOP */
+.album-grid, .artist-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 16px;
@@ -24,42 +14,25 @@ body {
 }
 
 /* CARDS */
-.album-card,
-.artist-card {
+.album-card, .artist-card {
   cursor: pointer;
-  transition: transform 0.2s;
 }
 
-.album-card:hover,
-.artist-card:hover {
-  transform: scale(1.05);
-}
-
-.album-card img,
-.artist-card img {
+.album-card img, .artist-card img {
   width: 100%;
   border-radius: 12px;
-  object-fit: cover;
 }
 
-/* =========================
-   ALBUM PAGE
-========================= */
-.tracklist {
-  padding: 20px;
-}
-
+/* TRACKLIST */
 .tracklist div {
   padding: 12px;
+  margin: 6px 0;
   background: #1e1e1e;
-  margin-bottom: 8px;
   border-radius: 8px;
   cursor: pointer;
 }
 
-/* =========================
-   PLAYER BAR
-========================= */
+/* PLAYER */
 .player-bar {
   position: fixed;
   bottom: 0;
@@ -67,36 +40,12 @@ body {
   background: black;
   display: flex;
   justify-content: space-between;
-  padding: 12px;
+  padding: 10px;
 }
 
-/* =========================
-   📱 MOBILE APPLE MUSIC LAYOUT
-========================= */
+/* MOBILE */
 @media (max-width: 768px) {
-
-  .album-grid {
+  .album-grid, .artist-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .artist-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  /* ALBUM HEADER SPLIT (your request earlier) */
-  .album-header {
-    display: flex;
-    gap: 12px;
-    padding: 10px;
-    align-items: center;
-  }
-
-  .album-header img {
-    width: 50%;
-    border-radius: 10px;
-  }
-
-  .album-header h1 {
-    font-size: 18px;
   }
 }
