@@ -4,13 +4,13 @@ let currentAlbum = null;
 let currentIndex = 0;
 
 /* =========================
-   STARTUP SAFETY
+   SAFE STARTUP
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   const app = document.getElementById("app");
 
   if (!app) {
-    document.body.innerHTML = "<h2 style='color:red;padding:20px'>Missing #app</h2>";
+    document.body.innerHTML = "<h2 style='color:red;padding:20px'>Missing #app in HTML</h2>";
     return;
   }
 
@@ -36,21 +36,23 @@ const artistData = {
   },
   mj: {
     name: "Michael Jackson",
-    bio: "The King of Pop and global music icon."
+    bio: "The King of Pop."
   },
   bruno: {
     name: "Bruno Mars",
-    bio: "Pop and R&B artist known for funk-inspired hits."
+    bio: "Pop, funk, and R&B artist."
   }
 };
 
 /* =========================
-   ALBUM DATA
+   SAFE ALBUM LOAD (CRITICAL FIX)
 ========================= */
-const albums = window.albums || [];
+const albums = Array.isArray(window.albums) ? window.albums : [];
+
+console.log("📀 Albums loaded:", albums);
 
 /* =========================
-   HOME PAGE (ARTISTS ONLY)
+   HOME PAGE
 ========================= */
 function renderHome() {
   const app = document.getElementById("app");
@@ -70,7 +72,7 @@ function renderHome() {
 }
 
 /* =========================
-   ARTIST PAGE (FIXED FILTERING)
+   ARTIST PAGE (ROBUST FILTERING)
 ========================= */
 function openArtist(id) {
   const app = document.getElementById("app");
@@ -78,11 +80,12 @@ function openArtist(id) {
 
   if (!artist) return;
 
-  const artistName = artist.name.toLowerCase().trim();
+  const name = artist.name.toLowerCase().trim();
 
   const artistAlbums = albums.filter(a => {
-    if (!a.artist) return false;
-    return a.artist.toLowerCase().trim().includes(artistName);
+    if (!a || !a.artist) return false;
+
+    return a.artist.toLowerCase().includes(name);
   });
 
   app.innerHTML = `
@@ -94,12 +97,15 @@ function openArtist(id) {
     <h3>Albums</h3>
 
     <div class="album-grid">
-      ${artistAlbums.length ? artistAlbums.map(a => `
-        <div class="album-card" onclick="openAlbum('${a.id}')">
-          <img src="${a.cover}">
-          <p>${a.title}</p>
-        </div>
-      `).join("") : "<p style='color:white'>No albums found</p>"}
+      ${artistAlbums.length
+        ? artistAlbums.map(a => `
+            <div class="album-card" onclick="openAlbum('${a.id}')">
+              <img src="${a.cover}">
+              <p>${a.title}</p>
+            </div>
+          `).join("")
+        : "<p style='color:white'>No albums found</p>"
+      }
     </div>
   `;
 }
@@ -111,7 +117,10 @@ function openAlbum(id) {
   const app = document.getElementById("app");
   const album = albums.find(a => a.id === id);
 
-  if (!album) return;
+  if (!album) {
+    app.innerHTML = "<p style='color:white'>Album not found</p>";
+    return;
+  }
 
   app.innerHTML = `
     <button onclick="renderHome()">← Back</button>
@@ -132,7 +141,7 @@ function openAlbum(id) {
 }
 
 /* =========================
-   AUDIO ENGINE (UNCHANGED LOGIC)
+   AUDIO ENGINE (SAFE + STABLE)
 ========================= */
 function playSong(albumId, index) {
   const album = albums.find(a => a.id === albumId);
@@ -148,7 +157,7 @@ function playSong(albumId, index) {
   audio.load();
 
   audio.onerror = () => {
-    console.error("Missing file:", song.file);
+    console.error("❌ Missing file:", song.file);
   };
 
   audio.oncanplay = () => {
