@@ -3,9 +3,7 @@ const audio = new Audio();
 let currentAlbum = null;
 let currentIndex = 0;
 
-document.addEventListener("DOMContentLoaded", () => {
-  renderHome();
-});
+document.addEventListener("DOMContentLoaded", renderHome);
 
 const albums = window.albums || [];
 
@@ -15,19 +13,22 @@ const albums = window.albums || [];
 function renderHome() {
   const app = document.getElementById("app");
 
-  app.innerHTML = `
-    <h2 class="section-title">Artists</h2>
+  const artists = [...new Set(albums.map(a => a.artist))];
 
-    <div class="artist-row">
-      <div onclick="filterArtist('Kanye West')">Kanye West</div>
-      <div onclick="filterArtist('Michael Jackson')">Michael Jackson</div>
+  app.innerHTML = `
+    <h2>Artists</h2>
+
+    <div class="scroll">
+      ${artists.map(a => `
+        <div class="chip" onclick="filterArtist('${a}')">${a}</div>
+      `).join("")}
     </div>
 
-    <h2 class="section-title">Albums</h2>
+    <h2>Albums</h2>
 
-    <div class="album-grid">
+    <div class="grid">
       ${albums.map(a => `
-        <div class="album-card" onclick="openAlbum('${a.id}')">
+        <div class="card" onclick="openAlbum('${a.id}')">
           <img src="${a.cover}">
           <p>${a.title}</p>
         </div>
@@ -37,7 +38,7 @@ function renderHome() {
 }
 
 /* =========================
-   FILTER BY ARTIST
+   FILTER ARTIST
 ========================= */
 function filterArtist(name) {
   const app = document.getElementById("app");
@@ -51,9 +52,9 @@ function filterArtist(name) {
 
     <h2>${name}</h2>
 
-    <div class="album-grid">
+    <div class="grid">
       ${filtered.map(a => `
-        <div class="album-card" onclick="openAlbum('${a.id}')">
+        <div class="card" onclick="openAlbum('${a.id}')">
           <img src="${a.cover}">
           <p>${a.title}</p>
         </div>
@@ -72,7 +73,7 @@ function openAlbum(id) {
   app.innerHTML = `
     <button onclick="renderHome()">← Back</button>
 
-    <img src="${album.cover}" class="cover">
+    <img src="${album.cover}" class="hero">
 
     <h2>${album.title}</h2>
     <p>${album.artist}</p>
@@ -100,7 +101,7 @@ function playSong(albumId, index) {
   audio.src = song.file;
   audio.play();
 
-  document.getElementById("now-title").innerText =
+  document.getElementById("now").innerText =
     song.title + " • " + album.artist;
 }
 
