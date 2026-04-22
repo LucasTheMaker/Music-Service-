@@ -1,43 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Music App</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Music App</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<nav class="navbar">
-<input id="search-input" placeholder="Search music...">
-</nav>
+  <!-- MAIN APP ROOT -->
+  <div id="app"></div>
 
-<main>
-<div id="app"></div>
-</main>
-
-<footer class="player-bar">
-
-  <!-- LEFT: COVER + TEXT -->
-  <div class="now-playing-left">
+  <!-- NOW PLAYING BAR -->
+  <div id="player-bar">
     <img id="player-cover" src="" />
+    
+    <div class="player-info">
+      <div id="player-track-title">No song playing</div>
+      <div id="player-track-artist"></div>
+    </div>
 
-    <div class="now-playing-text">
-      <div id="player-track-title" class="title">Nothing Playing</div>
-      <div id="player-track-artist" class="artist">Select a song</div>
+    <div class="controls">
+      <button onclick="prevSong()">⏮</button>
+      <button onclick="togglePlay()">⏯</button>
+      <button onclick="nextSong()">⏭</button>
     </div>
   </div>
 
-  <!-- CONTROLS -->
-  <div class="controls">
-    <button onclick="prevSong()">⏮</button>
-    <button onclick="togglePlay()" id="play-btn">▶</button>
-    <button onclick="nextSong()">⏭</button>
-  </div>
+  <!-- SCRIPTS (ORDER IS CRITICAL) -->
+  <script src="albums.js"></script>
+  <script src="app.js"></script>
 
-</footer>
-
-<script src="app.js"></script>
 </body>
 </html>
