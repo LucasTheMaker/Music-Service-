@@ -4,6 +4,25 @@ let currentAlbum = null;
 let currentIndex = 0;
 
 /* =========================
+   SAFETY: PREVENT BLANK SCREEN
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+  if (!document.getElementById("app")) {
+    console.error("❌ Missing #app in HTML");
+    return;
+  }
+
+  if (!window.albums) {
+    console.error("❌ albums.js not loaded BEFORE app.js");
+    document.getElementById("app").innerHTML =
+      "<h2 style='padding:20px'>Albums failed to load</h2>";
+    return;
+  }
+
+  renderHome();
+});
+
+/* =========================
    ARTISTS
 ========================= */
 const artists = [
@@ -22,26 +41,26 @@ const artistData = {
   },
   mj: {
     name: "Michael Jackson",
-    bio: "The King of Pop and one of the most influential artists in music history."
+    bio: "The King of Pop and one of the most influential entertainers in history."
   },
   bruno: {
     name: "Bruno Mars",
-    bio: "Singer-songwriter blending pop, funk, R&B, and soul."
+    bio: "Pop and R&B artist known for funk-inspired global hits."
   }
 };
 
 /* =========================
-   ALBUMS (DO NOT TOUCH TRACKLISTS)
+   SAFE ALBUM LOAD
 ========================= */
-const albums = window.albums;
+const albums = window.albums || [];
 
 /* =========================
-   HOME (ARTIST PRIORITY LAYOUT)
+   HOME PAGE (ARTIST FIRST)
 ========================= */
-document.addEventListener("DOMContentLoaded", renderHome);
-
 function renderHome() {
   const app = document.getElementById("app");
+
+  if (!app) return;
 
   app.innerHTML = `
     <h2>Artists</h2>
@@ -75,6 +94,8 @@ function openArtist(id) {
   const app = document.getElementById("app");
   const artist = artistData[id];
 
+  if (!artist) return;
+
   const artistAlbums = albums.filter(a =>
     a.artist.toLowerCase().includes(artist.name.toLowerCase())
   );
@@ -101,11 +122,13 @@ function openArtist(id) {
 }
 
 /* =========================
-   OPEN ALBUM
+   ALBUM PAGE
 ========================= */
 function openAlbum(id) {
   const album = albums.find(a => a.id === id);
   const app = document.getElementById("app");
+
+  if (!album) return;
 
   app.innerHTML = `
     <button onclick="renderHome()">← Back</button>
@@ -126,18 +149,20 @@ function openAlbum(id) {
 }
 
 /* =========================
-   AUDIO ENGINE (UNCHANGED FIX LOGIC)
+   AUDIO ENGINE (ALL FIXES INCLUDED)
 ========================= */
 function playSong(albumId, index) {
   const album = albums.find(a => a.id === albumId);
   const song = album.tracks[index];
+
+  if (!album || !song) return;
 
   currentAlbum = album;
   currentIndex = index;
 
   let file = song.file;
 
-  /* YE */
+  /* YE FIX */
   if (album.id === "ye") {
     const yeMap = {
       "1. I Thought About Killing You.mp3": "1. I Thought About Killing You.mp3",
@@ -151,7 +176,7 @@ function playSong(albumId, index) {
     file = yeMap[file] || file;
   }
 
-  /* LATE REG */
+  /* LATE REG FIX */
   if (album.id === "late") {
     const lateMap = {
       "Skits 1.mp3": "Skits 1.mp3",
@@ -164,7 +189,7 @@ function playSong(albumId, index) {
     file = lateMap[file] || file;
   }
 
-  /* THRILLER */
+  /* THRILLER FIX */
   if (album.id === "thriller") {
     const thrillerMap = {
       "Wanna Be Startin Somethin.mp3": "Wanna Be Startin Somethin.mp3",
@@ -180,7 +205,7 @@ function playSong(albumId, index) {
     file = thrillerMap[file] || file;
   }
 
-  /* ROMANTIC */
+  /* ROMANTIC FIX */
   if (album.id === "romantic") {
     const romanticMap = {
       "01 Risk It All.mp3": "01 Risk It All.mp3",
@@ -206,6 +231,10 @@ function playSong(albumId, index) {
 
   audio.oncanplay = () => {
     audio.play();
+
+    document.getElementById("player-cover").src = album.cover;
+    document.getElementById("player-track-title").innerText = song.title;
+    document.getElementById("player-track-artist").innerText = album.artist;
   };
 }
 
