@@ -34,11 +34,11 @@ const albumId = params.get("id");
 
 const album = albums.find(a => a.id === albumId);
 
-if (!album) {
-    document.getElementById("album-page").innerHTML = "<h2>Album not found</h2>";
-} else {
-    const container = document.getElementById("album-page");
+const container = document.getElementById("album-page");
 
+if (!album) {
+    container.innerHTML = "<h2>Album not found</h2>";
+} else {
     container.innerHTML = `
         <img src="${album.cover}" style="width:200px">
         <h1>${album.title}</h1>
@@ -54,9 +54,7 @@ if (!album) {
         div.className = "track";
         div.innerText = track.number + ". " + track.title;
 
-        div.onclick = () => {
-            playSong(album.id, i);
-        };
+        div.onclick = () => playSong(album.id, i);
 
         tracklist.appendChild(div);
     });
