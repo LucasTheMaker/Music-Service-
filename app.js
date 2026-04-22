@@ -13,12 +13,30 @@ const artists = [
 ];
 
 /* =========================
-   ALBUM DATA (UNCHANGED TRACKLISTS)
+   ARTIST BIOS
+========================= */
+const artistData = {
+  kanye: {
+    name: "Kanye West",
+    bio: "American rapper, producer, and designer known for shaping modern hip-hop."
+  },
+  mj: {
+    name: "Michael Jackson",
+    bio: "The King of Pop and one of the most influential artists in music history."
+  },
+  bruno: {
+    name: "Bruno Mars",
+    bio: "Singer-songwriter blending pop, funk, R&B, and soul."
+  }
+};
+
+/* =========================
+   ALBUMS (DO NOT TOUCH TRACKLISTS)
 ========================= */
 const albums = window.albums;
 
 /* =========================
-   RENDER HOME
+   HOME (ARTIST PRIORITY LAYOUT)
 ========================= */
 document.addEventListener("DOMContentLoaded", renderHome);
 
@@ -26,7 +44,19 @@ function renderHome() {
   const app = document.getElementById("app");
 
   app.innerHTML = `
+    <h2>Artists</h2>
+
+    <div class="artist-featured-grid">
+      ${artists.map(a => `
+        <div class="artist-card featured" onclick="openArtist('${a.id}')">
+          <img src="${a.image}">
+          <p>${a.name}</p>
+        </div>
+      `).join("")}
+    </div>
+
     <h2>Albums</h2>
+
     <div class="album-grid">
       ${albums.map(a => `
         <div class="album-card" onclick="openAlbum('${a.id}')">
@@ -35,13 +65,35 @@ function renderHome() {
         </div>
       `).join("")}
     </div>
+  `;
+}
 
-    <h2>Artists</h2>
-    <div class="artist-grid">
-      ${artists.map(a => `
-        <div class="artist-card">
-          <img src="${a.image}">
-          <p>${a.name}</p>
+/* =========================
+   ARTIST PAGE
+========================= */
+function openArtist(id) {
+  const app = document.getElementById("app");
+  const artist = artistData[id];
+
+  const artistAlbums = albums.filter(a =>
+    a.artist.toLowerCase().includes(artist.name.toLowerCase())
+  );
+
+  app.innerHTML = `
+    <button onclick="renderHome()">← Back</button>
+
+    <div class="artist-header">
+      <h1>${artist.name}</h1>
+      <p>${artist.bio}</p>
+    </div>
+
+    <h3>Albums</h3>
+
+    <div class="album-grid">
+      ${artistAlbums.map(a => `
+        <div class="album-card" onclick="openAlbum('${a.id}')">
+          <img src="${a.cover}">
+          <p>${a.title}</p>
         </div>
       `).join("")}
     </div>
@@ -74,7 +126,7 @@ function openAlbum(id) {
 }
 
 /* =========================
-   AUDIO ENGINE (ALL FIXES)
+   AUDIO ENGINE (UNCHANGED FIX LOGIC)
 ========================= */
 function playSong(albumId, index) {
   const album = albums.find(a => a.id === albumId);
@@ -85,9 +137,7 @@ function playSong(albumId, index) {
 
   let file = song.file;
 
-  /* =========================
-     YE FIX
-  ========================= */
+  /* YE */
   if (album.id === "ye") {
     const yeMap = {
       "1. I Thought About Killing You.mp3": "1. I Thought About Killing You.mp3",
@@ -101,9 +151,7 @@ function playSong(albumId, index) {
     file = yeMap[file] || file;
   }
 
-  /* =========================
-     LATE REG FIX
-  ========================= */
+  /* LATE REG */
   if (album.id === "late") {
     const lateMap = {
       "Skits 1.mp3": "Skits 1.mp3",
@@ -116,9 +164,7 @@ function playSong(albumId, index) {
     file = lateMap[file] || file;
   }
 
-  /* =========================
-     THRILLER FIX
-  ========================= */
+  /* THRILLER */
   if (album.id === "thriller") {
     const thrillerMap = {
       "Wanna Be Startin Somethin.mp3": "Wanna Be Startin Somethin.mp3",
@@ -134,9 +180,7 @@ function playSong(albumId, index) {
     file = thrillerMap[file] || file;
   }
 
-  /* =========================
-     ROMANTIC FIX
-  ========================= */
+  /* ROMANTIC */
   if (album.id === "romantic") {
     const romanticMap = {
       "01 Risk It All.mp3": "01 Risk It All.mp3",
@@ -152,25 +196,16 @@ function playSong(albumId, index) {
     file = romanticMap[file] || file;
   }
 
-  /* =========================
-     PLAYBACK SAFETY
-  ========================= */
   audio.pause();
   audio.src = file;
   audio.load();
 
   audio.onerror = () => {
     console.error("❌ Missing file:", file);
-    document.getElementById("player-track-title").innerText =
-      "Missing: " + song.title;
   };
 
   audio.oncanplay = () => {
     audio.play();
-
-    document.getElementById("player-cover").src = album.cover;
-    document.getElementById("player-track-title").innerText = song.title;
-    document.getElementById("player-track-artist").innerText = album.artist;
   };
 }
 
