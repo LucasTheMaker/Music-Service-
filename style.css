@@ -1,60 +1,200 @@
 body {
   margin: 0;
-  background: #0d0d0d;
+  font-family: Arial, sans-serif;
+  background: #121212;
   color: white;
-  font-family: Arial;
 }
 
-#app {
+header {
+  background: #D41C00;
   padding: 15px;
-  padding-bottom: 90px;
+  text-align: center;
 }
 
-/* ARTIST SCROLL */
-.scroll {
+/* HOME LAYOUT (UPDATED BIGGER + SPACED OUT) */
+.album-grid {
   display: flex;
-  overflow-x: auto;
-  gap: 10px;
+  justify-content: center;
+  gap: 60px;              /* more space between albums */
+  padding: 50px;
+  flex-wrap: wrap;
 }
 
-.chip {
-  background: #222;
-  padding: 8px 12px;
-  border-radius: 20px;
-  white-space: nowrap;
+.album-card {
+  text-align: center;
+  cursor: pointer;
+  width: 260px;          /* bigger card */
+  color: white;
 }
 
-/* 2x2 MOBILE GRID */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
-.card {
-  background: #1c1c1c;
-  padding: 10px;
+.album-card img {
+  width: 260px;          /* bigger cover */
+  height: 260px;         /* bigger cover */
   border-radius: 12px;
+  transition: transform 0.2s ease;
 }
 
-.card img {
-  width: 100%;
+.album-card img:hover {
+  transform: scale(1.05);
+}
+
+.album-card h3 {
+  margin-top: 12px;
+  font-size: 20px;
+}
+
+.album-card p {
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* ALBUM VIEW */
+#album-view {
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  padding-top: 10px;
+}
+
+.album-scroll {
+  min-height: 100%;
+  padding-bottom: 120px;
+}
+
+.album-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.back-btn {
+  position: absolute;
+  top: 70px;
+  left: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ALBUM PAGE */
+.album-big {
+  width: 300px;
+  height: 300px;
   border-radius: 10px;
 }
 
-/* HERO */
-.hero {
-  width: 100%;
-  border-radius: 12px;
+.track-list {
+  margin-top: 20px;
+  width: 80%;
 }
 
-/* PLAYER */
-#player {
+.track {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  background: #1e1e1e;
+  margin-top: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.track:hover {
+  background: #2a2a2a;
+}
+
+.track-num {
+  color: #aaa;
+  width: 20px;
+}
+
+/* MINI PLAYER */
+.mini-player {
   position: fixed;
-  bottom: 0;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e1e1e;
+  padding: 12px 20px;
+  border-radius: 40px;
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+}
+
+/* FULL PLAYER */
+.full-player {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  background: black;
-  padding: 8px;
+  height: 100%;
+  background: #121212;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  transform: translateY(100%);
+  transition: 0.4s;
+}
+
+.full-player.active {
+  transform: translateY(0);
+}
+
+.album-cover {
+  width: 360px;
+  height: 360px;
+  background: #333;
+  border-radius: 10px;
+}
+
+.info {
+  width: 80%;
+  text-align: left;
+}
+
+#progress {
+  width: 100%;
+}
+
+.time-row {
   display: flex;
   justify-content: space-between;
+  font-size: 12px;
+  color: #aaa;
+}
+
+.controls button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 26px;
+  margin: 0 10px;
+}
+
+#volume {
+  width: 95%;
+}
+
+.options-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.options-menu {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background: #1e1e1e;
+  padding: 10px;
+  display: none;
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
 }
