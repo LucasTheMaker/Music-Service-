@@ -5,24 +5,106 @@
   <title>Music App</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-  <div id="app"></div>
+<header>
+  <h1 id="page-title">Home</h1>
+</header>
 
-  <!-- MINI PLAYER -->
-  <div id="player">
-    <div id="now">No song playing</div>
+<main>
 
-    <div class="controls">
-      <button onclick="prevSong()">⏮</button>
-      <button onclick="togglePlay()">⏯</button>
-      <button onclick="nextSong()">⏭</button>
+<!-- HOME -->
+<div id="home-view">
+
+  <div class="album-grid">
+
+    <div class="album-card" onclick="openAlbum('war')">
+      <img src="war/warlol.png">
+      <h3>WAR</h3>
+      <p>Kanye West & James Blake</p>
+    </div>
+
+    <div class="album-card" onclick="openAlbum('bully')">
+      <img src="lol/bully-cover.jpg">
+      <h3>BULLY</h3>
+      <p>Kanye West</p>
+    </div>
+
+    <div class="album-card" onclick="openAlbum('tryingtimes')">
+      <img src="fun/ttcover.png">
+      <h3>Trying Times</h3>
+      <p>James Blake</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ALBUM VIEW -->
+<div id="album-view" style="display:none;">
+
+  <button class="back-btn" onclick="goHome()">← Back</button>
+
+  <div class="album-scroll">
+
+    <div class="album-page">
+
+      <img id="album-cover-img" class="album-big">
+      <h2 id="album-title">Album</h2>
+      <p id="album-artist">Artist</p>
+
+      <div class="track-list" id="track-list"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</main>
+
+<!-- MINI PLAYER -->
+<div class="mini-player" onclick="expandPlayer()">
+  <span id="mini-title">Song</span>
+  <button onclick="event.stopPropagation(); playPause()">⏯</button>
+</div>
+
+<!-- FULL PLAYER -->
+<div class="full-player" id="fullPlayer">
+
+  <div class="options-btn" onclick="toggleOptions()">●</div>
+
+  <div class="options-menu" id="optionsMenu">
+    <button>Placeholder Option</button>
+  </div>
+
+  <div class="album-cover" id="album-cover"></div>
+
+  <div class="info">
+    <h2 id="song-title">Title</h2>
+    <p id="artist-name">Artist</p>
+
+    <input type="range" id="progress" min="0" max="100">
+
+    <div class="time-row">
+      <span id="current-time">0:00</span>
+      <span id="remaining-time">-0:00</span>
     </div>
   </div>
 
-  <script src="albums.js"></script>
-  <script src="app.js"></script>
+  <div class="controls">
+    <button onclick="prevTrack()">⏮</button>
+    <button onclick="playPause()">⏯</button>
+    <button onclick="nextTrack()">⏭</button>
+  </div>
 
+  <input type="range" id="volume" min="0" max="1" step="0.01">
+
+  <button class="close-btn" onclick="closePlayer()">⬇</button>
+
+  <audio id="audio-player"></audio>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
